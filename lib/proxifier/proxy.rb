@@ -45,7 +45,7 @@ module Proxifier
         when 1
           @addr = parse_addr(td)
         when 2 then
-          @port = td.content.strip
+          @port = Integer(td.content.strip)
         when 3 then
           @country = td.content.strip
         when 4
@@ -84,11 +84,11 @@ module Proxifier
     end
 
     def parse_response_time(html)
-      html.at_xpath('div')['rel']
+      Integer(html.at_xpath('div')['rel'])
     end
 
     def parse_indicator_value(html)
-      html.at('.indicator').attr('style').match(/width: (\d+)%/i)[1]
+      Integer(html.at('.indicator').attr('style').match(/width: (\d+)%/i)[1])
     end
   end
 end
