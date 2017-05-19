@@ -10,6 +10,8 @@ module Proxifier
 
     attr_reader :proxies
 
+    # refresh: true - load proxy list from the remote server on initialization
+    # refresh: false - just initialize the class, proxy list will be empty ([])
     def initialize(refresh: true)
       if refresh
         refresh_list!
@@ -40,8 +42,9 @@ module Proxifier
       proxies.map(&:url)
     end
 
+    # No need to put all the attr_readers
     def inspect
-      "#<#{self.class.name}>"
+      to_s
     end
 
     private

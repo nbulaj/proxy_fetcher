@@ -20,4 +20,12 @@ describe Proxifier::Manager do
     manager = described_class.new
     expect(manager.raw_proxies).to all(be_a(String))
   end
+
+  it 'cleanup proxy list from dead servers' do
+    allow_any_instance_of(Proxifier::Proxy).to receive(:connectable?).and_return(false)
+
+    manager = described_class.new
+
+    expect { manager.cleanup! }.to change { manager.proxies }.to([])
+  end
 end
