@@ -1,6 +1,6 @@
 module ProxyFetcher
   class Configuration
-    attr_reader :open_timeout, :read_timeout
+    attr_accessor :open_timeout, :read_timeout
 
     def initialize
       @open_timeout = 3
