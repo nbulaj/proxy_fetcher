@@ -2,11 +2,18 @@ require 'uri'
 require 'net/http'
 require 'nokogiri'
 
+require 'proxifier/configuration'
 require 'proxifier/proxy'
 
 module Proxifier
   class Manager
     PROXY_PROVIDER_URL = 'http://proxylist.hidemyass.com/'.freeze
+
+    class << self
+      def config
+        @config ||= Proxifier::Configuration.new
+      end
+    end
 
     attr_reader :proxies
 

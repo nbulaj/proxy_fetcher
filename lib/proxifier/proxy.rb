@@ -11,13 +11,13 @@ module Proxifier
 
     def connectable?
       connection = Net::HTTP.new(addr, port)
-      connection.open_timeout = 3
-      connection.read_timeout = 3
+      connection.open_timeout = Proxifier::Manager.config.open_timeout
+      connection.read_timeout = Proxifier::Manager.config.read_timeout
 
       connection.start { |http| return true if http.request_head('/') }
 
       false
-    rescue StandardError
+    rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::ECONNABORTED
       false
     end
 

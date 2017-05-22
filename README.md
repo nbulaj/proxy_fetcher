@@ -82,6 +82,16 @@ If you wanna clear current proxy manager list from dead servers, you can just ca
 manager.cleanup!
 ```
 
+To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change Proxifier::Manager config:
+
+```ruby
+Proxifier::Manager.config.read_timeout = 1 # default is 3
+Proxifier::Manager.config.open_timeout = 1# default is 3
+
+manager = Proxifier::Manager.new
+manager.cleanup!
+```
+
 ## Contributing
 
 You are very welcome to help improve Proxifier if you have suggestions for features that other people can use.
