@@ -1,4 +1,4 @@
-module Proxifier
+module ProxyFetcher
   class Proxy
     attr_reader :addr, :port, :country, :response_time,
                 :connection_time, :speed, :type, :anonimity
@@ -11,8 +11,8 @@ module Proxifier
 
     def connectable?
       connection = Net::HTTP.new(addr, port)
-      connection.open_timeout = Proxifier::Manager.config.open_timeout
-      connection.read_timeout = Proxifier::Manager.config.read_timeout
+      connection.open_timeout = ProxyFetcher::Manager.config.open_timeout
+      connection.read_timeout = ProxyFetcher::Manager.config.read_timeout
 
       connection.start { |http| return true if http.request_head('/') }
 

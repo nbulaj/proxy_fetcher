@@ -1,10 +1,10 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
-require 'proxifier/version'
+require 'proxy_fetcher/version'
 
 Gem::Specification.new do |gem|
-  gem.name = 'proxifier'
-  gem.version = Proxifier.gem_version
+  gem.name = 'proxy_fetcher'
+  gem.version = ProxyFetcher.gem_version
   gem.date = '2017-05-19'
   gem.summary = 'Ruby gem for dealing with proxy lists '
   gem.description = 'This gem can help your Ruby application to make HTTP(S) requests ' \
@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.email = 'bulajnikita@gmail.com'
   gem.require_paths = ['lib']
   gem.files = `git ls-files`.split($RS)
-  gem.homepage = 'http://github.com/nbulaj/proxifier'
+  gem.homepage = 'http://github.com/nbulaj/proxy_fetcher'
   gem.license = 'MIT'
   gem.required_ruby_version = '>= 2.2.2'
 

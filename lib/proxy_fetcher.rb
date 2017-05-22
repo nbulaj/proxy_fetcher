@@ -2,16 +2,16 @@ require 'uri'
 require 'net/http'
 require 'nokogiri'
 
-require 'proxifier/configuration'
-require 'proxifier/proxy'
+require 'proxy_fetcher/configuration'
+require 'proxy_fetcher/proxy'
 
-module Proxifier
+module ProxyFetcher
   class Manager
     PROXY_PROVIDER_URL = 'http://proxylist.hidemyass.com/'.freeze
 
     class << self
       def config
-        @config ||= Proxifier::Configuration.new
+        @config ||= ProxyFetcher::Configuration.new
       end
     end
 

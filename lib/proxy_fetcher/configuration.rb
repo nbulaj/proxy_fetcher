@@ -1,4 +1,4 @@
-module Proxifier
+module ProxyFetcher
   class Configuration
     attr_reader :open_timeout, :read_timeout
 

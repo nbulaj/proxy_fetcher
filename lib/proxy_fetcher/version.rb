@@ -1,4 +1,4 @@
-module Proxifier
+module ProxyFetcher
   def self.gem_version
     Gem::Version.new VERSION::STRING
   end

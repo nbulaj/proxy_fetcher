@@ -1,6 +1,6 @@
 # Ruby lib for managing proxies
-[![Build Status](https://travis-ci.org/nbulaj/proxifier.svg?branch=master)](https://travis-ci.org/nbulaj/proxifier)
-[![Coverage Status](https://coveralls.io/repos/github/nbulaj/proxifier/badge.svg)](https://coveralls.io/github/nbulaj/proxifier)
+[![Build Status](https://travis-ci.org/nbulaj/proxy_fetcher.svg?branch=master)](https://travis-ci.org/nbulaj/proxy_fetcher)
+[![Coverage Status](https://coveralls.io/repos/github/nbulaj/proxy_fetcher/badge.svg)](https://coveralls.io/github/nbulaj/proxy_fetcher)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy server, fetching and validating
@@ -8,10 +8,10 @@ current proxy lists from the [HideMyAss](http://hidemyass.com/) service.
 
 ## Installation
 
-If using bundler, first add 'proxifier' to your Gemfile:
+If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxifier', '~> 0.1'
+gem 'proxy_fetcher', '~> 0.1'
 ```
 
 And run:
@@ -23,7 +23,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxifier -v '0.1'
+gem install proxy_fetcher -v '0.1'
 ```
 
 ## Example of usage
@@ -31,33 +31,33 @@ gem install proxifier -v '0.1'
 Get current proxy list:
 
 ```ruby
-manager = Proxifier::Manager.new # will immediately load proxy list from the server
+manager = ProxyFetcher::Manager.new # will immediately load proxy list from the server
 manager.proxies
 
- #=> [#<Proxifier::Proxy:0x00000002879680 @addr="97.77.104.22", @port="3128", @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port="3128", @country="USA", 
  #     @response_time="5217", @speed="48", @connection_time="100", @type="HTTP", @anonymity="High">, ... ]
 ```
 
 Get raw proxy URLs:
 
 ```ruby
-manager = Proxifier::Manager.new
+manager = ProxyFetcher::Manager.new
 manager.raw_proxies
 
  # => ["http://97.77.104.22:3128", "http://94.23.205.32:3128", "http://209.79.65.140:8080",
  #     "http://91.217.42.2:8080", "http://97.77.104.22:80", "http://165.234.102.177:8080", ...]
 ```
 
-If `Proxifier::Manager` was already initialized somewhere, you can refresh the proxy list by calling `#refresh_list!` method:
+If `ProxyFetcher::Manager` was already initialized somewhere, you can refresh the proxy list by calling `#refresh_list!` method:
 
 ```ruby
 manager.refresh_list!
 
- #=> [#<Proxifier::Proxy:0x00000002879680 @addr="97.77.104.22", @port="3128", @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port="3128", @country="USA", 
  #     @response_time="5217", @speed="48", @connection_time="100", @type="HTTP", @anonymity="High">, ... ]
 ```
 
-Every proxy is a `Proxifier::Proxy` object that has next readers:
+Every proxy is a `ProxyFetcher::Proxy` object that has next readers:
 
 * `addr` (IP address)
 * `port`
@@ -82,19 +82,19 @@ If you wanna clear current proxy manager list from dead servers, you can just ca
 manager.cleanup!
 ```
 
-To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change Proxifier::Manager config:
+To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change ProxyFetcher::Manager config:
 
 ```ruby
-Proxifier::Manager.config.read_timeout = 1 # default is 3
-Proxifier::Manager.config.open_timeout = 1# default is 3
+ProxyFetcher::Manager.config.read_timeout = 1 # default is 3
+ProxyFetcher::Manager.config.open_timeout = 1# default is 3
 
-manager = Proxifier::Manager.new
+manager = ProxyFetcher::Manager.new
 manager.cleanup!
 ```
 
 ## Contributing
 
-You are very welcome to help improve Proxifier if you have suggestions for features that other people can use.
+You are very welcome to help improve ProxyFetcher if you have suggestions for features that other people can use.
 
 To contribute:
 
@@ -113,6 +113,6 @@ Thanks.
 
 ## License
 
-Proxifier gem is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+proxy_fetcher gem is released under the [MIT License](http://www.opensource.org/licenses/MIT).
 
 Copyright (c) 2017 Nikita Bulai (bulajnikita@gmail.com).

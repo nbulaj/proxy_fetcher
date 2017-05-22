@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Proxifier::Manager do
+describe ProxyFetcher::Manager do
   it 'loads proxy list on initialization by default' do
     manager = described_class.new
     expect(manager.proxies).not_to be_empty
@@ -13,7 +13,7 @@ describe Proxifier::Manager do
 
   it 'can returns Proxy objects' do
     manager = described_class.new
-    expect(manager.proxies).to all(be_a(Proxifier::Proxy))
+    expect(manager.proxies).to all(be_a(ProxyFetcher::Proxy))
   end
 
   it 'can returns raw proxies' do
@@ -22,7 +22,7 @@ describe Proxifier::Manager do
   end
 
   it 'cleanup proxy list from dead servers' do
-    allow_any_instance_of(Proxifier::Proxy).to receive(:connectable?).and_return(false)
+    allow_any_instance_of(ProxyFetcher::Proxy).to receive(:connectable?).and_return(false)
 
     manager = described_class.new
 

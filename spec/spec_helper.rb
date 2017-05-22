@@ -9,7 +9,7 @@ end
 require 'bundler/setup'
 Bundler.setup
 
-require 'proxifier'
+require 'proxy_fetcher'
 
 RSpec.configure do |config|
   config.order = 'random'

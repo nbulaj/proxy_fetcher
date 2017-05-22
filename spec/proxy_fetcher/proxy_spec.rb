@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Proxifier::Proxy do
+describe ProxyFetcher::Proxy do
   before :all do
-    @manager = Proxifier::Manager.new
+    @manager = ProxyFetcher::Manager.new
   end
 
   let(:proxy) { @manager.proxies.first }
@@ -13,7 +13,7 @@ describe Proxifier::Proxy do
   end
 
   it 'checks connection status' do
-    allow_any_instance_of(Proxifier::Proxy).to receive(:addr).and_return('192.168.1.1')
+    allow_any_instance_of(ProxyFetcher::Proxy).to receive(:addr).and_return('192.168.1.1')
     expect(proxy.connectable?).to be_falsey
   end
 
