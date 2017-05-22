@@ -34,8 +34,8 @@ Get current proxy list:
 manager = ProxyFetcher::Manager.new # will immediately load proxy list from the server
 manager.proxies
 
- #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port="3128", @country="USA", 
- #     @response_time="5217", @speed="48", @connection_time="100", @type="HTTP", @anonymity="High">, ... ]
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #     @response_time=5217, @speed=48, @connection_time=100, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 Get raw proxy URLs:
@@ -53,8 +53,8 @@ If `ProxyFetcher::Manager` was already initialized somewhere, you can refresh th
 ```ruby
 manager.refresh_list!
 
- #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port="3128", @country="USA", 
- #     @response_time="5217", @speed="48", @connection_time="100", @type="HTTP", @anonymity="High">, ... ]
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #     @response_time=5217, @speed=48, @connection_time=100, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 Every proxy is a `ProxyFetcher::Proxy` object that has next readers:
@@ -86,7 +86,7 @@ To change open/read timeout for `cleanup!` and `connectable?` methods yu need to
 
 ```ruby
 ProxyFetcher::Manager.config.read_timeout = 1 # default is 3
-ProxyFetcher::Manager.config.open_timeout = 1# default is 3
+ProxyFetcher::Manager.config.open_timeout = 1 # default is 3
 
 manager = ProxyFetcher::Manager.new
 manager.cleanup!
