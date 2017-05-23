@@ -104,7 +104,7 @@ manager.cleanup!
 
 ## TODO
 
-# Proxy filters
+* Proxy filters
 
 ## Contributing
 
