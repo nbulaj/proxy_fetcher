@@ -39,6 +39,15 @@ manager.proxies
  #     @response_time=5217, @speed=48, @connection_time=100, @type="HTTP", @anonymity="High">, ... ]
 ```
 
+You can initialize proxy manager without loading proxy list from the remote server by passing `refresh: false` on initialization:
+
+```ruby
+manager = ProxyFetcher::Manager.new(refresh: false) # just initialize class instance
+manager.proxies
+
+ #=> []
+```
+
 Get raw proxy URLs:
 
 ```ruby
@@ -52,7 +61,7 @@ manager.raw_proxies
 If `ProxyFetcher::Manager` was already initialized somewhere, you can refresh the proxy list by calling `#refresh_list!` method:
 
 ```ruby
-manager.refresh_list!
+manager.refresh_list! # or manager.fetch!
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
  #     @response_time=5217, @speed=48, @connection_time=100, @type="HTTP", @anonymity="High">, ... ]
@@ -80,7 +89,7 @@ Also you can call next instance method for every Proxy object:
 If you wanna clear current proxy manager list from dead servers, you can just call `cleanup!` method:
 
 ```ruby
-manager.cleanup!
+manager.cleanup! # or manager.validate!
 ```
 
 To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change ProxyFetcher::Manager config:
@@ -92,6 +101,10 @@ ProxyFetcher::Manager.config.open_timeout = 1 # default is 3
 manager = ProxyFetcher::Manager.new
 manager.cleanup!
 ```
+
+## TODO
+
+# Proxy filters
 
 ## Contributing
 

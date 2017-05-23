@@ -11,6 +11,7 @@ module ProxyFetcher
 
     def connectable?
       connection = Net::HTTP.new(addr, port)
+      connection.use_ssl = true if https?
       connection.open_timeout = ProxyFetcher::Manager.config.open_timeout
       connection.read_timeout = ProxyFetcher::Manager.config.read_timeout
 
@@ -21,12 +22,14 @@ module ProxyFetcher
       false
     end
 
+    alias_method :valid?, :connectable?
+
     def http?
       type.casecmp('http').zero?
     end
 
     def https?
-      !http?
+      type.casecmp('https').zero?
     end
 
     def uri
@@ -39,6 +42,7 @@ module ProxyFetcher
 
     private
 
+    # HideMyAss proxy list rows parsing by columns
     def parse_row!(html)
       html.xpath('td').each_with_index do |td, index|
         case index
@@ -67,11 +71,11 @@ module ProxyFetcher
       good = []
       bytes = []
       css = html.at_xpath('span/style/text()').to_s
-      css.split.each { |l| good << $1 if l.match(/\.(.+?)\{.*inline/) }
+      css.split.each { |l| good << Regexp.last_match(1) if l =~ /\.(.+?)\{.*inline/ }
 
       html.xpath('span/span | span | span/text()').each do |span|
         if span.is_a?(Nokogiri::XML::Text)
-          bytes << $1 if span.content.strip.match(/\.{0,1}(.+)\.{0,1}/)
+          bytes << Regexp.last_match(1) if span.content.strip =~ /\.{0,1}(.+)\.{0,1}/
         elsif (span['style'] && span['style'] =~ /inline/) ||
               (span['class'] && good.include?(span['class'])) ||
               (span['class'] =~ /^[0-9]/)

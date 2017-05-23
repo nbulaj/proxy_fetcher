@@ -28,4 +28,9 @@ describe ProxyFetcher::Manager do
 
     expect { manager.cleanup! }.to change { manager.proxies }.to([])
   end
+
+  it "doesn't pollute the output with array of proxies" do
+    manager = described_class.new(refresh: false)
+    expect(manager.inspect).to eq(manager.to_s)
+  end
 end

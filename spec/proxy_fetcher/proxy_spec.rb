@@ -12,8 +12,13 @@ describe ProxyFetcher::Proxy do
     expect(proxy.https?).to be_falsey.or(be_truthy)
   end
 
-  it 'checks connection status' do
+  it 'not connectable if IP addr is wrong' do
     allow_any_instance_of(ProxyFetcher::Proxy).to receive(:addr).and_return('192.168.1.1')
+    expect(proxy.connectable?).to be_falsey
+  end
+
+  it "not connectable if server doesn't respond to head" do
+    allow_any_instance_of(Net::HTTP).to receive(:request_head).and_return(false)
     expect(proxy.connectable?).to be_falsey
   end
 

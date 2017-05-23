@@ -37,7 +37,7 @@ module ProxyFetcher
 
     alias_method :fetch!, :refresh_list!
 
-    # Clean current proxies list from dead proxies
+    # Clean current proxy list from dead proxies (doesn't respond by timeout)
     def cleanup!
       proxies.keep_if(&:connectable?)
     end
@@ -56,6 +56,7 @@ module ProxyFetcher
 
     private
 
+    # Get HTML from the requested URL
     def load_html(url)
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
