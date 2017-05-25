@@ -18,7 +18,7 @@ describe ProxyFetcher::Proxy do
   end
 
   it "not connectable if server doesn't respond to head" do
-    allow_any_instance_of(Net::HTTP).to receive(:request_head).and_return(false)
+    allow_any_instance_of(Net::HTTP).to receive(:start).and_return(false)
     expect(proxy.connectable?).to be_falsey
   end
 

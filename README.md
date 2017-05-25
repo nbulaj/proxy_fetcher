@@ -86,6 +86,11 @@ Also you can call next instance method for every Proxy object:
 * `uri` (returns `URI::Generic` object)
 * `url` (returns a formatted URL like "_http://IP:PORT_" )
 
+You can use two methods to get the first proxy from the list:
+
+* `get` (will return first proxy and move it to the end of the list)
+* `get!` (will return first **connectable** proxy and move it to the end of the list; all the proxies till the working one will be removed)
+
 If you wanna clear current proxy manager list from dead servers, you can just call `cleanup!` method:
 
 ```ruby

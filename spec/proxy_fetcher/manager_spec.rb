@@ -33,4 +33,32 @@ describe ProxyFetcher::Manager do
     manager = described_class.new(refresh: false)
     expect(manager.inspect).to eq(manager.to_s)
   end
+
+  it 'returns first proxy' do
+    manager = described_class.new
+
+    first_proxy = manager.proxies.first
+
+    expect(manager.get).to eq(first_proxy)
+    expect(manager.proxies.first).not_to eq(first_proxy)
+  end
+
+  it 'returns first valid proxy' do
+    manager = described_class.new(refresh: false)
+
+    proxies = 5.times.collect { instance_double('ProxyFetcher::Proxy', connectable?: false) }
+    manager.instance_variable_set(:@proxies, proxies)
+
+    connectable_proxy = instance_double('ProxyFetcher::Proxy')
+    allow(connectable_proxy).to receive(:connectable?).and_return(true)
+
+    manager.proxies[0..2].each { |proxy| proxy.instance_variable_set(:@addr, '192.168.1.1') }
+    manager.proxies[2] = connectable_proxy
+
+    expect(manager.get!).to eq(connectable_proxy)
+    expect(manager.proxies.size).to be(3)
+
+    expect(manager.get!).to eq(connectable_proxy)
+    expect(manager.proxies.size).to be(1)
+  end
 end

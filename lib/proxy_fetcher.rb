@@ -37,6 +37,32 @@ module ProxyFetcher
 
     alias_method :fetch!, :refresh_list!
 
+    # Pop just first proxy (and back it to the end of the proxy list)
+    def get
+      first_proxy = @proxies.shift
+      @proxies << first_proxy
+
+      first_proxy
+    end
+
+    alias_method :pop, :get
+
+    # Pop first valid proxy (and back it to the end of the proxy list)
+    # Invalid proxies will be removed from the list
+    def get!
+      index = @proxies.find_index(&:connectable?)
+      return if index < 0
+
+      proxy = @proxies.delete_at(index)
+      tail = @proxies[index..-1]
+
+      @proxies = tail << proxy
+
+      proxy
+    end
+
+    alias_method :pop!, :get!
+
     # Clean current proxy list from dead proxies (doesn't respond by timeout)
     def cleanup!
       proxies.keep_if(&:connectable?)
