@@ -39,6 +39,8 @@ module ProxyFetcher
 
     # Pop just first proxy (and back it to the end of the proxy list)
     def get
+      return if @proxies.empty?
+
       first_proxy = @proxies.shift
       @proxies << first_proxy
 
@@ -51,7 +53,7 @@ module ProxyFetcher
     # Invalid proxies will be removed from the list
     def get!
       index = @proxies.find_index(&:connectable?)
-      return if index < 0
+      return if index.nil?
 
       proxy = @proxies.delete_at(index)
       tail = @proxies[index..-1]

@@ -61,4 +61,11 @@ describe ProxyFetcher::Manager do
     expect(manager.get!).to eq(connectable_proxy)
     expect(manager.proxies.size).to be(1)
   end
+
+  it 'returns nothing if proxy list is empty' do
+    manager = described_class.new(refresh: false)
+
+    expect(manager.get).to be_nil
+    expect(manager.get!).to be_nil
+  end
 end
