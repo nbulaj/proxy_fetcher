@@ -22,7 +22,7 @@ module ProxyFetcher
       false
     end
 
-    alias_method :valid?, :connectable?
+    alias valid? connectable?
 
     def http?
       type.casecmp('http').zero?

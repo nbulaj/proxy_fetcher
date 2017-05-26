@@ -20,6 +20,7 @@ describe ProxyFetcher::Proxy do
   it "not connectable if server doesn't respond to head" do
     allow_any_instance_of(Net::HTTP).to receive(:start).and_return(false)
     expect(proxy.connectable?).to be_falsey
+    expect(proxy.valid?).to be_falsey
   end
 
   it 'returns URI::Generic' do
