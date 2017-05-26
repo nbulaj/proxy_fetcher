@@ -8,8 +8,13 @@ describe ProxyFetcher::Proxy do
   let(:proxy) { @manager.proxies.first }
 
   it 'checks schema' do
-    expect(proxy.http?).to be_falsey.or(be_truthy)
-    expect(proxy.https?).to be_falsey.or(be_truthy)
+    proxy.instance_variable_set(:@type, 'HTTP')
+    expect(proxy.http?).to be_truthy
+    expect(proxy.https?).to be_falsey
+
+    proxy.instance_variable_set(:@type, 'HTTPS')
+    expect(proxy.https?).to be_truthy
+    expect(proxy.http?).to be_falsey
   end
 
   it 'not connectable if IP addr is wrong' do
