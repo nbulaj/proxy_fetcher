@@ -35,4 +35,31 @@ describe ProxyFetcher::Proxy do
   it 'returns URL' do
     expect(proxy.url).to be_a(String)
   end
+
+  it 'must be slow if speed < 33' do
+    proxy.instance_variable_set(:@speed, 32)
+    expect(proxy.slow?).to be_truthy
+
+    proxy.instance_variable_set(:@speed, 33)
+    expect(proxy.slow?).to be_falsey
+  end
+
+  it 'must be medium if speed >= 33 and < 66' do
+    proxy.instance_variable_set(:@speed, 32)
+    expect(proxy.medium?).to be_falsey
+
+    proxy.instance_variable_set(:@speed, 33)
+    expect(proxy.medium?).to be_truthy
+
+    proxy.instance_variable_set(:@speed, 65)
+    expect(proxy.medium?).to be_truthy
+  end
+
+  it 'must be fast if speed >= 66' do
+    proxy.instance_variable_set(:@speed, 65)
+    expect(proxy.fast?).to be_falsey
+
+    proxy.instance_variable_set(:@speed, 66)
+    expect(proxy.fast?).to be_truthy
+  end
 end
