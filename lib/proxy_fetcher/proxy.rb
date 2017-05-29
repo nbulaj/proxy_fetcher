@@ -32,6 +32,18 @@ module ProxyFetcher
       type.casecmp('https').zero?
     end
 
+    def fast?
+      speed >= 66
+    end
+
+    def medium?
+      speed >= 33 && speed < 66
+    end
+
+    def slow?
+      speed < 33
+    end
+
     def uri
       URI::Generic.build(host: addr, port: port, scheme: type)
     end
