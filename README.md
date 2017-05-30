@@ -135,3 +135,5 @@ Thanks.
 proxy_fetcher gem is released under the [MIT License](http://www.opensource.org/licenses/MIT).
 
 Copyright (c) 2017 Nikita Bulai (bulajnikita@gmail.com).
+
+Some parser code (c) [pifleo](https://gist.github.com/pifleo/3889803)
