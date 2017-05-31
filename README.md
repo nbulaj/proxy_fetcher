@@ -15,6 +15,12 @@ If using bundler, first add 'proxy_fetcher' to your Gemfile:
 gem 'proxy_fetcher', '~> 0.1'
 ```
 
+or if you want to use the latest version (from `master` branch), then:
+
+```ruby
+gem 'proxy_fetcher', git: 'https://github.com/nbulaj/proxy_fetcher.git'
+```
+
 And run:
 
 ```sh
@@ -97,6 +103,12 @@ If you wanna clear current proxy manager list from dead servers, you can just ca
 manager.cleanup! # or manager.validate!
 ```
 
+You can sort or find any proxy by speed using next 3 instance methods:
+
+* `fast?`
+* `medium?`
+* `slow?`'
+
 To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change ProxyFetcher::Manager config:
 
 ```ruby
@@ -123,7 +135,7 @@ To contribute:
 4. Add documentation for your feature or bug fix.
 5. Run <tt>rake doc:yard</tt>. If your changes are not 100% documented, go back to step 4.
 6. Add tests for your feature or bug fix.
-7. Run `rake` to make sure all tests pass.
+7. Run `rake spec` to make sure all tests pass.
 8. Commit your changes (`git commit -am 'Add new feature'`).
 9. Push to the branch (`git push origin my-new-feature`).
 10. Create new pull request.
