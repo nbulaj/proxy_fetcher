@@ -18,7 +18,7 @@ module ProxyFetcher
       connection.start { |http| return true if http.request_head('/') }
 
       false
-    rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::ECONNABORTED
+    rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::ECONNABORTED, Errno::EOFError
       false
     end
 

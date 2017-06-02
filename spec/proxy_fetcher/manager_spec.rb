@@ -68,4 +68,9 @@ describe ProxyFetcher::Manager do
     expect(manager.get).to be_nil
     expect(manager.get!).to be_nil
   end
+
+  it 'returns random proxy' do
+    manager = described_class.new
+    expect(manager.random).to be_an_instance_of(ProxyFetcher::Proxy)
+  end
 end

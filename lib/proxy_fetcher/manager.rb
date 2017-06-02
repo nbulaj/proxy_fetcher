@@ -45,11 +45,11 @@ module ProxyFetcher
     # Pop first valid proxy (and back it to the end of the proxy list)
     # Invalid proxies will be removed from the list
     def get!
-      index = @proxies.find_index(&:connectable?)
+      index = proxies.find_index(&:connectable?)
       return if index.nil?
 
-      proxy = @proxies.delete_at(index)
-      tail = @proxies[index..-1]
+      proxy = proxies.delete_at(index)
+      tail = proxies[index..-1]
 
       @proxies = tail << proxy
 
@@ -65,7 +65,12 @@ module ProxyFetcher
 
     alias validate! cleanup!
 
-    # Just schema + host + port
+    # Return random proxy
+    def random
+      proxies.sample
+    end
+
+    # Returns array of proxy URLs (just schema + host + port)
     def raw_proxies
       proxies.map(&:url)
     end
