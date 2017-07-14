@@ -1,7 +1,7 @@
 module ProxyFetcher
   module Providers
-    class HideMyName < Base
-      PROVIDER_URL = 'https://hidemy.name/en/proxy-list/?type=hs#list'.freeze
+    class FreeProxyList < Base
+      PROVIDER_URL = 'https://free-proxy-list.net/'.freeze
 
       class << self
         def parse_entry(entry, proxy_instance)
@@ -10,7 +10,7 @@ module ProxyFetcher
 
         def load_proxy_list
           doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//table[@class="proxy__t"]/tbody/tr')
+          doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
         end
       end
 
@@ -21,14 +21,12 @@ module ProxyFetcher
             set!(:addr, td.content.strip)
           when 1 then
             set!(:port, Integer(td.content.strip))
-          when 2 then
-            set!(:country, td.at_xpath('*//span[1]/following-sibling::text()[1]').content.strip)
-          when 3
-            set!(:response_time, Integer(td.at('p').content.strip[/\d+/]))
+          when 3 then
+            set!(:country, td.content.strip)
           when 4
-            set!(:type, parse_type(td))
-          when 5
             set!(:anonymity, td.content.strip)
+          when 6
+            set!(:type, parse_type(td))
           else
             # nothing
           end
@@ -38,9 +36,9 @@ module ProxyFetcher
       private
 
       def parse_type(td)
-        schemas = td.content.strip
+        type = td.content.strip
 
-        if schemas && schemas.downcase.include?('https')
+        if type && type.downcase.include?('yes')
           'HTTPS'
         else
           'HTTP'
@@ -50,4 +48,4 @@ module ProxyFetcher
   end
 end
 
-ProxyFetcher::Configuration.register_provider(:hide_my_name, ProxyFetcher::Providers::HideMyName)
+ProxyFetcher::Configuration.register_provider(:free_proxy_list, ProxyFetcher::Providers::FreeProxyList)

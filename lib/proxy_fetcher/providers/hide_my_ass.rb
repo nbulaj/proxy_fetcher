@@ -38,8 +38,6 @@ module ProxyFetcher
         end
       end
 
-      ProxyFetcher::Configuration.register_provider(:hide_my_ass, self)
-
       private
 
       def parse_addr(html_doc)
@@ -72,3 +70,5 @@ module ProxyFetcher
     end
   end
 end
+
+ProxyFetcher::Configuration.register_provider(:hide_my_ass, ProxyFetcher::Providers::HideMyAss)
