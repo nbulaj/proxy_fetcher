@@ -7,6 +7,8 @@
 This gem can help your Ruby application to make HTTP(S) requests from proxy server, fetching and validating
 current proxy lists from the [HideMyAss](http://hidemyass.com/) service.
 
+**IMPORTANT** currently HideMyAss service closed free proxy list service, but it will be open soon and gem will be updated.
+
 ## Installation
 
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
