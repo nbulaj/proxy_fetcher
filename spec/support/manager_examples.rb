@@ -1,15 +1,4 @@
-require 'spec_helper'
-
-describe ProxyFetcher::Manager do
-  before :all do
-    ProxyFetcher.config.provider = :hide_my_ass
-  end
-
-  before do
-    html = File.read(File.expand_path('../../../../fixtures/hide_my_ass.html', __FILE__))
-    allow(ProxyFetcher::Providers::Base).to receive(:load_html).and_return(html)
-  end
-
+RSpec.shared_examples 'a manager' do
   it 'loads proxy list on initialization by default' do
     manager = described_class.new
     expect(manager.proxies).not_to be_empty
