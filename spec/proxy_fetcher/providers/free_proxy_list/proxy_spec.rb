@@ -1,9 +1,12 @@
 require 'spec_helper'
 
 describe ProxyFetcher::Proxy do
+  before :all do
+    ProxyFetcher.config.provider = :free_proxy_list
+  end
+
   before do
-    ProxyFetcher.config.provider = :hide_my_ass
-    html = File.read(File.expand_path('../../fixtures/hide_my_ass.html', __FILE__))
+    html = File.read(File.expand_path('../../../../fixtures/free_proxy_list.html', __FILE__))
     allow(ProxyFetcher::Providers::Base).to receive(:load_html).and_return(html)
 
     @manager = ProxyFetcher::Manager.new
@@ -38,32 +41,5 @@ describe ProxyFetcher::Proxy do
 
   it 'returns URL' do
     expect(proxy.url).to be_a(String)
-  end
-
-  it 'must be slow if speed < 33' do
-    proxy.instance_variable_set(:@speed, 32)
-    expect(proxy.slow?).to be_truthy
-
-    proxy.instance_variable_set(:@speed, 33)
-    expect(proxy.slow?).to be_falsey
-  end
-
-  it 'must be medium if speed >= 33 and < 66' do
-    proxy.instance_variable_set(:@speed, 32)
-    expect(proxy.medium?).to be_falsey
-
-    proxy.instance_variable_set(:@speed, 33)
-    expect(proxy.medium?).to be_truthy
-
-    proxy.instance_variable_set(:@speed, 65)
-    expect(proxy.medium?).to be_truthy
-  end
-
-  it 'must be fast if speed >= 66' do
-    proxy.instance_variable_set(:@speed, 65)
-    expect(proxy.fast?).to be_falsey
-
-    proxy.instance_variable_set(:@speed, 66)
-    expect(proxy.fast?).to be_truthy
   end
 end
