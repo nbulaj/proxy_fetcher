@@ -7,6 +7,7 @@ require 'proxy_fetcher/proxy'
 require 'proxy_fetcher/manager'
 require 'proxy_fetcher/providers/base'
 require 'proxy_fetcher/providers/hide_my_ass'
+require 'proxy_fetcher/providers/hide_my_name'
 
 module ProxyFetcher
   class << self

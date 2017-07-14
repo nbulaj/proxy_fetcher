@@ -1,6 +1,7 @@
 module ProxyFetcher
   class Configuration
     UnknownProvider = Class.new(StandardError)
+    ProviderRegistered = Class.new(StandardError)
 
     attr_accessor :open_timeout, :read_timeout, :provider
 
@@ -10,6 +11,8 @@ module ProxyFetcher
       end
 
       def register_provider(name, klass)
+        raise ProviderRegistered, "#{name} provider already registered!" if providers.key?(name.to_sym)
+
         providers[name.to_sym] = klass
       end
     end
@@ -18,7 +21,7 @@ module ProxyFetcher
       @open_timeout = 3
       @read_timeout = 3
 
-      self.provider = :hide_my_ass # currently default one
+      self.provider = :hide_my_name # currently default one
     end
 
     def provider=(name)

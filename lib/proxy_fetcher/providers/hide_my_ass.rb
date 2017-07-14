@@ -14,8 +14,8 @@ module ProxyFetcher
         end
       end
 
-      def parse!(html_doc)
-        html_doc.xpath('td').each_with_index do |td, index|
+      def parse!(html_entry)
+        html_entry.xpath('td').each_with_index do |td, index|
           case index
           when 1
             set!(:addr, parse_addr(td))
@@ -37,6 +37,8 @@ module ProxyFetcher
           end
         end
       end
+
+      ProxyFetcher::Configuration.register_provider(:hide_my_ass, self)
 
       private
 
@@ -70,5 +72,3 @@ module ProxyFetcher
     end
   end
 end
-
-ProxyFetcher::Configuration.register_provider(:hide_my_ass, ProxyFetcher::Providers::HideMyAss)
