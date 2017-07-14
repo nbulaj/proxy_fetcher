@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 describe ProxyFetcher::Proxy do
-  before :all do
+  before do
+    html = File.read(File.expand_path('../../fixtures/hide_my_ass.html', __FILE__))
+    allow(ProxyFetcher::Providers::Base).to receive(:load_html).and_return(html)
+
     @manager = ProxyFetcher::Manager.new
   end
 
