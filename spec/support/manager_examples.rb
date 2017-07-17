@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe ProxyFetcher::Manager do
+RSpec.shared_examples 'a manager' do
   it 'loads proxy list on initialization by default' do
     manager = described_class.new
     expect(manager.proxies).not_to be_empty

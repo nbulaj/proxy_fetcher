@@ -1,12 +1,6 @@
 module ProxyFetcher
   class Manager
-    PROXY_PROVIDER_URL = 'http://proxylist.hidemyass.com/'.freeze
-
-    class << self
-      def config
-        @config ||= ProxyFetcher::Configuration.new
-      end
-    end
+    EmptyProxyList = Class.new(StandardError)
 
     attr_reader :proxies
 
@@ -22,9 +16,7 @@ module ProxyFetcher
 
     # Update current proxy list from the provider
     def refresh_list!
-      doc = Nokogiri::HTML(load_html(PROXY_PROVIDER_URL))
-      rows = doc.xpath('//table[@id="listable"]/tbody/tr')
-
+      rows = ProxyFetcher.config.provider.load_proxy_list
       @proxies = rows.map { |row| Proxy.new(row) }
     end
 
@@ -78,16 +70,6 @@ module ProxyFetcher
     # No need to put all the attr_readers
     def inspect
       to_s
-    end
-
-    private
-
-    # Get HTML from the requested URL
-    def load_html(url)
-      uri = URI.parse(url)
-      http = Net::HTTP.new(uri.host, uri.port)
-      response = http.get(uri.request_uri)
-      response.body
     end
   end
 end
