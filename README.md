@@ -5,7 +5,7 @@
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy server, fetching and validating
-current proxy lists from the [HideMyAss](http://hidemyass.com/) service.
+current proxy lists from the different proxy services like [HideMyAss](http://hidemyass.com/) or Hide My Name.
 
 **IMPORTANT** currently HideMyAss service closed free proxy list service, but it will be open soon and gem will be updated.
 
@@ -14,7 +14,7 @@ current proxy lists from the [HideMyAss](http://hidemyass.com/) service.
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.1'
+gem 'proxy_fetcher', '~> 0.2'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -32,7 +32,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.1'
+gem install proxy_fetcher -v '0.2'
 ```
 
 ## Example of usage
@@ -81,9 +81,9 @@ Every proxy is a `ProxyFetcher::Proxy` object that has next readers:
 * `port`
 * `country` (USA or Brazil for example)
 * `response_time` (5217 for example)
-* `connection_time` (rank from 0 to 100, where 0 — slow, 100 — high)
-* `speed` (rank from 0 to 100, where 0 — slow, 100 — high)
-* `type` (URI schema, HTTP for example)
+* `connection_time` (rank from 0 to 100, where 0 — slow, 100 — high. **Note** depends on the proxy provider)
+* `speed` (rank from 0 to 100, where 0 — slow, 100 — high. **Note** depends on the proxy provider)
+* `type` (URI schema, HTTP or HTTPS)
 * `anonimity` (Low or High +KA for example)
 
 Also you can call next instance method for every Proxy object:
@@ -111,15 +111,44 @@ You can sort or find any proxy by speed using next 3 instance methods:
 * `medium?`
 * `slow?`'
 
-To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change ProxyFetcher::Manager config:
+To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change ProxyFetcher.config:
 
 ```ruby
-ProxyFetcher::Manager.config.read_timeout = 1 # default is 3
-ProxyFetcher::Manager.config.open_timeout = 1 # default is 3
+ProxyFetcher.config.read_timeout = 1 # default is 3
+ProxyFetcher.config.open_timeout = 1 # default is 3
 
 manager = ProxyFetcher::Manager.new
 manager.cleanup!
 ```
+
+## Providers
+
+Currently ProxyFetcher can deal with next proxy providers:
+
+* Hide My Name (default one)
+* Free Proxy List
+* HideMyAss
+
+If you wanna use one of them just setup required in the config:
+
+ 
+```ruby
+ProxyFetcher.config.provider = :free_proxy_list
+
+manager = ProxyFetcher::Manager.new
+manager.proxies
+ #=> ...
+```
+
+Also you can write your own provider. All you need is to create a class, that would be inherited from the
+`ProxyFetcher::Providers::Base` class, and register your provider like this:
+
+```ruby
+ProxyFetcher::Configuration.register_provider(:your_provider, YourProviderClass)
+```
+
+Provider class must implement `self.load_proxy_list` and `#parse!(html_entry)` methods that will load and parse
+provider HTML page with proxy list. Take a look at the samples in the `proxy_fetcher/providers` directory.
 
 ## TODO
 

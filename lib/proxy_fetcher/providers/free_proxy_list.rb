@@ -4,10 +4,6 @@ module ProxyFetcher
       PROVIDER_URL = 'https://free-proxy-list.net/'.freeze
 
       class << self
-        def parse_entry(entry, proxy_instance)
-          new(proxy_instance).parse!(entry)
-        end
-
         def load_proxy_list
           doc = Nokogiri::HTML(load_html(PROVIDER_URL))
           doc.xpath('//table[@id="proxylisttable"]/tbody/tr')

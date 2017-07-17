@@ -12,6 +12,10 @@ module ProxyFetcher
       end
 
       class << self
+        def parse_entry(entry, proxy_instance)
+          new(proxy_instance).parse!(entry)
+        end
+
         # Get HTML from the requested URL
         def load_html(url)
           uri = URI.parse(url)
