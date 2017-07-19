@@ -4,8 +4,11 @@
 [![Coverage Status](https://coveralls.io/repos/github/nbulaj/proxy_fetcher/badge.svg)](https://coveralls.io/github/nbulaj/proxy_fetcher)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
-This gem can help your Ruby application to make HTTP(S) requests from proxy server, fetching and validating
-current proxy lists from the different proxy services like [HideMyAss](http://hidemyass.com/) or Hide My Name.
+This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
+proxy lists from the different providers like [HideMyAss](http://hidemyass.com/) or Hide My Name.
+
+It gives you a `Manager` class that can load proxy list, validate it and return random or specific proxy entry. Take a look
+at the documentation below to find all the gem features.
 
 **IMPORTANT** currently HideMyAss service closed free proxy list service, but it will be open soon and gem will be updated.
 
@@ -86,7 +89,7 @@ Every proxy is a `ProxyFetcher::Proxy` object that has next readers:
 * `type` (URI schema, HTTP or HTTPS)
 * `anonimity` (Low or High +KA for example)
 
-Also you can call next instance method for every Proxy object:
+Also you can call next instance methods for every Proxy object:
 
 * `connectable?` (whether proxy server is available)
 * `http?` (whether proxy server has a HTTP protocol)
@@ -123,7 +126,7 @@ manager.cleanup!
 
 ## Providers
 
-Currently ProxyFetcher can deal with next proxy providers:
+Currently ProxyFetcher can deal with next proxy providers (services):
 
 * Hide My Name (default one)
 * Free Proxy List
@@ -131,7 +134,6 @@ Currently ProxyFetcher can deal with next proxy providers:
 
 If you wanna use one of them just setup required in the config:
 
- 
 ```ruby
 ProxyFetcher.config.provider = :free_proxy_list
 
@@ -153,6 +155,7 @@ provider HTML page with proxy list. Take a look at the samples in the `proxy_fet
 ## TODO
 
 * Proxy filters
+* Code refactoring
 
 ## Contributing
 
