@@ -1,7 +1,6 @@
 module ProxyFetcher
   class Proxy
-    attr_reader :addr, :port, :country, :response_time,
-                :connection_time, :speed, :type, :anonymity
+    attr_reader :addr, :port, :country, :response_time, :speed, :type, :anonymity
 
     def initialize(html_row)
       ProxyFetcher.config.provider.parse_entry(html_row, self)
@@ -24,24 +23,18 @@ module ProxyFetcher
 
     alias valid? connectable?
 
+    %i[slow medium fast].each do |method|
+      define_method "#{method}?" do
+        speed == method
+      end
+    end
+
     def http?
       type.casecmp('http').zero?
     end
 
     def https?
       type.casecmp('https').zero?
-    end
-
-    def fast?
-      speed >= 66
-    end
-
-    def medium?
-      speed >= 33 && speed < 66
-    end
-
-    def slow?
-      speed < 33
     end
 
     def uri

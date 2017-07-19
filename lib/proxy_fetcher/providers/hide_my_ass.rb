@@ -22,8 +22,6 @@ module ProxyFetcher
           when 4
             set!(:response_time, parse_response_time(td))
             set!(:speed, parse_indicator_value(td))
-          when 5
-            set!(:connection_time, parse_indicator_value(td))
           when 6 then
             set!(:type, td.content.strip)
           when 7

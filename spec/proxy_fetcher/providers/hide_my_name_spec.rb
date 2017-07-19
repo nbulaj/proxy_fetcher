@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ProxyFetcher::Manager do
+describe ProxyFetcher::Providers::HideMyName do
   before :all do
     ProxyFetcher.config.provider = :hide_my_name
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ProxyFetcher::Manager do
+describe ProxyFetcher::Providers::FreeProxyList do
   before :all do
     ProxyFetcher.config.provider = :free_proxy_list
   end

@@ -47,7 +47,7 @@ manager = ProxyFetcher::Manager.new # will immediately load proxy list from the 
 manager.proxies
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
- #     @response_time=5217, @speed=48, @connection_time=100, @type="HTTP", @anonymity="High">, ... ]
+ #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 You can initialize proxy manager without loading proxy list from the remote server by passing `refresh: false` on initialization:
@@ -75,17 +75,16 @@ If `ProxyFetcher::Manager` was already initialized somewhere, you can refresh th
 manager.refresh_list! # or manager.fetch!
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
- #     @response_time=5217, @speed=48, @connection_time=100, @type="HTTP", @anonymity="High">, ... ]
+ #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
 ```
 
-Every proxy is a `ProxyFetcher::Proxy` object that has next readers:
+Every proxy is a `ProxyFetcher::Proxy` object that has next readers (instance variables):
 
 * `addr` (IP address)
 * `port`
 * `country` (USA or Brazil for example)
 * `response_time` (5217 for example)
-* `connection_time` (rank from 0 to 100, where 0 — slow, 100 — high. **Note** depends on the proxy provider)
-* `speed` (rank from 0 to 100, where 0 — slow, 100 — high. **Note** depends on the proxy provider)
+* `speed` (`:slow`, `:medium` or `:fast`. **Note:** depends on the proxy provider and can be `nil`)
 * `type` (URI schema, HTTP or HTTPS)
 * `anonimity` (Low or High +KA for example)
 
@@ -154,8 +153,9 @@ provider HTML page with proxy list. Take a look at the samples in the `proxy_fet
 
 ## TODO
 
-* Proxy filters
+* Add proxy filters
 * Code refactoring
+* Rewrite specs
 
 ## Contributing
 
