@@ -5,7 +5,7 @@ require 'proxy_fetcher/version'
 Gem::Specification.new do |gem|
   gem.name = 'proxy_fetcher'
   gem.version = ProxyFetcher.gem_version
-  gem.date = '2017-07-19'
+  gem.date = '2017-07-20'
   gem.summary = 'Ruby gem for dealing with proxy lists '
   gem.description = 'This gem can help your Ruby application to make HTTP(S) requests ' \
                     'from proxy server by fetching and validating proxy lists from the different providers.'

@@ -130,6 +130,9 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 * Hide My Name (default one)
 * Free Proxy List
 * HideMyAss
+* Hidster
+* Proxy Docker
+* XRoxy
 
 If you wanna use one of them just setup required in the config:
 
