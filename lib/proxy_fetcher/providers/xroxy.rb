@@ -32,7 +32,7 @@ module ProxyFetcher
         end
       end
     end
+
+    ProxyFetcher::Configuration.register_provider(:xroxy, XRoxy)
   end
 end
-
-ProxyFetcher::Configuration.register_provider(:xroxy, ProxyFetcher::Providers::XRoxy)

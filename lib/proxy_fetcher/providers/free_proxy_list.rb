@@ -41,7 +41,7 @@ module ProxyFetcher
         end
       end
     end
+
+    ProxyFetcher::Configuration.register_provider(:free_proxy_list, FreeProxyList)
   end
 end
-
-ProxyFetcher::Configuration.register_provider(:free_proxy_list, ProxyFetcher::Providers::FreeProxyList)

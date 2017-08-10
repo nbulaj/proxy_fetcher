@@ -56,7 +56,7 @@ module ProxyFetcher
         end
       end
     end
+
+    ProxyFetcher::Configuration.register_provider(:hide_my_name, HideMyName)
   end
 end
-
-ProxyFetcher::Configuration.register_provider(:hide_my_name, ProxyFetcher::Providers::HideMyName)
