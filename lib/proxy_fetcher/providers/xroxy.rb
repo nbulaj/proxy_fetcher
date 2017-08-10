@@ -21,7 +21,7 @@ module ProxyFetcher
             set!(:anonymity,  td.content.strip)
           when 4
             ssl = td.content.strip.downcase
-            set!(:type, ssl.include?('true') ? 'HTTPS' : 'HTTP' )
+            set!(:type, ssl.include?('true') ? 'HTTPS' : 'HTTP')
           when 5 then
             set!(:country, td.content.strip)
           when 6
