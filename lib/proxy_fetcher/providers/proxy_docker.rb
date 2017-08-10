@@ -6,7 +6,7 @@ module ProxyFetcher
       class << self
         def load_proxy_list
           doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//table[@class="table table-striped"]/tr[(not(@id="proxy-table-header")) and (count(td)>2)]')
+          doc.xpath('//table[contains(@class, "table")]/tr[(not(@id="proxy-table-header")) and (count(td)>2)]')
         end
       end
 
@@ -30,7 +30,7 @@ module ProxyFetcher
         end
       end
     end
+
+    ProxyFetcher::Configuration.register_provider(:proxy_docker, ProxyDocker)
   end
 end
-
-ProxyFetcher::Configuration.register_provider(:proxy_docker, ProxyFetcher::Providers::ProxyDocker)

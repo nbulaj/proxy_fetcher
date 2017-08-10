@@ -1,7 +1,5 @@
 module ProxyFetcher
   class Manager
-    EmptyProxyList = Class.new(StandardError)
-
     attr_reader :proxies
 
     # refresh: true - load proxy list from the remote server on initialization

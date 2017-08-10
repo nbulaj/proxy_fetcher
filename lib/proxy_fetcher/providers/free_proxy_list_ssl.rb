@@ -1,37 +1,35 @@
 module ProxyFetcher
   module Providers
-    class Hidster < Base
-      PROVIDER_URL = 'https://hidester.com/proxylist/'.freeze
+    class FreeProxyListSSL < Base
+      PROVIDER_URL = 'https://www.sslproxies.org/'.freeze
 
       class << self
         def load_proxy_list
           doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//div[@class="proxyListTable"]/table/tbody/tr[@class!="proxy-table-header"]')
+          doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
         end
       end
 
       def parse!(html_entry)
         html_entry.xpath('td').each_with_index do |td, index|
           case index
-          when 1
+          when 0
             set!(:addr, td.content.strip)
-          when 2 then
+          when 1 then
             set!(:port, Integer(td.content.strip))
           when 3 then
             set!(:country, td.content.strip)
           when 4
-            set!(:type, td.content.strip)
-          when 6
-            set!(:response_time, Integer(td.at('p').content.strip[/\d+/]))
-          when 7
             set!(:anonymity, td.content.strip)
+          when 6
+            set!(:type, 'HTTPS')
           else
             # nothing
           end
         end
       end
     end
+
+    ProxyFetcher::Configuration.register_provider(:free_proxy_list_ssl, FreeProxyListSSL)
   end
 end
-
-ProxyFetcher::Configuration.register_provider(:hidster, ProxyFetcher::Providers::Hidster)

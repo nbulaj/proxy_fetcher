@@ -5,12 +5,10 @@
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
-proxy lists from the different providers like [HideMyAss](http://hidemyass.com/) or Hide My Name.
+proxy lists from the different providers like [HideMyName](https://hidemy.name/en/) or Hide My Name.
 
 It gives you a `Manager` class that can load proxy list, validate it and return random or specific proxy entry. Take a look
 at the documentation below to find all the gem features.
-
-**IMPORTANT** currently HideMyAss service closed free proxy list service, but it will be open soon and gem will be updated.
 
 ## Installation
 
@@ -129,8 +127,7 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 
 * Hide My Name (default one)
 * Free Proxy List
-* HideMyAss
-* Hidster
+* SSL Proxies
 * Proxy Docker
 * XRoxy
 
