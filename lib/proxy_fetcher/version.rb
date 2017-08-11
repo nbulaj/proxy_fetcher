@@ -9,7 +9,7 @@ module ProxyFetcher
     # Minor version number
     MINOR = 2
     # Smallest version number
-    TINY  = 3
+    TINY  = 4
 
     # Full version number
     STRING = [MAJOR, MINOR, TINY].compact.join('.')

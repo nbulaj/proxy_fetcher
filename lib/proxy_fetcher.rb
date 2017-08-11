@@ -5,6 +5,7 @@ require 'nokogiri'
 require 'proxy_fetcher/configuration'
 require 'proxy_fetcher/proxy'
 require 'proxy_fetcher/manager'
+require 'proxy_fetcher/utils/http_fetcher'
 require 'proxy_fetcher/providers/base'
 require 'proxy_fetcher/providers/free_proxy_list'
 require 'proxy_fetcher/providers/free_proxy_list_ssl'
@@ -16,6 +17,10 @@ module ProxyFetcher
   class << self
     def config
       @config ||= ProxyFetcher::Configuration.new
+    end
+
+    def configure
+      yield config
     end
   end
 end

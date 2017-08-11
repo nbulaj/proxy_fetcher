@@ -4,6 +4,7 @@ module ProxyFetcher
     RegisteredProvider = Class.new(StandardError)
 
     attr_accessor :open_timeout, :read_timeout, :provider
+    attr_accessor :http_client
 
     class << self
       def providers
@@ -20,6 +21,7 @@ module ProxyFetcher
     def initialize
       @open_timeout = 3
       @read_timeout = 3
+      @http_client = HTTPClient
 
       self.provider = :hide_my_name # currently default one
     end

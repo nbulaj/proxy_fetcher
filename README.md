@@ -5,7 +5,7 @@
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
-proxy lists from the different providers like [HideMyName](https://hidemy.name/en/) or Hide My Name.
+proxy lists from the different providers like [HideMyName](https://hidemy.name/en/).
 
 It gives you a `Manager` class that can load proxy list, validate it and return random or specific proxy entry. Take a look
 at the documentation below to find all the gem features.
@@ -111,14 +111,42 @@ You can sort or find any proxy by speed using next 3 instance methods:
 * `medium?`
 * `slow?`'
 
-To change open/read timeout for `cleanup!` and `connectable?` methods yu need to change ProxyFetcher.config:
+## Configuration
+
+To change open/read timeout for `cleanup!` and `connectable?` methods you need to change ProxyFetcher.config:
 
 ```ruby
-ProxyFetcher.config.read_timeout = 1 # default is 3
-ProxyFetcher.config.open_timeout = 1 # default is 3
+ProxyFetcher.configure do |config|
+  config.read_timeout = 1 # default is 3
+  config.open_timeout = 1 # default is 3
+end
 
 manager = ProxyFetcher::Manager.new
 manager.cleanup!
+```
+
+ProxyFetcher uses simple Ruby solution for dealing with HTTP requests - `net/http` library. If you wanna add, for example, your custom provider that
+was developed as a Single Page Application (SPA) with some JavaScript, then you will need something like []selenium-webdriver](https://github.com/SeleniumHQ/selenium/tree/master/rb)
+to properly load the content of the website. For those and other cases you can write your own class for fetching HTML content by the URL and setup it
+in the ProxyFetcher config:
+
+```ruby
+class MyHTTPClient
+  class << self
+    # [IMPORTANT]: self.fetch method is required!
+    def fetch(url)
+      # ... some magic to return proper HTML ...
+    end
+  end
+end
+
+ProxyFetcher.config.http_client = MyHTTPClient
+
+manager = ProxyFetcher::Manager.new
+manager.proxies
+
+#=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 ## Providers
