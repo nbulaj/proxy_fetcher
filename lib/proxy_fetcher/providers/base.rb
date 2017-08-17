@@ -18,11 +18,7 @@ module ProxyFetcher
 
         # Get HTML from the requested URL
         def load_html(url)
-          uri = URI.parse(url)
-          http = Net::HTTP.new(uri.host, uri.port)
-          http.use_ssl = true if uri.scheme == 'https'
-          response = http.get(uri.request_uri)
-          response.body
+          ProxyFetcher.config.http_client.fetch(url)
         end
       end
     end
