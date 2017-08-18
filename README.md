@@ -161,8 +161,9 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 
 * Hide My Name (default one)
 * Free Proxy List
-* SSL Proxies
+* Free SSL Proxies
 * Proxy Docker
+* Proxy List
 * XRoxy
 
 If you wanna use one of them just setup required in the config:
@@ -188,8 +189,6 @@ provider HTML page with proxy list. Take a look at the existing providers in the
 ## TODO
 
 * Add proxy filters
-* Code refactoring
-* Rewrite specs
 
 ## Contributing
 
@@ -212,8 +211,6 @@ Thanks.
 
 ## License
 
-proxy_fetcher gem is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+`proxy_fetcher` gem is released under the [MIT License](http://www.opensource.org/licenses/MIT).
 
 Copyright (c) 2017 Nikita Bulai (bulajnikita@gmail.com).
-
-Some parser code (c) [pifleo](https://gist.github.com/pifleo/3889803)
