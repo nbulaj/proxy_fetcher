@@ -3,32 +3,19 @@ module ProxyFetcher
     class XRoxy < Base
       PROVIDER_URL = 'http://www.xroxy.com/proxylist.php?port=&type=All_http'.freeze
 
-      class << self
-        def load_proxy_list
-          doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//div[@id="content"]/table[1]/tr[contains(@class, "row")]')
-        end
+      def load_proxy_list
+        doc = Nokogiri::HTML(load_html(PROVIDER_URL))
+        doc.xpath('//div[@id="content"]/table[1]/tr[contains(@class, "row")]')
       end
 
-      def parse!(html_entry)
-        html_entry.xpath('td').each_with_index do |td, index|
-          case index
-          when 1
-            set!(:addr, td.content.strip)
-          when 2
-            set!(:port, Integer(td.content.strip))
-          when 3
-            set!(:anonymity,  td.content.strip)
-          when 4
-            ssl = td.content.strip.downcase
-            set!(:type, ssl.include?('true') ? 'HTTPS' : 'HTTP')
-          when 5 then
-            set!(:country, td.content.strip)
-          when 6
-            set!(:response_time, Integer(td.content.strip))
-          else
-            # nothing
-          end
+      def to_proxy(html_element)
+        ProxyFetcher::Proxy.new.tap do |proxy|
+          proxy.addr = parse_element(html_element, 'td[2]')
+          proxy.port = convert_to_int(parse_element(html_element, 'td[3]'))
+          proxy.anonymity = parse_element(html_element, 'td[4]')
+          proxy.type = parse_element(html_element, 'td[5]').casecmp('true').zero? ? HTTPS : HTTP
+          proxy.country = parse_element(html_element, 'td[6]')
+          proxy.response_time = convert_to_int(parse_element(html_element, 'td[7]'))
         end
       end
     end

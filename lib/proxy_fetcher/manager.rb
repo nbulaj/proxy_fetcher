@@ -14,8 +14,7 @@ module ProxyFetcher
 
     # Update current proxy list from the provider
     def refresh_list!
-      rows = ProxyFetcher.config.provider.load_proxy_list
-      @proxies = rows.map { |row| Proxy.new(row) }
+      @proxies = ProxyFetcher.config.provider.fetch_proxies!
     end
 
     alias fetch! refresh_list!
@@ -56,9 +55,11 @@ module ProxyFetcher
     alias validate! cleanup!
 
     # Return random proxy
-    def random
+    def random_proxy
       proxies.sample
     end
+
+    alias random random_proxy
 
     # Returns array of proxy URLs (just schema + host + port)
     def raw_proxies

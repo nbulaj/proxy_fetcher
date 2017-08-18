@@ -2,6 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/proxy_fetcher.svg)](http://badge.fury.io/rb/proxy_fetcher)
 [![Build Status](https://travis-ci.org/nbulaj/proxy_fetcher.svg?branch=master)](https://travis-ci.org/nbulaj/proxy_fetcher)
 [![Coverage Status](https://coveralls.io/repos/github/nbulaj/proxy_fetcher/badge.svg)](https://coveralls.io/github/nbulaj/proxy_fetcher)
+[![Code Climate](https://codeclimate.com/github/nbulaj/proxy_fetcher/badges/gpa.svg)](https://codeclimate.com/github/nbulaj/proxy_fetcher)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
@@ -15,7 +16,7 @@ at the documentation below to find all the gem features.
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.2'
+gem 'proxy_fetcher', '~> 0.3'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -33,7 +34,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.2'
+gem install proxy_fetcher -v '0.3'
 ```
 
 ## Example of usage
@@ -84,7 +85,7 @@ Every proxy is a `ProxyFetcher::Proxy` object that has next readers (instance va
 * `response_time` (5217 for example)
 * `speed` (`:slow`, `:medium` or `:fast`. **Note:** depends on the proxy provider and can be `nil`)
 * `type` (URI schema, HTTP or HTTPS)
-* `anonimity` (Low or High +KA for example)
+* `anonymity` (`Low`, `Elite proxy` or `High +KA` for example)
 
 Also you can call next instance methods for every Proxy object:
 
@@ -99,13 +100,15 @@ You can use two methods to get the first proxy from the list:
 * `get` or aliased `pop` (will return first proxy and move it to the end of the list)
 * `get!` or aliased `pop!` (will return first **connectable** proxy and move it to the end of the list; all the proxies till the working one will be removed)
 
-If you wanna clear current proxy manager list from dead servers, you can just call `cleanup!` method:
+Or you can get just random proxy by calling `manager.random_proxy` or it's alias `manager.random`.
+
+If you wanna clean current proxy list from some dead servers that does not respond to the requests, than you can just call `cleanup!` method:
 
 ```ruby
 manager.cleanup! # or manager.validate!
 ```
 
-You can sort or find any proxy by speed using next 3 instance methods:
+Also you can sort or find any proxy by speed using next 3 instance methods (if it is available for the specific provider):
 
 * `fast?`
 * `medium?`
@@ -117,26 +120,27 @@ To change open/read timeout for `cleanup!` and `connectable?` methods you need t
 
 ```ruby
 ProxyFetcher.configure do |config|
-  config.read_timeout = 1 # default is 3
-  config.open_timeout = 1 # default is 3
+  config.connection_timeout = 1 # default is 3
 end
 
 manager = ProxyFetcher::Manager.new
 manager.cleanup!
 ```
 
-ProxyFetcher uses simple Ruby solution for dealing with HTTP requests - `net/http` library. If you wanna add, for example, your custom provider that
-was developed as a Single Page Application (SPA) with some JavaScript, then you will need something like []selenium-webdriver](https://github.com/SeleniumHQ/selenium/tree/master/rb)
+ProxyFetcher uses simple Ruby solution for dealing with HTTP(S) requests - `net/http` library from the stdlib. If you wanna add, for example, your custom provider that
+was developed as a Single Page Application (SPA) with some JavaScript, then you will need something like [selenium-webdriver](https://github.com/SeleniumHQ/selenium/tree/master/rb)
 to properly load the content of the website. For those and other cases you can write your own class for fetching HTML content by the URL and setup it
 in the ProxyFetcher config:
 
 ```ruby
 class MyHTTPClient
-  class << self
-    # [IMPORTANT]: self.fetch method is required!
-    def fetch(url)
-      # ... some magic to return proper HTML ...
-    end
+  # [IMPORTANT]: below methods are required!
+  def self.fetch(url)
+    # ... some magic to return proper HTML ...
+  end
+  
+  def self.connectable?(url)
+    # ... some magic to check if url is connectable ...
   end
 end
 
@@ -148,6 +152,8 @@ manager.proxies
 #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
  #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
 ```
+
+You can take a look at the [lib/proxy_fetcher/utils/http_client.rb](lib/proxy_fetcher/utils/http_client.rb) for an example.
 
 ## Providers
 
@@ -176,8 +182,8 @@ Also you can write your own provider. All you need is to create a class, that wo
 ProxyFetcher::Configuration.register_provider(:your_provider, YourProviderClass)
 ```
 
-Provider class must implement `self.load_proxy_list` and `#parse!(html_entry)` methods that will load and parse
-provider HTML page with proxy list. Take a look at the samples in the `proxy_fetcher/providers` directory.
+Provider class must implement `self.load_proxy_list` and `#to_proxy(html_element)` methods that will load and parse
+provider HTML page with proxy list. Take a look at the existing providers in the [lib/proxy_fetcher/providers](lib/proxy_fetcher/providers) directory.
 
 ## TODO
 

@@ -9,24 +9,24 @@ describe ProxyFetcher::Proxy do
     @manager = ProxyFetcher::Manager.new
   end
 
-  let(:proxy) { @manager.proxies.first }
+  let(:proxy) { @manager.proxies.first.dup }
 
   it 'checks schema' do
-    proxy.instance_variable_set(:@type, 'HTTP')
+    proxy.type = ProxyFetcher::Providers::Base::HTTP
     expect(proxy.http?).to be_truthy
     expect(proxy.https?).to be_falsey
 
-    proxy.instance_variable_set(:@type, 'HTTPS')
+    proxy.type = ProxyFetcher::Providers::Base::HTTPS
     expect(proxy.https?).to be_truthy
     expect(proxy.http?).to be_falsey
   end
 
   it 'not connectable if IP addr is wrong' do
-    allow_any_instance_of(ProxyFetcher::Proxy).to receive(:addr).and_return('192.168.1.1')
+    proxy.addr = '192.168.1.0'
     expect(proxy.connectable?).to be_falsey
   end
 
-  it 'not connectable if ERR' do
+  it 'not connectable if there are some error during connection request' do
     allow_any_instance_of(Net::HTTP).to receive(:start).and_raise(Errno::ECONNABORTED)
     expect(proxy.connectable?).to be_falsey
   end
@@ -46,13 +46,13 @@ describe ProxyFetcher::Proxy do
   end
 
   it 'checks speed' do
-    proxy.instance_variable_set(:@speed, :fast)
+    proxy.speed = :fast
     expect(proxy.fast?).to be_truthy
 
-    proxy.instance_variable_set(:@speed, :slow)
+    proxy.speed = :slow
     expect(proxy.slow?).to be_truthy
 
-    proxy.instance_variable_set(:@speed, :medium)
+    proxy.speed = :medium
     expect(proxy.medium?).to be_truthy
   end
 end
