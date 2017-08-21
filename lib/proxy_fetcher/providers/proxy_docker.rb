@@ -3,30 +3,21 @@ module ProxyFetcher
     class ProxyDocker < Base
       PROVIDER_URL = 'https://www.proxydocker.com/en'.freeze
 
-      class << self
-        def load_proxy_list
-          doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//table[contains(@class, "table")]/tr[(not(@id="proxy-table-header")) and (count(td)>2)]')
-        end
+      # [NOTE] Doesn't support direct filters
+      def load_proxy_list(*)
+        doc = load_document(PROVIDER_URL, {})
+        doc.xpath('//table[contains(@class, "table")]/tr[(not(@id="proxy-table-header")) and (count(td)>2)]')
       end
 
-      def parse!(html_entry)
-        html_entry.xpath('td').each_with_index do |td, index|
-          case index
-          when 0
-            uri = URI("//#{td.content.strip}")
+      def to_proxy(html_element)
+        ProxyFetcher::Proxy.new.tap do |proxy|
+          uri = URI("//#{parse_element(html_element, 'td[1]')}")
+          proxy.addr = uri.host
+          proxy.port = uri.port
 
-            set!(:addr, uri.host)
-            set!(:port, uri.port)
-          when 1
-            set!(:type,  td.content.strip)
-          when 2
-            set!(:anonymity, td.content.strip)
-          when 4 then
-            set!(:country, td.content.strip)
-          else
-            # nothing
-          end
+          proxy.type = parse_element(html_element, 'td[2]')
+          proxy.anonymity = parse_element(html_element, 'td[3]')
+          proxy.country = parse_element(html_element, 'td[5]')
         end
       end
     end

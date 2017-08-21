@@ -1,29 +1,52 @@
+require 'forwardable'
+
 module ProxyFetcher
   module Providers
     class Base
+      extend Forwardable
+
+      def_delegators ProxyFetcher::HTML, :clear, :convert_to_int
+
+      PROXY_TYPES = [
+        HTTP = 'HTTP'.freeze,
+        HTTPS = 'HTTPS'.freeze
+      ].freeze
+
       attr_reader :proxy
 
-      def initialize(proxy_instance)
-        @proxy = proxy_instance
-      end
-
-      def set!(name, value)
-        @proxy.instance_variable_set(:"@#{name}", value)
+      def fetch_proxies!(filters = {})
+        load_proxy_list(filters).map { |html| to_proxy(html) }
       end
 
       class << self
-        def parse_entry(entry, proxy_instance)
-          new(proxy_instance).parse!(entry)
+        def fetch_proxies!(filters = {})
+          new.fetch_proxies!(filters)
         end
+      end
 
-        # Get HTML from the requested URL
-        def load_html(url)
-          uri = URI.parse(url)
-          http = Net::HTTP.new(uri.host, uri.port)
-          http.use_ssl = true if uri.scheme == 'https'
-          response = http.get(uri.request_uri)
-          response.body
-        end
+      protected
+
+      # Loads HTML document with Nokogiri by the URL combined with custom filters
+      def load_document(url, filters = {})
+        uri = URI.parse(url)
+        uri.query = URI.encode_www_form(filters) if filters.any?
+
+        Nokogiri::HTML(ProxyFetcher.config.http_client.fetch(uri.to_s))
+      end
+
+      # Get HTML elements with proxy info
+      def load_proxy_list(*)
+        raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
+      end
+
+      # Convert HTML element with proxy info to ProxyFetcher::Proxy instance
+      def to_proxy(*)
+        raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
+      end
+
+      # Return normalized HTML element content by selector
+      def parse_element(element, selector, method = :at_xpath)
+        clear(element.public_send(method, selector).content)
       end
     end
   end

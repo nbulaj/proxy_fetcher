@@ -1,49 +1,47 @@
 module ProxyFetcher
   module Providers
     class HideMyName < Base
-      PROVIDER_URL = 'https://hidemy.name/en/proxy-list/?type=hs'.freeze
+      PROVIDER_URL = 'https://hidemy.name/en/proxy-list/'.freeze
 
-      class << self
-        def load_proxy_list
-          doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//table[@class="proxy__t"]/tbody/tr')
-        end
+      def load_proxy_list(filters = { type: 'hs' })
+        doc = load_document(PROVIDER_URL, filters)
+        doc.xpath('//table[@class="proxy__t"]/tbody/tr')
       end
 
-      def parse!(html_entry)
-        html_entry.xpath('td').each_with_index do |td, index|
-          case index
-          when 0
-            set!(:addr, td.content.strip)
-          when 1 then
-            set!(:port, Integer(td.content.strip))
-          when 2 then
-            set!(:country, td.at_xpath('*//span[1]/following-sibling::text()[1]').content.strip)
-          when 3
-            response_time = Integer(td.at('p').content.strip[/\d+/])
+      def to_proxy(html_element)
+        ProxyFetcher::Proxy.new.tap do |proxy|
+          proxy.addr = parse_element(html_element, 'td[1]')
+          proxy.port = convert_to_int(parse_element(html_element, 'td[2]'))
+          proxy.anonymity = parse_element(html_element, 'td[6]')
 
-            set!(:response_time, response_time)
-            set!(:speed, speed_from_response_time(response_time))
-          when 4
-            set!(:type, parse_type(td))
-          when 5
-            set!(:anonymity, td.content.strip)
-          else
-            # nothing
-          end
+          proxy.country = parse_country(html_element)
+          proxy.type = parse_type(html_element)
+
+          response_time = parse_response_time(html_element)
+
+          proxy.response_time = response_time
+          proxy.speed = speed_from_response_time(response_time)
         end
       end
 
       private
 
-      def parse_type(td)
-        schemas = td.content.strip
+      def parse_country(element)
+        clear(element.at_xpath('*//span[1]/following-sibling::text()[1]').content)
+      end
+
+      def parse_type(element)
+        schemas = parse_element(element, 'td[5]')
 
         if schemas && schemas.downcase.include?('https')
-          'HTTPS'
+          HTTPS
         else
-          'HTTP'
+          HTTP
         end
+      end
+
+      def parse_response_time(element)
+        convert_to_int(element.at_xpath('td[4]').content.strip[/\d+/])
       end
 
       def speed_from_response_time(response_time)

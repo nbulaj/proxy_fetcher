@@ -3,42 +3,27 @@ module ProxyFetcher
     class FreeProxyList < Base
       PROVIDER_URL = 'https://free-proxy-list.net/'.freeze
 
-      class << self
-        def load_proxy_list
-          doc = Nokogiri::HTML(load_html(PROVIDER_URL))
-          doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
-        end
+      # [NOTE] Doesn't support filtering
+      def load_proxy_list(*)
+        doc = load_document(PROVIDER_URL, {})
+        doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
       end
 
-      def parse!(html_entry)
-        html_entry.xpath('td').each_with_index do |td, index|
-          case index
-          when 0
-            set!(:addr, td.content.strip)
-          when 1 then
-            set!(:port, Integer(td.content.strip))
-          when 3 then
-            set!(:country, td.content.strip)
-          when 4
-            set!(:anonymity, td.content.strip)
-          when 6
-            set!(:type, parse_type(td))
-          else
-            # nothing
-          end
+      def to_proxy(html_element)
+        ProxyFetcher::Proxy.new.tap do |proxy|
+          proxy.addr = parse_element(html_element, 'td[1]')
+          proxy.port = convert_to_int(parse_element(html_element, 'td[2]'))
+          proxy.country = parse_element(html_element, 'td[4]')
+          proxy.anonymity = parse_element(html_element, 'td[5]')
+          proxy.type = parse_type(html_element)
         end
       end
 
       private
 
-      def parse_type(td)
-        type = td.content.strip
-
-        if type && type.downcase.include?('yes')
-          'HTTPS'
-        else
-          'HTTP'
-        end
+      def parse_type(element)
+        type = parse_element(element, 'td[6]')
+        type && type.casecmp('yes').zero? ? HTTPS : HTTP
       end
     end
 

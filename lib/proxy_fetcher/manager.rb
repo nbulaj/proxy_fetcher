@@ -1,10 +1,12 @@
 module ProxyFetcher
   class Manager
-    attr_reader :proxies
+    attr_reader :proxies, :filters
 
     # refresh: true - load proxy list from the remote server on initialization
     # refresh: false - just initialize the class, proxy list will be empty ([])
-    def initialize(refresh: true)
+    def initialize(refresh: true, filters: {})
+      @filters = filters
+
       if refresh
         refresh_list!
       else
@@ -14,8 +16,7 @@ module ProxyFetcher
 
     # Update current proxy list from the provider
     def refresh_list!
-      rows = ProxyFetcher.config.provider.load_proxy_list
-      @proxies = rows.map { |row| Proxy.new(row) }
+      @proxies = ProxyFetcher.config.provider.fetch_proxies!(filters)
     end
 
     alias fetch! refresh_list!
@@ -56,9 +57,11 @@ module ProxyFetcher
     alias validate! cleanup!
 
     # Return random proxy
-    def random
+    def random_proxy
       proxies.sample
     end
+
+    alias random random_proxy
 
     # Returns array of proxy URLs (just schema + host + port)
     def raw_proxies

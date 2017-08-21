@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'proxy_fetcher'
+
+options = {
+  validate: true,
+  json: false
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: proxy_fetcher [OPTIONS]'
+
+  opts.on('-h', '--help', '# Show this help message and quit') do
+    puts opts
+    exit(0)
+  end
+
+  opts.on('-p', '--provider=NAME', '# Use specific proxy provider') do |value|
+    provider_name = value.downcase
+
+    unless ProxyFetcher::Configuration.providers.include?(provider_name.to_sym)
+      possible_providers = ProxyFetcher::Configuration.providers.keys
+
+      puts "Unknown provider - '#{value}'.\nUse one of the following: #{possible_providers.join(', ')}."
+      exit(0)
+    end
+
+    options[:provider] = provider_name
+  end
+
+  opts.on('-n', '--no-validate', '# Dump all the proxies without validation') do
+    options[:validate] = false
+  end
+
+  opts.on('-t', '--timeout=SECONDS', Integer, '# Connection timeout in seconds') do |value|
+    options[:timeout] = value
+  end
+
+  opts.on('-j', '--json', '# Dump proxies to the JSON format') do
+    options[:json] = true
+  end
+end.parse!
+
+ProxyFetcher.config.provider = options[:provider] if options[:provider]
+ProxyFetcher.config.connection_timeout = options[:timeout] if options[:timeout]
+
+manager = ProxyFetcher::Manager.new
+manager.validate! if options[:validate]
+
+if options[:json]
+  require 'json'
+
+  puts JSON.generate(proxies: manager.raw_proxies)
+else
+  puts manager.raw_proxies
+end
