@@ -14,21 +14,24 @@ module ProxyFetcher
 
       attr_reader :proxy
 
-      def fetch_proxies!
-        load_proxy_list.map { |html| to_proxy(html) }
+      def fetch_proxies!(filters = {})
+        load_proxy_list(filters).map { |html| to_proxy(html) }
       end
 
       class << self
-        def fetch_proxies!
-          new.fetch_proxies!
+        def fetch_proxies!(filters = {})
+          new.fetch_proxies!(filters)
         end
       end
 
       protected
 
-      # Get HTML from the requested URL
-      def load_html(url)
-        ProxyFetcher.config.http_client.fetch(url)
+      # Loads HTML document with Nokogiri by the URL combined with custom filters
+      def load_document(url, filters = {})
+        uri = URI.parse(url)
+        uri.query = URI.encode_www_form(filters) if filters.any?
+
+        Nokogiri::HTML(ProxyFetcher.config.http_client.fetch(uri.to_s))
       end
 
       # Get HTML elements with proxy info

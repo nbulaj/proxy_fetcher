@@ -4,7 +4,6 @@ describe ProxyFetcher::Providers::Base do
   before { ProxyFetcher.config.reset! }
   after { ProxyFetcher.config.reset! }
 
-
   it 'does not allows to use not implemented methods' do
     NotImplementedCustomProvider = Class.new(ProxyFetcher::Providers::Base)
 

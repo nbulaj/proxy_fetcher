@@ -1,10 +1,10 @@
 module ProxyFetcher
   module Providers
     class XRoxy < Base
-      PROVIDER_URL = 'http://www.xroxy.com/proxylist.php?port=&type=All_http'.freeze
+      PROVIDER_URL = 'http://www.xroxy.com/proxylist.php'.freeze
 
-      def load_proxy_list
-        doc = Nokogiri::HTML(load_html(PROVIDER_URL))
+      def load_proxy_list(filters = { type: 'All_http' })
+        doc = load_document(PROVIDER_URL, filters)
         doc.xpath('//div[@id="content"]/table[1]/tr[contains(@class, "row")]')
       end
 

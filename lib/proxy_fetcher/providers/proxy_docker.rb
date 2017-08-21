@@ -3,8 +3,9 @@ module ProxyFetcher
     class ProxyDocker < Base
       PROVIDER_URL = 'https://www.proxydocker.com/en'.freeze
 
-      def load_proxy_list
-        doc = Nokogiri::HTML(load_html(PROVIDER_URL))
+      # [NOTE] Doesn't support direct filters
+      def load_proxy_list(*)
+        doc = load_document(PROVIDER_URL, {})
         doc.xpath('//table[contains(@class, "table")]/tr[(not(@id="proxy-table-header")) and (count(td)>2)]')
       end
 

@@ -1,10 +1,10 @@
 module ProxyFetcher
   module Providers
     class HideMyName < Base
-      PROVIDER_URL = 'https://hidemy.name/en/proxy-list/?type=hs'.freeze
+      PROVIDER_URL = 'https://hidemy.name/en/proxy-list/'.freeze
 
-      def load_proxy_list
-        doc = Nokogiri::HTML(load_html(PROVIDER_URL))
+      def load_proxy_list(filters = { type: 'hs' })
+        doc = load_document(PROVIDER_URL, filters)
         doc.xpath('//table[@class="proxy__t"]/tbody/tr')
       end
 

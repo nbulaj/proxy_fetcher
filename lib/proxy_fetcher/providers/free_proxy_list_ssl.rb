@@ -3,8 +3,9 @@ module ProxyFetcher
     class FreeProxyListSSL < Base
       PROVIDER_URL = 'https://www.sslproxies.org/'.freeze
 
-      def load_proxy_list
-        doc = Nokogiri::HTML(load_html(PROVIDER_URL))
+      # [NOTE] Doesn't support filtering
+      def load_proxy_list(*)
+        doc = load_document(PROVIDER_URL, {})
         doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
       end
 

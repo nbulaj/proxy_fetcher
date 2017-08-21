@@ -5,8 +5,8 @@ module ProxyFetcher
     class ProxyList < Base
       PROVIDER_URL = 'https://proxy-list.org/english/index.php'.freeze
 
-      def load_proxy_list
-        doc = Nokogiri::HTML(load_html(PROVIDER_URL))
+      def load_proxy_list(filters = {})
+        doc = load_document(PROVIDER_URL, filters)
         doc.css('.table-wrap .table ul')
       end
 
