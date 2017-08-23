@@ -15,7 +15,7 @@ module ProxyFetcher
           proxy.port = convert_to_int(parse_element(html_element, 'td[2]'))
           proxy.country = parse_element(html_element, 'td[4]')
           proxy.anonymity = parse_element(html_element, 'td[5]')
-          proxy.type = HTTPS
+          proxy.type = ProxyFetcher::Proxy::HTTPS
         end
       end
     end

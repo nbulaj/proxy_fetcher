@@ -12,13 +12,16 @@ describe ProxyFetcher::Proxy do
   let(:proxy) { @manager.proxies.first.dup }
 
   it 'checks schema' do
-    proxy.type = ProxyFetcher::Providers::Base::HTTP
+    proxy.type = ProxyFetcher::Proxy::HTTP
     expect(proxy.http?).to be_truthy
     expect(proxy.https?).to be_falsey
 
-    proxy.type = ProxyFetcher::Providers::Base::HTTPS
+    proxy.type = ProxyFetcher::Proxy::HTTPS
     expect(proxy.https?).to be_truthy
-    expect(proxy.http?).to be_falsey
+    expect(proxy.http?).to be_truthy
+
+    proxy.type = ProxyFetcher::Proxy::SOCKS5
+    expect(proxy.socks5?).to be_truthy
   end
 
   it 'not connectable if IP addr is wrong' do
@@ -43,16 +46,5 @@ describe ProxyFetcher::Proxy do
 
   it 'returns URL' do
     expect(proxy.url).to be_a(String)
-  end
-
-  it 'checks speed' do
-    proxy.speed = :fast
-    expect(proxy.fast?).to be_truthy
-
-    proxy.speed = :slow
-    expect(proxy.slow?).to be_truthy
-
-    proxy.speed = :medium
-    expect(proxy.medium?).to be_truthy
   end
 end

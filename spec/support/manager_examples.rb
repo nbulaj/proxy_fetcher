@@ -9,12 +9,12 @@ RSpec.shared_examples 'a manager' do
     expect(manager.proxies).to be_empty
   end
 
-  it 'can returns Proxy objects' do
+  it 'returns Proxy objects' do
     manager = ProxyFetcher::Manager.new
     expect(manager.proxies).to all(be_a(ProxyFetcher::Proxy))
   end
 
-  it 'can returns raw proxies' do
+  it 'returns raw proxies (HOST:PORT)' do
     manager = ProxyFetcher::Manager.new
     expect(manager.raw_proxies).to all(be_a(String))
   end

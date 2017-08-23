@@ -22,8 +22,8 @@ module ProxyFetcher
       private
 
       def parse_type(element)
-        type = parse_element(element, 'td[6]')
-        type && type.casecmp('yes').zero? ? HTTPS : HTTP
+        https = parse_element(element, 'td[6]')
+        https && https.casecmp('yes').zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
       end
     end
 

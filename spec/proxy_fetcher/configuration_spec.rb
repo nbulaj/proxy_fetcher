@@ -10,10 +10,6 @@ describe ProxyFetcher::Configuration do
         def self.fetch(url)
           url
         end
-
-        def self.connectable?(*)
-          true
-        end
       end
 
       expect { ProxyFetcher.config.http_client = MyHTTPClient }.not_to raise_error
@@ -23,7 +19,26 @@ describe ProxyFetcher::Configuration do
       MyWrongHTTPClient = Class.new
 
       expect { ProxyFetcher.config.http_client = MyWrongHTTPClient }
-        .to raise_error(ProxyFetcher::Configuration::WrongHttpClient)
+        .to raise_error(ProxyFetcher::Configuration::WrongCustomClass)
+    end
+  end
+
+  context 'custom proxy validator' do
+    it 'successfully setups if class has all the required methods' do
+      class MyProxyValidator
+        def self.connectable?(*)
+          true
+        end
+      end
+
+      expect { ProxyFetcher.config.proxy_validator = MyProxyValidator }.not_to raise_error
+    end
+
+    it 'failed on setup if required methods are missing' do
+      MyWrongProxyValidator = Class.new
+
+      expect { ProxyFetcher.config.proxy_validator = MyWrongProxyValidator }
+        .to raise_error(ProxyFetcher::Configuration::WrongCustomClass)
     end
   end
 
