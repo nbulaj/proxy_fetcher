@@ -2,10 +2,10 @@ module ProxyFetcher
   class Configuration
     UnknownProvider = Class.new(StandardError)
     RegisteredProvider = Class.new(StandardError)
-    WrongHttpClient = Class.new(StandardError)
+    WrongCustomClass = Class.new(StandardError)
 
-    attr_accessor :http_client, :connection_timeout
-    attr_accessor :provider
+    attr_accessor :provider, :connection_timeout
+    attr_accessor :http_client, :proxy_validator, :logger
 
     class << self
       def providers
@@ -26,6 +26,7 @@ module ProxyFetcher
     def reset!
       @connection_timeout = 3
       @http_client = HTTPClient
+      @proxy_validator = ProxyValidator
 
       self.provider = :hide_my_name # currently default one
     end
@@ -37,11 +38,21 @@ module ProxyFetcher
     end
 
     def http_client=(klass)
-      unless klass.respond_to?(:fetch, :connectable?)
-        raise WrongHttpClient, "#{klass} must respond to #fetch and #connectable? class methods!"
+      @http_client = setup_custom_class(klass, required_methods: :fetch)
+    end
+
+    def proxy_validator=(klass)
+      @proxy_validator = setup_custom_class(klass, required_methods: :connectable?)
+    end
+
+    private
+
+    def setup_custom_class(klass, required_methods: [])
+      unless klass.respond_to?(*required_methods)
+        raise WrongCustomClass, "#{klass} must respond to [#{Array(required_methods).join(', ')}] class methods!"
       end
 
-      @http_client = klass
+      klass
     end
   end
 end

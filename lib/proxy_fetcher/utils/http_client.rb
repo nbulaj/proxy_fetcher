@@ -18,17 +18,6 @@ module ProxyFetcher
       response.body
     end
 
-    def connectable?
-      @http.open_timeout = ProxyFetcher.config.connection_timeout
-      @http.read_timeout = ProxyFetcher.config.connection_timeout
-
-      @http.start { |connection| return true if connection.request_head('/') }
-
-      false
-    rescue StandardError
-      false
-    end
-
     def https?
       @uri.scheme.casecmp('https').zero?
     end
@@ -36,10 +25,6 @@ module ProxyFetcher
     class << self
       def fetch(url)
         new(url).fetch
-      end
-
-      def connectable?(url)
-        new(url).connectable?
       end
     end
   end

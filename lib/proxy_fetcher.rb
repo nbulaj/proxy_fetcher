@@ -1,25 +1,27 @@
 require 'uri'
-require 'net/http'
-require 'openssl'
+require 'net/https'
 require 'nokogiri'
-require 'ostruct'
+require 'thread'
 
-require 'proxy_fetcher/configuration'
-require 'proxy_fetcher/proxy'
-require 'proxy_fetcher/manager'
+require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
+require File.dirname(__FILE__) + '/proxy_fetcher/proxy'
+require File.dirname(__FILE__) + '/proxy_fetcher/manager'
 
-require 'proxy_fetcher/utils/http_client'
-require 'proxy_fetcher/utils/html'
-
-require 'proxy_fetcher/providers/base'
-require 'proxy_fetcher/providers/free_proxy_list'
-require 'proxy_fetcher/providers/free_proxy_list_ssl'
-require 'proxy_fetcher/providers/hide_my_name'
-require 'proxy_fetcher/providers/proxy_docker'
-require 'proxy_fetcher/providers/proxy_list'
-require 'proxy_fetcher/providers/xroxy'
+require File.dirname(__FILE__) + '/proxy_fetcher/utils/http_client'
+require File.dirname(__FILE__) + '/proxy_fetcher/utils/html'
+require File.dirname(__FILE__) + '/proxy_fetcher/utils/proxy_validator'
 
 module ProxyFetcher
+  module Providers
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/base'
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/free_proxy_list'
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/free_proxy_list_ssl'
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/hide_my_name'
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/proxy_docker'
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/proxy_list'
+    require File.dirname(__FILE__) + '/proxy_fetcher/providers/xroxy'
+  end
+
   class << self
     def config
       @config ||= ProxyFetcher::Configuration.new
