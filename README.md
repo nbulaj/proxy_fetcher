@@ -51,7 +51,7 @@ manager = ProxyFetcher::Manager.new # will immediately load proxy list from the 
 manager.proxies
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
- #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 You can initialize proxy manager without immediate load of proxy list from the remote server by passing `refresh: false` on initialization:
@@ -75,8 +75,8 @@ Get raw proxy URLs as Strings:
 manager = ProxyFetcher::Manager.new
 manager.raw_proxies
 
- # => ["http://97.77.104.22:3128", "http://94.23.205.32:3128", "http://209.79.65.140:8080",
- #     "http://91.217.42.2:8080", "http://97.77.104.22:80", "http://165.234.102.177:8080", ...]
+ # => ["97.77.104.22:3128", "94.23.205.32:3128", "209.79.65.140:8080",
+ #     "91.217.42.2:8080", "97.77.104.22:80", "165.234.102.177:8080", ...]
 ```
 
 If `ProxyFetcher::Manager` was already initialized somewhere, you can refresh the proxy list by calling `#refresh_list!` method:
@@ -85,7 +85,7 @@ If `ProxyFetcher::Manager` was already initialized somewhere, you can refresh th
 manager.refresh_list! # or manager.fetch!
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
- #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 If you need to filter proxy list, for example, by country or response time and selected provider supports filtering by GET params, then you
@@ -117,19 +117,23 @@ then you already have Ruby 2.3 installed. In other cases you can install it with
 Just install the gem by running `gem install proxy_fetcher` in your terminal and run it:
 
 ```bash
-proxy_fetcher >> proxies.txt # Will download proxies, validate them and write to file
+proxy_fetcher >> proxies.txt # Will download proxies from the default provider, validate them and write to file
 ```
 
-If you need a list of proxies in JSON then pass `--json` argument to the command:
+If you need a list of proxies from some specific provider, then you need to pass it's name with `-p` option:
+
+```bash
+proxy_fetcher -p proxy_docker >> proxies.txt # Will download proxies from the default provider, validate them and write to file
+```
+
+If you need a list of proxies in JSON format just pass a `--json` option to the command:
 
 ```bash
 proxy_fetcher --json
 
 # Will print:
-# {"proxies":["https://120.26.206.178:8888","https://119.61.13.242:1080","https://117.40.213.26:1080","https://92.62.72.242:1080",
-# "https://58.20.41.172:1080","https://204.116.192.151:35923","https://190.5.96.58:1080","https://170.250.109.97:35923",
-# "https://121.41.82.99:1080","https://77.53.105.155:35923"]}
-
+# {"proxies":["120.26.206.178:80","119.61.13.242:1080","117.40.213.26:80","92.62.72.242:1080","77.53.105.155:3124"
+# "58.20.41.172:35923","204.116.192.151:35923","190.5.96.58:1080","170.250.109.97:35923","121.41.82.99:1080"]}
 ```
 
 To get all the possible options run:
@@ -144,10 +148,9 @@ Every proxy is a `ProxyFetcher::Proxy` object that has next readers (instance va
 
 * `addr` (IP address)
 * `port`
+* `type` (proxy type, can be HTTP, HTTPS, SOCKS4 or/and SOCKS5)
 * `country` (USA or Brazil for example)
 * `response_time` (5217 for example)
-* `speed` (`:slow`, `:medium` or `:fast`. **Note:** depends on the proxy provider and can be `nil`)
-* `type` (URI schema, HTTP or HTTPS)
 * `anonymity` (`Low`, `Elite proxy` or `High +KA` for example)
 
 Also you can call next instance methods for every Proxy object:
@@ -155,14 +158,10 @@ Also you can call next instance methods for every Proxy object:
 * `connectable?` (whether proxy server is available)
 * `http?` (whether proxy server has a HTTP protocol)
 * `https?` (whether proxy server has a HTTPS protocol)
+* `socks4?`
+* `socks5?`
 * `uri` (returns `URI::Generic` object)
 * `url` (returns a formatted URL like "_http://IP:PORT_" )
-
-You can sort or find any proxy by speed using next 3 instance methods (if it is available for the specific provider):
-
-* `fast?`
-* `medium?`
-* `slow?`'
 
 ## Configuration
 
@@ -188,10 +187,6 @@ class MyHTTPClient
   def self.fetch(url)
     # ... some magic to return proper HTML ...
   end
-  
-  def self.connectable?(url)
-    # ... some magic to check if url is connectable ...
-  end
 end
 
 ProxyFetcher.config.http_client = MyHTTPClient
@@ -200,10 +195,33 @@ manager = ProxyFetcher::Manager.new
 manager.proxies
 
 #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
- #     @response_time=5217, @speed=48, @type="HTTP", @anonymity="High">, ... ]
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 You can take a look at the [lib/proxy_fetcher/utils/http_client.rb](lib/proxy_fetcher/utils/http_client.rb) for an example.
+
+Moreover, you can write your own proxy validator to check if proxy is valid or not:
+
+```ruby
+class MyProxyValidator
+  # [IMPORTANT]: below methods are required!
+  def self.connectable?(proxy_addr, proxy_port)
+    # ... some magic to check if proxy is valid ...
+  end
+end
+
+ProxyFetcher.config.proxy_validator = MyProxyValidator
+
+manager = ProxyFetcher::Manager.new
+manager.proxies
+
+#=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
+ 
+manager.validate!
+ 
+ #=> [ ... ]
+```
 
 ## Providers
 

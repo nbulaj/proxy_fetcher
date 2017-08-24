@@ -7,11 +7,6 @@ module ProxyFetcher
 
       def_delegators ProxyFetcher::HTML, :clear, :convert_to_int
 
-      PROXY_TYPES = [
-        HTTP = 'HTTP'.freeze,
-        HTTPS = 'HTTPS'.freeze
-      ].freeze
-
       attr_reader :proxy
 
       def fetch_proxies!(filters = {})
@@ -45,8 +40,8 @@ module ProxyFetcher
       end
 
       # Return normalized HTML element content by selector
-      def parse_element(element, selector, method = :at_xpath)
-        clear(element.public_send(method, selector).content)
+      def parse_element(parent, selector, method = :at_xpath)
+        clear(parent.public_send(method, selector).content)
       end
     end
   end

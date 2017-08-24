@@ -4,6 +4,7 @@ require 'optparse'
 require 'proxy_fetcher'
 
 options = {
+  filters: {},
   validate: true,
   json: false
 }
@@ -33,6 +34,12 @@ OptionParser.new do |opts|
     options[:validate] = false
   end
 
+  opts.on('-f', '--filters={}', String, '# Filters for proxy provider in JSON format') do |filters|
+    require 'json'
+
+    options[:filters] = JSON.parse(filters)
+  end
+
   opts.on('-t', '--timeout=SECONDS', Integer, '# Connection timeout in seconds') do |value|
     options[:timeout] = value
   end
@@ -45,7 +52,7 @@ end.parse!
 ProxyFetcher.config.provider = options[:provider] if options[:provider]
 ProxyFetcher.config.connection_timeout = options[:timeout] if options[:timeout]
 
-manager = ProxyFetcher::Manager.new
+manager = ProxyFetcher::Manager.new(filters: options[:filters])
 manager.validate! if options[:validate]
 
 if options[:json]
