@@ -234,7 +234,7 @@ ProxyFetcher.config.proxy_validator = MyProxyValidator
 manager = ProxyFetcher::Manager.new
 manager.proxies
 
-#=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
  
 manager.validate!
@@ -294,7 +294,19 @@ manager.proxies
  #=> ...
 ```
 
-Also you can write your own provider. All you need is to create a class, that would be inherited from the
+If you want to use all the possible proxy providers then you can configure ProxyFetcher as follows:
+
+```ruby
+ProxyFetcher.config.providers = ProxyFetcher::Configuration.registered_providers
+
+manager = ProxyFetcher::Manager.new.proxies
+manager.proxies
+
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
+```
+
+Moreover, you can write your own provider! All you need is to create a class, that would be inherited from the
 `ProxyFetcher::Providers::Base` class, and register your provider like this:
 
 ```ruby

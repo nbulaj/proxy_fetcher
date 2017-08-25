@@ -19,7 +19,7 @@ module ProxyFetcher
       @proxies = []
 
       ProxyFetcher.config.providers.each do |provider_name|
-        provider = ProxyFetcher::Configuration.provider_class(provider_name)
+        provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
         provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
 
         @proxies.concat(provider.fetch_proxies!(provider_filters))

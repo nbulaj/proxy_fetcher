@@ -14,8 +14,8 @@ module ProxyFetcher
         providers_registry.register(name, klass)
       end
 
-      def provider_class(provider_name)
-        providers_registry.class_for(provider_name)
+      def registered_providers
+        providers_registry.providers.keys
       end
     end
 
