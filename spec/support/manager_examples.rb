@@ -15,12 +15,12 @@ RSpec.shared_examples 'a manager' do
 
     manager.proxies.each do |proxy|
       expect(proxy.addr).to match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/i)
-      expect(proxy.port).to be_instance_of(Integer)
+      expect(proxy.port).to be_a_kind_of(Numeric)
       expect(proxy.type).not_to be_empty
       expect(proxy.country).not_to be_empty
       expect(proxy.anonymity).not_to be_empty
 
-      expect(proxy.response_time).to be_nil.or(be_instance_of(Integer))
+      expect(proxy.response_time).to be_nil.or(be_a_kind_of(Numeric))
     end
   end
 
