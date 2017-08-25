@@ -3,6 +3,7 @@ LineLength:
 AllCops:
   Exclude:
     - 'spec/**/*'
+    - 'bin/*'
   DisplayCopNames: true
 Rails:
   Enabled: false

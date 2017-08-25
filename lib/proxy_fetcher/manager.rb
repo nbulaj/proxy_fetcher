@@ -16,7 +16,14 @@ module ProxyFetcher
 
     # Update current proxy list from the provider
     def refresh_list!
-      @proxies = ProxyFetcher.config.provider.fetch_proxies!(filters)
+      @proxies = []
+
+      ProxyFetcher.config.providers.each do |provider_name|
+        provider = ProxyFetcher::Configuration.provider_class(provider_name)
+        provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
+
+        @proxies.concat(provider.fetch_proxies!(provider_filters))
+      end
     end
 
     alias fetch! refresh_list!

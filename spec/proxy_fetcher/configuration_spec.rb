@@ -43,21 +43,16 @@ describe ProxyFetcher::Configuration do
   end
 
   context 'custom provider' do
-    it 'successfully setups if provider class registered' do
-      CustomProvider = Class.new(ProxyFetcher::Providers::Base)
-      ProxyFetcher::Configuration.register_provider(:custom_provider, CustomProvider)
-
-      expect { ProxyFetcher.config.provider = :custom_provider }.not_to raise_error
+    it 'failed on registration if provider class already registered' do
+      expect { ProxyFetcher::Configuration.register_provider(:xroxy, Class.new) }
+        .to raise_error(ProxyFetcher::ProvidersRegistry::RegisteredProvider)
     end
 
-    it 'failed on setup if provider class is not registered' do
-      expect { ProxyFetcher.config.provider = :unexisting_provider }
-        .to raise_error(ProxyFetcher::Configuration::UnknownProvider)
-    end
+    it "failed on proxy list fetching if provider doesn't registered" do
+      ProxyFetcher.config.provider = :not_existing_provider
 
-    it 'failed on setup if provider class already registered' do
-      expect { ProxyFetcher::Configuration.register_provider(:xroxy, Class.new)}
-        .to raise_error(ProxyFetcher::Configuration::RegisteredProvider)
+      expect { ProxyFetcher::Manager.new }
+        .to raise_error(ProxyFetcher::ProvidersRegistry::UnknownProvider)
     end
   end
 end

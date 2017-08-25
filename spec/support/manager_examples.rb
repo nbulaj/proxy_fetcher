@@ -9,9 +9,19 @@ RSpec.shared_examples 'a manager' do
     expect(manager.proxies).to be_empty
   end
 
-  it 'returns Proxy objects' do
+  it 'returns valid Proxy objects' do
     manager = ProxyFetcher::Manager.new
     expect(manager.proxies).to all(be_a(ProxyFetcher::Proxy))
+
+    manager.proxies.each do |proxy|
+      expect(proxy.addr).to match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/i)
+      expect(proxy.port).to be_instance_of(Integer)
+      expect(proxy.type).not_to be_empty
+      expect(proxy.country).not_to be_empty
+      expect(proxy.anonymity).not_to be_empty
+
+      expect(proxy.response_time).to be_nil.or(be_instance_of(Integer))
+    end
   end
 
   it 'returns raw proxies (HOST:PORT)' do
