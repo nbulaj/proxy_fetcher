@@ -11,11 +11,17 @@ module ProxyFetcher
 
     TYPES.each do |proxy_type|
       define_method "#{proxy_type.downcase}?" do
-        type && type.upcase.include?(proxy_type)
+        !type.nil? && type.upcase.include?(proxy_type)
       end
     end
 
     alias ssl? https?
+
+    def initialize(attributes = {})
+      attributes.each do |attr, value|
+        public_send("#{attr}=", value)
+      end
+    end
 
     def connectable?
       ProxyFetcher.config.proxy_validator.connectable?(addr, port)
