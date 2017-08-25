@@ -100,6 +100,13 @@ manager.refresh_list! # or manager.fetch!
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
+You can use two methods to get the first proxy from the list:
+
+* `get` or aliased `pop` (will return first proxy and move it to the end of the list)
+* `get!` or aliased `pop!` (will return first **connectable** proxy and move it to the end of the list; all the proxies till the working one will be removed)
+
+Or you can get just random proxy by calling `manager.random_proxy` or it's alias `manager.random`.
+
 If you need to filter proxy list, for example, by country or response time and selected provider supports filtering with GET params,
 then you can just pass your filters like a simple Ruby hash to the Manager instance:
 
@@ -132,14 +139,15 @@ manager.proxies
  # => [...]
 ```
 
-*NOTE*: not all the providers support filtering. Take a look at the provider class to see if it supports custom filters.
+You can apply different filters every time you calling `#refresh_list!` (or `#fetch!`) method:
 
-You can use two methods to get the first proxy from the list:
+```ruby
+manager.refresh_list!(country: 'PL', maxtime: '500')
+ 
+ # => [...]
+```
 
-* `get` or aliased `pop` (will return first proxy and move it to the end of the list)
-* `get!` or aliased `pop!` (will return first **connectable** proxy and move it to the end of the list; all the proxies till the working one will be removed)
-
-Or you can get just random proxy by calling `manager.random_proxy` or it's alias `manager.random`.
+*NOTE*: not all the providers support filtering. Take a look at the provider classes to see if it supports custom filters.
 
 ### Standalone
 

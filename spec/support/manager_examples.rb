@@ -19,7 +19,6 @@ RSpec.shared_examples 'a manager' do
       expect(proxy.type).not_to be_empty
       expect(proxy.country).not_to be_empty
       expect(proxy.anonymity).not_to be_empty
-
       expect(proxy.response_time).to be_nil.or(be_a_kind_of(Numeric))
     end
   end

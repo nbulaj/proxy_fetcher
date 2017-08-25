@@ -1,21 +1,21 @@
 module ProxyFetcher
   class Manager
-    attr_reader :proxies, :filters
+    attr_reader :proxies
 
     # refresh: true - load proxy list from the remote server on initialization
     # refresh: false - just initialize the class, proxy list will be empty ([])
-    def initialize(refresh: true, filters: {})
-      @filters = filters
-
+    def initialize(refresh: true, validate: false, filters: {})
       if refresh
-        refresh_list!
+        refresh_list!(filters)
       else
         @proxies = []
       end
+
+      cleanup! if validate
     end
 
     # Update current proxy list from the provider
-    def refresh_list!
+    def refresh_list!(filters = nil)
       @proxies = []
 
       ProxyFetcher.config.providers.each do |provider_name|
