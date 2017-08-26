@@ -23,8 +23,10 @@ module ProxyFetcher
 
       # Loads HTML document with Nokogiri by the URL combined with custom filters
       def load_document(url, filters = {})
+        raise ArgumentError, 'filters must be a Hash' if filters && !filters.is_a?(Hash)
+
         uri = URI.parse(url)
-        uri.query = URI.encode_www_form(filters) if filters.any?
+        uri.query = URI.encode_www_form(filters) if filters && filters.any?
 
         Nokogiri::HTML(ProxyFetcher.config.http_client.fetch(uri.to_s))
       end

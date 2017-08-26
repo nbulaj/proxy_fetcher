@@ -75,11 +75,16 @@ manager.proxies
  #=> []
 ```
 
-If you wanna clean current proxy list from some dead servers that does not respond to the requests, than you can just call `cleanup!` method:
+If you want to clean current proxy list from the dead servers that does not respond to the requests, than you can just call `cleanup!` method:
 
 ```ruby
 manager.cleanup! # or manager.validate!
 ```
+
+In order to increase the speed of this operation proxy list validation is performed using Ruby threads.
+By default, gem creates a pool with 10 threads, but you can increase this number by passing threads pool
+size to the `#cleanup!` (or `#validate!`) method: `manager.validate!(50)`. In that case ProxyFetcher will
+process all the fetched proxies in group of 50 threads.
 
 Get raw proxy URLs as Strings:
 
