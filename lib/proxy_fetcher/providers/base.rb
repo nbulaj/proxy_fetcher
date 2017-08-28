@@ -7,8 +7,8 @@ module ProxyFetcher
 
       def_delegators ProxyFetcher::HTML, :clear, :convert_to_int
 
-      attr_reader :proxy
-
+      # Loads proxy provider page content, extract proxy list from it
+      # and convert every entry to proxy object.
       def fetch_proxies!(filters = {})
         load_proxy_list(filters).map { |html| to_proxy(html) }
       end

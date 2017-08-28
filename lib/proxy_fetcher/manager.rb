@@ -57,10 +57,10 @@ module ProxyFetcher
     alias pop! get!
 
     # Clean current proxy list from dead proxies (that doesn't respond by timeout)
-    def cleanup!(pool_size = 10)
+    def cleanup!
       lock = Mutex.new
 
-      proxies.dup.each_slice(pool_size) do |proxy_group|
+      proxies.dup.each_slice(ProxyFetcher.config.pool_size) do |proxy_group|
         threads = proxy_group.map do |group_proxy|
           Thread.new(group_proxy, proxies) do |proxy, proxies|
             lock.synchronize { proxies.delete(proxy) } unless proxy.connectable?

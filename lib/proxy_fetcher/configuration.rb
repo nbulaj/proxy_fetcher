@@ -2,8 +2,8 @@ module ProxyFetcher
   class Configuration
     WrongCustomClass = Class.new(StandardError)
 
-    attr_accessor :providers, :connection_timeout
-    attr_accessor :http_client, :proxy_validator, :logger
+    attr_accessor :providers, :connection_timeout, :pool_size
+    attr_accessor :http_client, :proxy_validator
 
     class << self
       def providers_registry
@@ -23,7 +23,9 @@ module ProxyFetcher
       reset!
     end
 
+    # Sets default configuration options
     def reset!
+      @pool_size = 10
       @connection_timeout = 3
       @http_client = HTTPClient
       @proxy_validator = ProxyValidator
@@ -35,6 +37,7 @@ module ProxyFetcher
       @providers = Array(value)
     end
 
+    alias provider providers
     alias provider= providers=
 
     def http_client=(klass)
@@ -47,6 +50,7 @@ module ProxyFetcher
 
     private
 
+    # Checks if custom class has some required class methods
     def setup_custom_class(klass, required_methods: [])
       unless klass.respond_to?(*required_methods)
         raise WrongCustomClass, "#{klass} must respond to [#{Array(required_methods).join(', ')}] class methods!"
