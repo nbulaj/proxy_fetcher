@@ -6,20 +6,33 @@
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
-proxy lists from the different providers like [HideMyName](https://hidemy.name/en/).
+proxy lists from multiple providers like [HideMyName](https://hidemy.name/en/).
 
-It gives you a `Manager` class that can load proxy list, validate it and return random or specific proxy entry. Take a look
+It gives you a `Manager` class that can load proxy lists, validate them and return random or specific proxies. Take a look
 at the documentation below to find all the gem features.
 
-Also this gem can be used as standalone solution for downloading and validating proxy lists from the different providers.
-Checkout examples of usage below.
+Also this gem can be used with any other programming language (Go / Python / etc) as standalone solution for downloading and
+validating proxy lists from the different providers. [Checkout examples](#standalone) of usage below.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Example of usage](#example-of-usage)
+  - [In Ruby application](#in-ruby-application)
+  - [Standalone](#standalone)
+- [Configuration](#configuration)
+  - [Proxy validation speed](#proxy-validation-speed)
+- [Proxy object](#proxy-object)
+- [Providers](#providers)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Installation
 
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.3'
+gem 'proxy_fetcher', '~> 0.4'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -37,7 +50,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.3'
+gem install proxy_fetcher -v '0.4'
 ```
 
 ## Example of usage
@@ -63,11 +76,16 @@ manager.proxies
  #=> []
 ```
 
-If you wanna clean current proxy list from some dead servers that does not respond to the requests, than you can just call `cleanup!` method:
+If you want to clean current proxy list from the dead servers that does not respond to the requests, than you can just call `cleanup!` method:
 
 ```ruby
 manager.cleanup! # or manager.validate!
 ```
+
+In order to increase the speed of this operation proxy list validation is performed using Ruby threads.
+By default, gem creates a pool with 10 threads, but you can increase this number by passing threads pool
+size to the `#cleanup!` (or `#validate!`) method: `manager.validate!(50)`. In that case ProxyFetcher will
+process all the fetched proxies in group of 50 threads.
 
 Get raw proxy URLs as Strings:
 
@@ -88,20 +106,6 @@ manager.refresh_list! # or manager.fetch!
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
-If you need to filter proxy list, for example, by country or response time and selected provider supports filtering by GET params, then you
-can pass your filters to the Manager instance like that:
-
-```ruby
-ProxyFetcher.config.provider = :hide_my_name
-
-manager = ProxyFetcher::Manager.new(filters: { country: 'AO', maxtime: '500' })
-manager.proxies
-
- # => [...]
-```
-
-*NOTE*: not all the providers support filtering. Take a look at the provider class to see if it supports custom filters.
-
 You can use two methods to get the first proxy from the list:
 
 * `get` or aliased `pop` (will return first proxy and move it to the end of the list)
@@ -109,12 +113,54 @@ You can use two methods to get the first proxy from the list:
 
 Or you can get just random proxy by calling `manager.random_proxy` or it's alias `manager.random`.
 
+If you need to filter proxy list, for example, by country or response time and selected provider supports filtering with GET params,
+then you can just pass your filters like a simple Ruby hash to the Manager instance:
+
+```ruby
+ProxyFetcher.config.providers = :hide_my_name
+
+manager = ProxyFetcher::Manager.new(filters: { country: 'PL', maxtime: '500' })
+manager.proxies
+
+ # => [...]
+```
+
+If you are using multiple providers, then you can split your filters by proxy provider names:
+
+```ruby
+ProxyFetcher.config.providers = [:hide_my_name, :xroxy]
+
+manager = ProxyFetcher::Manager.new(filters: {
+  hide_my_name: {
+    country: 'PL',
+    maxtime: '500'
+  },
+  xroxy: {
+    type: 'All_http'
+  }
+})
+  
+manager.proxies
+
+ # => [...]
+```
+
+You can apply different filters every time you calling `#refresh_list!` (or `#fetch!`) method:
+
+```ruby
+manager.refresh_list!(country: 'PL', maxtime: '500')
+ 
+ # => [...]
+```
+
+*NOTE*: not all the providers support filtering. Take a look at the provider classes to see if it supports custom filters.
+
 ### Standalone
 
-All you need to use this gem is Ruby >= 2.0 (2.3 is recommended). You can install it in a different ways. If you are using Ubuntu Xenial (16.04LTS)
+All you need to use this gem is Ruby >= 2.0 (2.4 is recommended). You can install it in a different ways. If you are using Ubuntu Xenial (16.04LTS)
 then you already have Ruby 2.3 installed. In other cases you can install it with [RVM](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv).
 
-Just install the gem by running `gem install proxy_fetcher` in your terminal and run it:
+After installing Ruby just bundle the gem by running `gem install proxy_fetcher` in your terminal and now you can run it:
 
 ```bash
 proxy_fetcher >> proxies.txt # Will download proxies from the default provider, validate them and write to file
@@ -141,27 +187,6 @@ To get all the possible options run:
 ```bash
 proxy_fetcher --help
 ```
-
-## Proxy object
-
-Every proxy is a `ProxyFetcher::Proxy` object that has next readers (instance variables):
-
-* `addr` (IP address)
-* `port`
-* `type` (proxy type, can be HTTP, HTTPS, SOCKS4 or/and SOCKS5)
-* `country` (USA or Brazil for example)
-* `response_time` (5217 for example)
-* `anonymity` (`Low`, `Elite proxy` or `High +KA` for example)
-
-Also you can call next instance methods for every Proxy object:
-
-* `connectable?` (whether proxy server is available)
-* `http?` (whether proxy server has a HTTP protocol)
-* `https?` (whether proxy server has a HTTPS protocol)
-* `socks4?`
-* `socks5?`
-* `uri` (returns `URI::Generic` object)
-* `url` (returns a formatted URL like "_http://IP:PORT_" )
 
 ## Configuration
 
@@ -215,13 +240,55 @@ ProxyFetcher.config.proxy_validator = MyProxyValidator
 manager = ProxyFetcher::Manager.new
 manager.proxies
 
-#=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
  
 manager.validate!
  
  #=> [ ... ]
 ```
+
+### Proxy validation speed
+
+There are some tricks to increase proxy list validation performance.
+
+In a few words, ProxyFetcher gem uses threads to validate proxies for availability. Every proxy is checked in a
+separate thread. By default, ProxyFetcher uses a pool with a maximum of 10 threads. You can increase this number by
+setting max number of threads in the config:
+
+```ruby
+ProxyFetcher.config.pool_size = 50
+```
+
+You can experiment with the threads pool size to find an optimal number of maximum threads count for you PC and OS.
+This will definitely give you some performance improvements.
+
+Moreover, the common proxy validation speed depends on `ProxyFetcher.config.connection_timeout` option that is equal
+to `3` by default. It means that gem will wait 3 seconds for the server answer to check if particular proxy is connectable.
+You can decrease this option to `1`, for example, and it will heavily increase proxy validation speed (**but remember**
+that some proxies could be connectable, but slow, so with this option you will clear proxy list from the proxies that
+works, but very slow).
+
+## Proxy object
+
+Every proxy is a `ProxyFetcher::Proxy` object that has next readers (instance variables):
+
+* `addr` (IP address)
+* `port`
+* `type` (proxy type, can be HTTP, HTTPS, SOCKS4 or/and SOCKS5)
+* `country` (USA or Brazil for example)
+* `response_time` (5217 for example)
+* `anonymity` (`Low`, `Elite proxy` or `High +KA` for example)
+
+Also you can call next instance methods for every Proxy object:
+
+* `connectable?` (whether proxy server is available)
+* `http?` (whether proxy server has a HTTP protocol)
+* `https?` (whether proxy server has a HTTPS protocol)
+* `socks4?`
+* `socks5?`
+* `uri` (returns `URI::Generic` object)
+* `url` (returns a formatted URL like "_http://IP:PORT_" )
 
 ## Providers
 
@@ -234,7 +301,7 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 * Proxy List
 * XRoxy
 
-If you wanna use one of them just setup required in the config:
+If you wanna use one of them just setup it in the config:
 
 ```ruby
 ProxyFetcher.config.provider = :free_proxy_list
@@ -244,7 +311,29 @@ manager.proxies
  #=> ...
 ```
 
-Also you can write your own provider. All you need is to create a class, that would be inherited from the
+You can use multiple providers at the same time:
+
+```ruby
+ProxyFetcher.config.providers = :free_proxy_list, :xroxy, :proxy_docker
+
+manager = ProxyFetcher::Manager.new
+manager.proxies
+ #=> ...
+```
+
+If you want to use all the possible proxy providers then you can configure ProxyFetcher as follows:
+
+```ruby
+ProxyFetcher.config.providers = ProxyFetcher::Configuration.registered_providers
+
+manager = ProxyFetcher::Manager.new.proxies
+manager.proxies
+
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
+```
+
+Moreover, you can write your own provider! All you need is to create a class, that would be inherited from the
 `ProxyFetcher::Providers::Base` class, and register your provider like this:
 
 ```ruby

@@ -4,6 +4,7 @@ require 'nokogiri'
 require 'thread'
 
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
+require File.dirname(__FILE__) + '/proxy_fetcher/configuration/providers_registry'
 require File.dirname(__FILE__) + '/proxy_fetcher/proxy'
 require File.dirname(__FILE__) + '/proxy_fetcher/manager'
 

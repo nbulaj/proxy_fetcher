@@ -11,6 +11,15 @@ describe ProxyFetcher::Proxy do
 
   let(:proxy) { @manager.proxies.first.dup }
 
+  it 'can initialize a new proxy object' do
+    proxy = described_class.new(addr: '192.169.1.1', port: 8080, type: 'HTTP')
+
+    expect(proxy).not_to be_nil
+    expect(proxy.addr).to eq('192.169.1.1')
+    expect(proxy.port).to eq(8080)
+    expect(proxy.type).to eq('HTTP')
+  end
+
   it 'checks schema' do
     proxy.type = ProxyFetcher::Proxy::HTTP
     expect(proxy.http?).to be_truthy

@@ -17,17 +17,8 @@ OptionParser.new do |opts|
     exit(0)
   end
 
-  opts.on('-p', '--provider=NAME', '# Use specific proxy provider') do |value|
-    provider_name = value.downcase
-
-    unless ProxyFetcher::Configuration.providers.include?(provider_name.to_sym)
-      possible_providers = ProxyFetcher::Configuration.providers.keys
-
-      puts "Unknown provider - '#{value}'.\nUse one of the following: #{possible_providers.join(', ')}."
-      exit(0)
-    end
-
-    options[:provider] = provider_name
+  opts.on('-p', '--providers=NAME1,NAME2', Array, '# Use specific proxy providers') do |values|
+    options[:providers] = values
   end
 
   opts.on('-n', '--no-validate', '# Dump all the proxies without validation') do
@@ -49,7 +40,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-ProxyFetcher.config.provider = options[:provider] if options[:provider]
+ProxyFetcher.config.providers = options[:providers] if options[:providers]
 ProxyFetcher.config.connection_timeout = options[:timeout] if options[:timeout]
 
 manager = ProxyFetcher::Manager.new(filters: options[:filters])

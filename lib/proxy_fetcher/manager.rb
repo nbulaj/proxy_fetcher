@@ -1,22 +1,29 @@
 module ProxyFetcher
   class Manager
-    attr_reader :proxies, :filters
+    attr_reader :proxies
 
     # refresh: true - load proxy list from the remote server on initialization
     # refresh: false - just initialize the class, proxy list will be empty ([])
-    def initialize(refresh: true, filters: {})
-      @filters = filters
-
+    def initialize(refresh: true, validate: false, filters: {})
       if refresh
-        refresh_list!
+        refresh_list!(filters)
       else
         @proxies = []
       end
+
+      cleanup! if validate
     end
 
     # Update current proxy list from the provider
-    def refresh_list!
-      @proxies = ProxyFetcher.config.provider.fetch_proxies!(filters)
+    def refresh_list!(filters = nil)
+      @proxies = []
+
+      ProxyFetcher.config.providers.each do |provider_name|
+        provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
+        provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
+
+        @proxies.concat(provider.fetch_proxies!(provider_filters))
+      end
     end
 
     alias fetch! refresh_list!
@@ -50,10 +57,10 @@ module ProxyFetcher
     alias pop! get!
 
     # Clean current proxy list from dead proxies (that doesn't respond by timeout)
-    def cleanup!(pool_size = 10)
+    def cleanup!
       lock = Mutex.new
 
-      proxies.dup.each_slice(pool_size) do |proxy_group|
+      proxies.dup.each_slice(ProxyFetcher.config.pool_size) do |proxy_group|
         threads = proxy_group.map do |group_proxy|
           Thread.new(group_proxy, proxies) do |proxy, proxies|
             lock.synchronize { proxies.delete(proxy) } unless proxy.connectable?

@@ -1,21 +1,21 @@
 module ProxyFetcher
   class Configuration
-    UnknownProvider = Class.new(StandardError)
-    RegisteredProvider = Class.new(StandardError)
     WrongCustomClass = Class.new(StandardError)
 
-    attr_accessor :provider, :connection_timeout
-    attr_accessor :http_client, :proxy_validator, :logger
+    attr_accessor :providers, :connection_timeout, :pool_size
+    attr_accessor :http_client, :proxy_validator
 
     class << self
-      def providers
-        @providers ||= {}
+      def providers_registry
+        @registry ||= ProvidersRegistry.new
       end
 
       def register_provider(name, klass)
-        raise RegisteredProvider, "`#{name}` provider already registered!" if providers.key?(name.to_sym)
+        providers_registry.register(name, klass)
+      end
 
-        providers[name.to_sym] = klass
+      def registered_providers
+        providers_registry.providers.keys
       end
     end
 
@@ -23,19 +23,22 @@ module ProxyFetcher
       reset!
     end
 
+    # Sets default configuration options
     def reset!
+      @pool_size = 10
       @connection_timeout = 3
       @http_client = HTTPClient
       @proxy_validator = ProxyValidator
 
-      self.provider = :hide_my_name # currently default one
+      self.providers = [:hide_my_name] # currently default one
     end
 
-    def provider=(name)
-      @provider = self.class.providers[name.to_sym]
-
-      raise UnknownProvider, "unregistered proxy provider `#{name}`!" if @provider.nil?
+    def providers=(value)
+      @providers = Array(value)
     end
+
+    alias provider providers
+    alias provider= providers=
 
     def http_client=(klass)
       @http_client = setup_custom_class(klass, required_methods: :fetch)
@@ -47,6 +50,7 @@ module ProxyFetcher
 
     private
 
+    # Checks if custom class has some required class methods
     def setup_custom_class(klass, required_methods: [])
       unless klass.respond_to?(*required_methods)
         raise WrongCustomClass, "#{klass} must respond to [#{Array(required_methods).join(', ')}] class methods!"
