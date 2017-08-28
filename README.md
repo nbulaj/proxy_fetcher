@@ -21,9 +21,9 @@ validating proxy lists from the different providers. [Checkout examples](#standa
   - [In Ruby application](#in-ruby-application)
   - [Standalone](#standalone)
 - [Configuration](#configuration)
+  - [Proxy validation speed](#proxy-validation-speed)
 - [Proxy object](#proxy-object)
 - [Providers](#providers)
-- [Speed](#speed)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -248,6 +248,27 @@ manager.validate!
  #=> [ ... ]
 ```
 
+### Proxy validation speed
+
+There are some tricks to increase proxy list validation performance.
+
+In a few words, ProxyFetcher gem uses threads to validate proxies for availability. Every proxy is checked in a
+separate thread. By default, ProxyFetcher uses a pool with a maximum of 10 threads. You can increase this number by
+setting max number of threads in the config:
+
+```ruby
+ProxyFetcher.config.pool_size = 50
+```
+
+You can experiment with the threads pool size to find an optimal number of maximum threads count for you PC and OS.
+This will definitely give you some performance improvements.
+
+Moreover, the common proxy validation speed depends on `ProxyFetcher.config.connection_timeout` option that is equal
+to `3` by default. It means that gem will wait 3 seconds for the server answer to check if particular proxy is connectable.
+You can decrease this option to `1`, for example, and it will heavily increase proxy validation speed (**but remember**
+that some proxies could be connectable, but slow, so with this option you will clear proxy list from the proxies that
+works, but very slow).
+
 ## Proxy object
 
 Every proxy is a `ProxyFetcher::Proxy` object that has next readers (instance variables):
@@ -321,27 +342,6 @@ ProxyFetcher::Configuration.register_provider(:your_provider, YourProviderClass)
 
 Provider class must implement `self.load_proxy_list` and `#to_proxy(html_element)` methods that will load and parse
 provider HTML page with proxy list. Take a look at the existing providers in the [lib/proxy_fetcher/providers](lib/proxy_fetcher/providers) directory.
-
-## Speed
-
-There are some tricks to increase proxy list validation performance.
-
-In a few words, ProxyFetcher gem uses threads to validate proxies for availability. Every proxy is checked in a
-separate thread. By default, ProxyFetcher uses a pool with a maximum of 10 threads. You can increase this number by
-setting max number of threads in the config:
-
-```ruby
-ProxyFetcher.config.pool_size = 50
-```
-
-You can experiment with the threads pool size to find an optimal number of maximum threads count for you PC and OS.
-This will definitely give you some performance improvements.
-
-Moreover, the common proxy validation speed depends on `ProxyFetcher.config.connection_timeout` option that is equal
-to `3` by default. It means that gem will wait 3 seconds for the server answer to check if particular proxy is connectable.
-You can decrease this option to `1`, for example, and it will heavily increase proxy validation speed (**but remember**
-that some proxies could be connectable, but slow, so with this option you will clear proxy list from the proxies that
-works, but very slow).
 
 ## Contributing
 
