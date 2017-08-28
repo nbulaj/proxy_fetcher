@@ -82,10 +82,9 @@ If you want to clean current proxy list from the dead servers that does not resp
 manager.cleanup! # or manager.validate!
 ```
 
-In order to increase the speed of this operation proxy list validation is performed using Ruby threads.
-By default, gem creates a pool with 10 threads, but you can increase this number by passing threads pool
-size to the `#cleanup!` (or `#validate!`) method: `manager.validate!(50)`. In that case ProxyFetcher will
-process all the fetched proxies in group of 50 threads.
+In order to increase the performance proxy list validation is performed using Ruby threads. By default gem creates a
+pool with 10 threads, but you can increase this number by changing `pool_size` configuration option: `ProxyFetcher.config.pool_size = 50`.
+Read more in [Proxy validation speed](#proxy-validation-speed) section.
 
 Get raw proxy URLs as Strings:
 
