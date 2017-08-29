@@ -19,7 +19,7 @@ module ProxyFetcher
     end
 
     def https?
-      @uri.scheme.casecmp('https').zero?
+      @uri.is_a?(URI::HTTPS)
     end
 
     class << self

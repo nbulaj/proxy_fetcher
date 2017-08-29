@@ -1,8 +1,10 @@
+require 'simplecov'
+SimpleCov.add_filter 'spec'
+
 if ENV['CI'] || ENV['TRAVIS'] || ENV['COVERALLS'] || ENV['JENKINS_URL']
   require 'coveralls'
   Coveralls.wear!
 else
-  require 'simplecov'
   SimpleCov.start
 end
 

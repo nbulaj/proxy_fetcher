@@ -6,7 +6,7 @@ module ProxyFetcher
       uri = URI.parse(URL_TO_CHECK)
       @http = Net::HTTP.new(uri.host, uri.port, proxy_addr, proxy_port.to_i)
 
-      return unless uri.scheme.casecmp('https').zero?
+      return unless uri.is_a?(URI::HTTPS)
 
       @http.use_ssl = true
       @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
