@@ -11,6 +11,7 @@ require File.dirname(__FILE__) + '/proxy_fetcher/manager'
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/http_client'
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/html'
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/proxy_validator'
+require File.dirname(__FILE__) + '/proxy_fetcher/client/request'
 require File.dirname(__FILE__) + '/proxy_fetcher/client/client'
 
 module ProxyFetcher

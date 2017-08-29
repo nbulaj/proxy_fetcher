@@ -10,31 +10,9 @@ module ProxyFetcher
         'User-Agent': DEFAULT_USER_AGENT
       }.freeze
 
-      def get(url, headers: {}, options: {}, limit: 10)
+      def get(url, headers: {})
         safe_request_to(url) do |proxy|
-          http = build_http_client(url, proxy, options)
-
-          request = Net::HTTP::Get.new(URI.parse(url), DEFAULT_HEADERS.merge(headers))
-          response = http.request(request)
-          response.body
-
-          case response
-          when Net::HTTPSuccess     then response.body
-          when Net::HTTPRedirection then get(response['location'], headers: headers, options: options, limit: limit - 1)
-          else
-            response.error!
-          end
-        end
-      end
-
-      def post(url, payload, headers = {}, options: {})
-        safe_request_to(url) do |proxy|
-          http = build_http_client(url, proxy, options)
-
-          request = Net::HTTP::Post.new(URI.parse(url), DEFAULT_HEADERS.merge(headers))
-          request.set_form_data(payload)
-          response = http.request(request)
-          response.body
+          Request.execute(method: :get, url: url, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
         end
       end
 
@@ -59,21 +37,6 @@ module ProxyFetcher
       def remove_proxy!(proxy)
         manager.proxies.delete(proxy)
         manager.refresh_list! if manager.proxies.empty?
-      end
-
-      def build_http_client(url, proxy, options = {})
-        uri = URI.parse(url)
-        http = Net::HTTP.new(uri.host, uri.port, proxy.addr, proxy.port)
-
-        http.read_timeout = options.fetch(:read_timeout, ProxyFetcher.config.connection_timeout)
-        http.open_timeout = options.fetch(:open_timeout, ProxyFetcher.config.connection_timeout)
-
-        if uri.is_a?(URI::HTTPS)
-          http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        end
-
-        http
       end
 
       def find_proxy_for(url)
