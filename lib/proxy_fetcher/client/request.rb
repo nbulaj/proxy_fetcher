@@ -2,7 +2,7 @@ module ProxyFetcher
   module Client
     class Request
       URL_ENCODED = {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type' => 'application/x-www-form-urlencoded'
       }.freeze
 
       attr_reader :http, :method, :uri, :headers, :timeout,
@@ -70,7 +70,7 @@ module ProxyFetcher
         raise ProxyFetcher::Exceptions::MaximumRedirectsReached if max_redirects <= 0
 
         url = http_response.fetch('location')
-        url = URI.parse(uri.to_s).merge(url).to_s unless url.downcase.start_with?('http')
+        url = uri.merge(url).to_s unless url.downcase.start_with?('http')
 
         Request.execute(method: :get, url: url, proxy: proxy, headers: headers, timeout: timeout, max_redirects: max_redirects - 1)
       end

@@ -4,7 +4,8 @@ module ProxyFetcher
   module Exceptions
     class WrongCustomClass < Error
       def initialize(klass, methods)
-        super("#{klass} must respond to [#{methods}] class methods!")
+        required_methods = Array(methods).join(', ')
+        super("#{klass} must respond to [#{required_methods}] class methods!")
       end
     end
 
@@ -21,14 +22,14 @@ module ProxyFetcher
     end
 
     class MaximumRedirectsReached < Error
-      def message
-        'maximum redirects reached'
+      def initialize(*)
+        super('maximum redirects reached')
       end
     end
 
     class MaximumRetriesReached < Error
-      def message
-        'reached the maximum number of retries'
+      def initialize(*)
+        super('reached the maximum number of retries')
       end
     end
   end

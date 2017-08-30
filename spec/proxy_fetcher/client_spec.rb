@@ -18,7 +18,7 @@ describe ProxyFetcher::Client do
   # Use local proxy server in order to avoid side effects, non-working proxies, etc
   before :each do
     proxy = ProxyFetcher::Proxy.new(addr: '127.0.0.1', port: 8080, type: 'HTTP, HTTPS')
-    allow(ProxyFetcher::Client::ProxiesRegistry).to receive(:find_proxy_for).and_return(proxy)
+    allow_any_instance_of(ProxyFetcher::Manager).to receive(:proxies).and_return([proxy])
   end
 
   context 'GET request with the valid proxy' do
@@ -58,7 +58,7 @@ describe ProxyFetcher::Client do
 
   context 'PUT request with the valid proxy' do
     it 'successfully returns page content for HTTP' do
-      content = ProxyFetcher::Client.put('http://httpbin.org/put', param: 'value')
+      content = ProxyFetcher::Client.put('http://httpbin.org/put', 'param=value')
 
       expect(content).not_to be_nil
       expect(content).not_to be_empty
@@ -84,7 +84,7 @@ describe ProxyFetcher::Client do
   end
 
   context 'retries' do
-    it 'reaches max limit' do
+    it 'raises an error when reaches max retries limit' do
       allow(ProxyFetcher::Client::Request).to receive(:execute).and_raise(StandardError)
 
       expect { ProxyFetcher::Client.get('http://httpbin.org') }.to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
@@ -92,14 +92,14 @@ describe ProxyFetcher::Client do
   end
 
   context 'redirects' do
-    it 'follows redirects' do
+    it 'follows redirect when present' do
       content = ProxyFetcher::Client.get('http://httpbin.org/absolute-redirect/2')
 
       expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
 
-    it 'reaches max limit' do
+    it 'raises an error when reaches max redirects limit' do
       expect { ProxyFetcher::Client.get('http://httpbin.org/absolute-redirect/11') }.to raise_error(ProxyFetcher::Exceptions::MaximumRedirectsReached)
     end
   end

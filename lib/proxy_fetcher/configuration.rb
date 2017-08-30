@@ -51,8 +51,7 @@ module ProxyFetcher
     # Checks if custom class has some required class methods
     def setup_custom_class(klass, required_methods: [])
       unless klass.respond_to?(*required_methods)
-        methods = Array(required_methods).join(', ')
-        raise ProxyFetcher::Exceptions::WrongCustomClass.new(klass, methods)
+        raise ProxyFetcher::Exceptions::WrongCustomClass.new(klass, required_methods)
       end
 
       klass
