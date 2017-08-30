@@ -3,6 +3,7 @@ require 'net/https'
 require 'nokogiri'
 require 'thread'
 
+require File.dirname(__FILE__) + '/proxy_fetcher/exceptions'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration/providers_registry'
 require File.dirname(__FILE__) + '/proxy_fetcher/proxy'

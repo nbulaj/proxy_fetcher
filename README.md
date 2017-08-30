@@ -193,7 +193,7 @@ To change open/read timeout for `cleanup!` and `connectable?` methods you need t
 
 ```ruby
 ProxyFetcher.configure do |config|
-  config.connection_timeout = 1 # default is 3
+  config.timeout = 1 # default is 3
 end
 
 manager = ProxyFetcher::Manager.new
@@ -262,7 +262,7 @@ ProxyFetcher.config.pool_size = 50
 You can experiment with the threads pool size to find an optimal number of maximum threads count for you PC and OS.
 This will definitely give you some performance improvements.
 
-Moreover, the common proxy validation speed depends on `ProxyFetcher.config.connection_timeout` option that is equal
+Moreover, the common proxy validation speed depends on `ProxyFetcher.config.timeout` option that is equal
 to `3` by default. It means that gem will wait 3 seconds for the server answer to check if particular proxy is connectable.
 You can decrease this option to `1`, for example, and it will heavily increase proxy validation speed (**but remember**
 that some proxies could be connectable, but slow, so with this option you will clear proxy list from the proxies that

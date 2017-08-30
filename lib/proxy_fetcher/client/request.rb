@@ -1,8 +1,6 @@
 module ProxyFetcher
   module Client
     class Request
-      MaximumRedirectsReached = Class.new(StandardError)
-
       URL_ENCODED = {
         'Content-Type': 'application/x-www-form-urlencoded'
       }.freeze
@@ -15,13 +13,13 @@ module ProxyFetcher
       end
 
       def initialize(args)
-        raise ArgumentError, 'requires hash arguments' unless args.is_a?(Hash)
+        raise ArgumentError, 'args must be a Hash!' unless args.is_a?(Hash)
 
         @uri = URI.parse(args.fetch(:url))
         @method = args.fetch(:method).to_s.capitalize
         @headers = (args[:headers] || {}).dup
         @payload = preprocess_payload(args[:payload])
-        @timeout = args.fetch(:timeout, ProxyFetcher.config.connection_timeout)
+        @timeout = args.fetch(:timeout, ProxyFetcher.config.timeout)
 
         @proxy = args.fetch(:proxy)
         @max_redirects = args.fetch(:max_redirects, 10)
@@ -69,7 +67,7 @@ module ProxyFetcher
       end
 
       def follow_redirection(http_response)
-        raise MaximumRedirectsReached, 'maximum redirects reached' if max_redirects <= 0
+        raise ProxyFetcher::Exceptions::MaximumRedirectsReached if max_redirects <= 0
 
         url = http_response.fetch('location')
         url = URI.parse(uri.to_s).merge(url).to_s unless url.downcase.start_with?('http')

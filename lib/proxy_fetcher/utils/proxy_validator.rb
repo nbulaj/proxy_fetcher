@@ -13,8 +13,8 @@ module ProxyFetcher
     end
 
     def connectable?
-      @http.open_timeout = ProxyFetcher.config.connection_timeout
-      @http.read_timeout = ProxyFetcher.config.connection_timeout
+      @http.open_timeout = ProxyFetcher.config.timeout
+      @http.read_timeout = ProxyFetcher.config.timeout
 
       @http.start { |connection| return true if connection.request_head('/') }
 

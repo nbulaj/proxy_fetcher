@@ -19,7 +19,7 @@ describe ProxyFetcher::Configuration do
       MyWrongHTTPClient = Class.new
 
       expect { ProxyFetcher.config.http_client = MyWrongHTTPClient }
-        .to raise_error(ProxyFetcher::Configuration::WrongCustomClass)
+        .to raise_error(ProxyFetcher::Exceptions::WrongCustomClass)
     end
   end
 
@@ -38,21 +38,21 @@ describe ProxyFetcher::Configuration do
       MyWrongProxyValidator = Class.new
 
       expect { ProxyFetcher.config.proxy_validator = MyWrongProxyValidator }
-        .to raise_error(ProxyFetcher::Configuration::WrongCustomClass)
+        .to raise_error(ProxyFetcher::Exceptions::WrongCustomClass)
     end
   end
 
   context 'custom provider' do
     it 'failed on registration if provider class already registered' do
       expect { ProxyFetcher::Configuration.register_provider(:xroxy, Class.new) }
-        .to raise_error(ProxyFetcher::ProvidersRegistry::RegisteredProvider)
+        .to raise_error(ProxyFetcher::Exceptions::RegisteredProvider)
     end
 
     it "failed on proxy list fetching if provider doesn't registered" do
       ProxyFetcher.config.provider = :not_existing_provider
 
       expect { ProxyFetcher::Manager.new }
-        .to raise_error(ProxyFetcher::ProvidersRegistry::UnknownProvider)
+        .to raise_error(ProxyFetcher::Exceptions::UnknownProvider)
     end
   end
 end
