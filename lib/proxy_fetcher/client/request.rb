@@ -5,8 +5,12 @@ module ProxyFetcher
         'Content-Type' => 'application/x-www-form-urlencoded'
       }.freeze
 
+      DEFAULT_SSL_OPTIONS = {
+        verify_mode: OpenSSL::SSL::VERIFY_NONE
+      }.freeze
+
       attr_reader :http, :method, :uri, :headers, :timeout,
-                  :payload, :proxy, :max_redirects
+                  :payload, :proxy, :max_redirects, :ssl_options
 
       def self.execute(args)
         new(args).execute
@@ -20,6 +24,7 @@ module ProxyFetcher
         @headers = (args[:headers] || {}).dup
         @payload = preprocess_payload(args[:payload])
         @timeout = args.fetch(:timeout, ProxyFetcher.config.timeout)
+        @ssl_options = args.fetch(:ssl_options, DEFAULT_SSL_OPTIONS)
 
         @proxy = args.fetch(:proxy)
         @max_redirects = args.fetch(:max_redirects, 10)
@@ -52,7 +57,7 @@ module ProxyFetcher
         @http = Net::HTTP.new(uri.host, uri.port, proxy.addr, proxy.port)
 
         @http.use_ssl = uri.is_a?(URI::HTTPS)
-        @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        @http.verify_mode = ssl_options.fetch(:verify_mode)
         @http.open_timeout = timeout
         @http.read_timeout = timeout
       end
