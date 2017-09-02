@@ -30,7 +30,7 @@ module ProxyFetcher
       @http_client = HTTPClient
       @proxy_validator = ProxyValidator
 
-      self.providers = [:hide_my_name] # currently default one
+      self.providers = self.class.registered_providers
     end
 
     def providers=(value)
