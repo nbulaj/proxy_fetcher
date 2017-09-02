@@ -9,46 +9,46 @@ module ProxyFetcher
 
     class << self
       def get(url, headers: {}, options: {})
-        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(method: :get, url: url, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
+        request_without_payload(:get, url, headers, options)
+      end
 
-          Request.execute(**opts)
-        end
+      def head(url, headers: {}, options: {})
+        request_without_payload(:head, url, headers, options)
       end
 
       def post(url, payload, headers: {}, options: {})
-        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(method: :post, url: url, payload: payload, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
-
-          Request.execute(**opts)
-        end
+        request_with_payload(:post, url, payload, headers, options)
       end
 
       def delete(url, headers: {}, options: {})
-        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(method: :delete, url: url, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
-
-          Request.execute(**opts)
-        end
+        request_without_payload(:delete, url, headers, options)
       end
 
       def put(url, payload, headers: {}, options: {})
-        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(method: :put, url: url, payload: payload, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
-
-          Request.execute(**opts)
-        end
+        request_with_payload(:post, url, payload, headers, options)
       end
 
       def patch(url, payload, headers: {}, options: {})
+        request_with_payload(:post, url, payload, headers, options)
+      end
+
+      private
+
+      def request_with_payload(method, url, payload, headers, options)
         safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(method: :patch, url: url, payload: payload, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
+          opts = options.merge(method: method, url: url, payload: payload, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
 
           Request.execute(**opts)
         end
       end
 
-      private
+      def request_without_payload(method, url, headers, options)
+        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
+          opts = options.merge(method: method, url: url, proxy: proxy, headers: DEFAULT_HEADERS.merge(headers))
+
+          Request.execute(**opts)
+        end
+      end
 
       def safe_request_to(url, max_retries = 1000)
         tries = 1
