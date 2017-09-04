@@ -4,5 +4,5 @@ gemspec
 
 group :test do
   gem 'coveralls', require: false
-  gem 'ritm'
+  gem 'evil-proxy'
 end

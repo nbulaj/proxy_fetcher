@@ -1,5 +1,8 @@
 require 'spec_helper'
-require 'ritm'
+require 'json'
+
+require 'evil-proxy'
+require 'evil-proxy/async'
 
 describe ProxyFetcher::Client do
   before :all do
@@ -8,16 +11,17 @@ describe ProxyFetcher::Client do
       config.timeout = 5
     end
 
-    Ritm.start
+    @server = EvilProxy::MITMProxyServer.new Port: 3128
+    @server.start
   end
 
   after :all do
-    Ritm.shutdown
+    @server.shutdown
   end
 
   # Use local proxy server in order to avoid side effects, non-working proxies, etc
   before :each do
-    proxy = ProxyFetcher::Proxy.new(addr: '127.0.0.1', port: 8080, type: 'HTTP, HTTPS')
+    proxy = ProxyFetcher::Proxy.new(addr: '127.0.0.1', port: 3128, type: 'HTTP, HTTPS')
     ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [proxy])
     allow_any_instance_of(ProxyFetcher::Manager).to receive(:proxies).and_return([proxy])
   end
@@ -30,7 +34,7 @@ describe ProxyFetcher::Client do
       expect(content).not_to be_empty
     end
 
-    xit 'successfully returns page content for HTTPS' do
+    it 'successfully returns page content for HTTPS' do
       content = ProxyFetcher::Client.get('https://httpbin.org')
 
       expect(content).not_to be_nil
@@ -40,10 +44,17 @@ describe ProxyFetcher::Client do
 
   context 'POST request with the valid proxy' do
     it 'successfully returns page content for HTTP' do
-      content = ProxyFetcher::Client.post('http://httpbin.org/post', param: 'value')
+      headers = {
+        'X-Proxy-Fetcher-Version' => ProxyFetcher::VERSION::STRING
+      }
+      content = ProxyFetcher::Client.post('http://httpbin.org/post', { param: 'value'} , headers: headers)
 
       expect(content).not_to be_nil
       expect(content).not_to be_empty
+
+      json = JSON.parse(content)
+
+      expect(json['headers']['X-Proxy-Fetcher-Version']).to eq(ProxyFetcher::VERSION::STRING)
     end
 
     it 'successfully returns page content for HTTPS' do
@@ -56,10 +67,14 @@ describe ProxyFetcher::Client do
 
   context 'PUT request with the valid proxy' do
     it 'successfully returns page content for HTTP' do
-      content = ProxyFetcher::Client.put('http://httpbin.org/put', 'param=value')
+      content = ProxyFetcher::Client.put('http://httpbin.org/put', 'param=PutValue')
 
       expect(content).not_to be_nil
       expect(content).not_to be_empty
+
+      json = JSON.parse(content)
+
+      expect(json['form']['param']).to eq('PutValue')
     end
   end
 
@@ -69,6 +84,10 @@ describe ProxyFetcher::Client do
 
       expect(content).not_to be_nil
       expect(content).not_to be_empty
+
+      json = JSON.parse(content)
+
+      expect(json['form']['param']).to eq('value')
     end
   end
 
