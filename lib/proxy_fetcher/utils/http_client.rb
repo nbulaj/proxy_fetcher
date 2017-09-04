@@ -14,6 +14,7 @@ module ProxyFetcher
     def fetch
       request = Net::HTTP::Get.new(@uri.to_s)
       request['Connection'] = 'keep-alive'
+      request['User-Agent'] = ProxyFetcher.config.user_agent
       response = @http.request(request)
       response.body
     end
