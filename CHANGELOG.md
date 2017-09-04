@@ -2,6 +2,11 @@
 
 Reverse Chronological Order:
 
+## `0.4.1` (2017-09-04)
+
+* Use all registered providers by default
+* Disable HideMyName provider (now ше uses CloudFlare)
+
 ## `0.4.0` (2017-08-26)
 
 * Support operations with multiple providers
