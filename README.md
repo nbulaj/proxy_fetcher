@@ -65,7 +65,7 @@ and parse all the proxies:
 manager = ProxyFetcher::Manager.new # will immediately load proxy list from the server
 manager.proxies
 
- #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA",
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
@@ -115,7 +115,7 @@ need is to refresh the proxy list by calling `#refresh_list!` (or `#fetch!`) met
 ```ruby
 manager.refresh_list! # or manager.fetch!
 
- #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA",
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
@@ -145,7 +145,7 @@ manager = ProxyFetcher::Manager.new(filters: {
     type: 'All_http'
   }
 })
-  
+
 manager.proxies
 
  # => [...]
@@ -155,7 +155,7 @@ You can apply different filters every time you calling `#refresh_list!` (or `#fe
 
 ```ruby
 manager.refresh_list!(country: 'PL', maxtime: '500')
- 
+
  # => [...]
 ```
 
@@ -225,7 +225,7 @@ ProxyFetcher.config.http_client = MyHTTPClient
 manager = ProxyFetcher::Manager.new
 manager.proxies
 
-#=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+#=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA",
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
@@ -246,11 +246,11 @@ ProxyFetcher.config.proxy_validator = MyProxyValidator
 manager = ProxyFetcher::Manager.new
 manager.proxies
 
- #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA",
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
- 
+
 manager.validate!
- 
+
  #=> [ ... ]
 ```
 
@@ -300,7 +300,7 @@ Also you can call next instance methods for every Proxy object:
 
 Currently ProxyFetcher can deal with next proxy providers (services):
 
-* Hide My Name (default one)
+* Hide My Name (**currently does not work**)
 * Free Proxy List
 * Free SSL Proxies
 * Proxy Docker

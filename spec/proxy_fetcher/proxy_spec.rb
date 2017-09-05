@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ProxyFetcher::Proxy do
   before :all do
-    ProxyFetcher.config.provider = :hide_my_name
+    ProxyFetcher.config.provider = :proxy_docker
   end
 
   before do
