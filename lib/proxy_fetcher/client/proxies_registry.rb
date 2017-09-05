@@ -8,15 +8,16 @@ module ProxyFetcher
         end
 
         def find_proxy_for(url)
-          if URI.parse(url).is_a?(URI::HTTPS)
-            proxy = manager.proxies.detect(&:ssl?)
-            return proxy unless proxy.nil?
+          proxy = if URI.parse(url).is_a?(URI::HTTPS)
+                    manager.proxies.detect(&:ssl?)
+                  else
+                    manager.get
+                  end
 
-            manager.refresh_list!
-            find_proxy_for(url)
-          else
-            manager.get
-          end
+          return proxy unless proxy.nil?
+
+          manager.refresh_list!
+          find_proxy_for(url)
         end
 
         def manager

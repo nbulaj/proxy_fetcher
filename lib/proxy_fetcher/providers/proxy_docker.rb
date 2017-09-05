@@ -1,7 +1,7 @@
 module ProxyFetcher
   module Providers
     class ProxyDocker < Base
-      PROVIDER_URL = 'https://www.proxydocker.com/en'.freeze
+      PROVIDER_URL = 'https://www.proxydocker.com/'.freeze
 
       # [NOTE] Doesn't support direct filters
       def load_proxy_list(*)

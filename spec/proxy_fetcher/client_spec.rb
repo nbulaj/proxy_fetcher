@@ -11,7 +11,7 @@ describe ProxyFetcher::Client do
       config.timeout = 5
     end
 
-    @server = EvilProxy::MITMProxyServer.new Port: 3128
+    @server = EvilProxy::MITMProxyServer.new Port: 3128, Logger: NullLogger.new(STDOUT)
     @server.start
   end
 
@@ -23,7 +23,7 @@ describe ProxyFetcher::Client do
   before :each do
     proxy = ProxyFetcher::Proxy.new(addr: '127.0.0.1', port: 3128, type: 'HTTP, HTTPS')
     ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [proxy])
-    allow_any_instance_of(ProxyFetcher::Manager).to receive(:proxies).and_return([proxy])
+    allow_any_instance_of(ProxyFetcher::Providers::Base).to receive(:fetch_proxies!).and_return([proxy])
   end
 
   context 'GET request with the valid proxy' do
@@ -55,13 +55,7 @@ describe ProxyFetcher::Client do
       json = JSON.parse(content)
 
       expect(json['headers']['X-Proxy-Fetcher-Version']).to eq(ProxyFetcher::VERSION::STRING)
-    end
-
-    it 'successfully returns page content for HTTPS' do
-      content = ProxyFetcher::Client.post('http://httpbin.org/post', param: 'value')
-
-      expect(content).not_to be_nil
-      expect(content).not_to be_empty
+      expect(json['headers']['User-Agent']).to eq(ProxyFetcher.config.user_agent)
     end
   end
 
@@ -97,6 +91,14 @@ describe ProxyFetcher::Client do
 
       expect(content).not_to be_nil
       expect(content).not_to be_empty
+    end
+  end
+
+  context 'HEAD request with the valid proxy' do
+    it 'successfully works' do
+      content = ProxyFetcher::Client.head('http://httpbin.org')
+
+      expect(content).to be_nil
     end
   end
 
