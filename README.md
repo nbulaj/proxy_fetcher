@@ -6,7 +6,7 @@
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
 This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
-proxy lists from multiple providers like [HideMyName](https://hidemy.name/en/).
+proxy lists from multiple providers.
 
 It gives you a `Manager` class that can load proxy lists, validate them and return random or specific proxies. Take a look
 at the documentation below to find all the gem features.
@@ -300,10 +300,11 @@ Also you can call next instance methods for every Proxy object:
 
 Currently ProxyFetcher can deal with next proxy providers (services):
 
-* Hide My Name (**currently does not work**)
 * Free Proxy List
 * Free SSL Proxies
 * Proxy Docker
+* Gather Proxy
+* HTTP Tunnel Genius
 * Proxy List
 * XRoxy
 
