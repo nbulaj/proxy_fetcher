@@ -1,6 +1,7 @@
 LineLength:
   Max: 120
 AllCops:
+  TargetRubyVersion: 2.4
   Exclude:
     - 'spec/**/*'
     - 'bin/*'
@@ -8,4 +9,6 @@ AllCops:
 Rails:
   Enabled: false
 Documentation:
+  Enabled: false
+FrozenStringLiteralComment:
   Enabled: false

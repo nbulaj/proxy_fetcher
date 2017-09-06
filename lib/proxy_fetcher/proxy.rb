@@ -15,7 +15,9 @@ module ProxyFetcher
       end
     end
 
-    alias ssl? https?
+    def ssl?
+      https? || socks4? || socks5?
+    end
 
     def initialize(attributes = {})
       attributes.each do |attr, value|

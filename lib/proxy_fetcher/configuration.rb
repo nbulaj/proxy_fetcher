@@ -1,9 +1,10 @@
 module ProxyFetcher
   class Configuration
-    WrongCustomClass = Class.new(StandardError)
-
-    attr_accessor :providers, :connection_timeout, :pool_size
+    attr_accessor :providers, :timeout, :pool_size, :user_agent
     attr_accessor :http_client, :proxy_validator
+
+    # rubocop:disable Metrics/LineLength
+    DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze
 
     class << self
       def providers_registry
@@ -25,8 +26,9 @@ module ProxyFetcher
 
     # Sets default configuration options
     def reset!
+      @user_agent = DEFAULT_USER_AGENT
       @pool_size = 10
-      @connection_timeout = 3
+      @timeout = 3
       @http_client = HTTPClient
       @proxy_validator = ProxyValidator
 
@@ -53,7 +55,7 @@ module ProxyFetcher
     # Checks if custom class has some required class methods
     def setup_custom_class(klass, required_methods: [])
       unless klass.respond_to?(*required_methods)
-        raise WrongCustomClass, "#{klass} must respond to [#{Array(required_methods).join(', ')}] class methods!"
+        raise ProxyFetcher::Exceptions::WrongCustomClass.new(klass, required_methods)
       end
 
       klass

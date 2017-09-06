@@ -1,17 +1,14 @@
 module ProxyFetcher
   class ProvidersRegistry
-    UnknownProvider = Class.new(StandardError)
-    RegisteredProvider = Class.new(StandardError)
-
     def providers
       @providers ||= {}
     end
 
     # Add custom provider to common registry.
-    # Requires proxy provider name ('hide_my_name' for example) and a class
+    # Requires proxy provider name ('proxy_docker' for example) and a class
     # that implements the parsing logic.
     def register(name, klass)
-      raise RegisteredProvider, "`#{name}` provider already registered!" if providers.key?(name.to_sym)
+      raise ProxyFetcher::Exceptions::RegisteredProvider, name if providers.key?(name.to_sym)
 
       providers[name.to_sym] = klass
     end
@@ -23,7 +20,7 @@ module ProxyFetcher
 
       providers.fetch(provider_name)
     rescue KeyError
-      raise UnknownProvider, "unregistered proxy provider `#{provider_name}`"
+      raise ProxyFetcher::Exceptions::UnknownProvider, provider_name
     end
   end
 end
