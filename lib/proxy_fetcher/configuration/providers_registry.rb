@@ -5,7 +5,7 @@ module ProxyFetcher
     end
 
     # Add custom provider to common registry.
-    # Requires proxy provider name ('hide_my_name' for example) and a class
+    # Requires proxy provider name ('proxy_docker' for example) and a class
     # that implements the parsing logic.
     def register(name, klass)
       raise ProxyFetcher::Exceptions::RegisteredProvider, name if providers.key?(name.to_sym)

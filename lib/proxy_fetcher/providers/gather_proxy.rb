@@ -18,7 +18,7 @@ module ProxyFetcher
           proxy.port = json['PROXY_PORT'].to_i(16)
           proxy.anonymity = json['PROXY_TYPE']
           proxy.country = json['PROXY_COUNTRY']
-          proxy.response_time = json['PROXY_TIME']
+          proxy.response_time = json['PROXY_TIME'].to_i
           proxy.type = ProxyFetcher::Proxy::HTTP
         end
       end

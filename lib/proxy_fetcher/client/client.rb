@@ -50,7 +50,7 @@ module ProxyFetcher
       end
 
       def safe_request_to(url, max_retries = 1000)
-        tries = 1
+        tries = 0
 
         begin
           proxy = ProxiesRegistry.find_proxy_for(url)

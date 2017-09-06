@@ -4,7 +4,7 @@ module ProxyFetcher
     attr_accessor :http_client, :proxy_validator
 
     # rubocop:disable Metrics/LineLength
-    DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'.freeze
+    DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze
 
     class << self
       def providers_registry

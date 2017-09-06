@@ -7,11 +7,11 @@ require 'evil-proxy/async'
 describe ProxyFetcher::Client do
   before :all do
     ProxyFetcher.configure do |config|
-      config.provider = :hide_my_name
+      config.provider = :xroxy
       config.timeout = 5
     end
 
-    @server = EvilProxy::MITMProxyServer.new Port: 3128, Logger: NullLogger.new(STDOUT)
+    @server = EvilProxy::MITMProxyServer.new Port: 3128, Quiet: true
     @server.start
   end
 

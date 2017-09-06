@@ -20,6 +20,7 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 - [Example of usage](#example-of-usage)
   - [In Ruby application](#in-ruby-application)
   - [Standalone](#standalone)
+- [Client](#client)
 - [Configuration](#configuration)
   - [Proxy validation speed](#proxy-validation-speed)
 - [Proxy object](#proxy-object)
@@ -32,7 +33,7 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.4'
+gem 'proxy_fetcher', '~> 0.5'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -50,7 +51,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.4'
+gem install proxy_fetcher -v '0.5'
 ```
 
 ## Example of usage
@@ -123,7 +124,7 @@ If you need to filter proxy list, for example, by country or response time and s
 then you can just pass your filters like a simple Ruby hash to the Manager instance:
 
 ```ruby
-ProxyFetcher.config.providers = :hide_my_name
+ProxyFetcher.config.providers = :proxy_docker
 
 manager = ProxyFetcher::Manager.new(filters: { country: 'PL', maxtime: '500' })
 manager.proxies
@@ -134,7 +135,7 @@ manager.proxies
 If you are using multiple providers, then you can split your filters by proxy provider names:
 
 ```ruby
-ProxyFetcher.config.providers = [:hide_my_name, :xroxy]
+ProxyFetcher.config.providers = [:proxy_docker, :xroxy]
 
 manager = ProxyFetcher::Manager.new(filters: {
   hide_my_name: {
@@ -194,6 +195,43 @@ To get all the possible options run:
 proxy_fetcher --help
 ```
 
+## Client
+
+ProxyFetcher gem provides you a ready-to-use HTTP client that made requesting with proxies easy. It does all the work 
+with the proxy lists for you (load, validate, refresh, find proxy by type, follow redirects, etc). All you need it to
+make HTTP(S) requests:
+
+```ruby
+require 'proxy-fetcher'
+
+ProxyFetcher::Client.get 'https://example.com/resource'
+
+ProxyFetcher::Client.post 'https://example.com/resource', { param: 'value' }
+
+ProxyFetcher::Client.post 'https://example.com/resource', 'Any data'
+
+ProxyFetcher::Client.post 'https://example.com/resource', { param: 'value'}.to_json , headers: { 'Content-Type': 'application/json' }
+
+ProxyFetcher::Client.put 'https://example.com/resource', { param: 'value' }
+
+ProxyFetcher::Client.patch 'https://example.com/resource', { param: 'value' }
+
+ProxyFetcher::Client.delete 'https://example.com/resource'
+```
+
+By default, `ProxyFetcher::Client` makes 1000 attempts to send a HTTP request in case if proxy is out of order or the
+remote server returns an error. You can increase or decrease this number for your case or set it to `nil` if you want to
+make infinite number of requests (or before your Ruby process will die :skull:):
+
+```ruby
+require 'proxy-fetcher'
+
+ProxyFetcher::Client.get 'https://example.com/resource', options: { max_retries: 10_000 }
+```
+
+Btw, if you need support of JavaScript or some other features, you need to implement your own client using, for example,
+`selenium-webdriver`.
+
 ## Configuration
 
 To change open/read timeout for `cleanup!` and `connectable?` methods you need to change `ProxyFetcher.config`:
@@ -205,6 +243,14 @@ end
 
 manager = ProxyFetcher::Manager.new
 manager.cleanup!
+```
+
+Also you can set your custom User-Agent:
+
+```ruby
+ProxyFetcher.configure do |config|
+  config.user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+end
 ```
 
 ProxyFetcher uses simple Ruby solution for dealing with HTTP(S) requests - `net/http` library from the stdlib. If you wanna add, for example, your custom provider that

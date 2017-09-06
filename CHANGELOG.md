@@ -2,6 +2,17 @@
 
 Reverse Chronological Order:
 
+## `0.5.0` (2017-09-06)
+
+* Remove HideMyName provider (not works anymore)
+* Fix ProxyDocker provider
+* Add `ProxyFetcher::Client` to make interacting with proxies easier
+* Add new providers (Gather Proxy & HTTP Tunnel Genius)
+* Simplify `connection_timeout` config option to `timeout`
+* Make User-Agent configurable
+* Move all the gem exceptions under `ProxyFetcher::Error` base class
+* Small improvements
+
 ## `0.4.1` (2017-09-04)
 
 * Use all registered providers by default
