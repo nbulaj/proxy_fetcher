@@ -108,6 +108,18 @@ describe ProxyFetcher::Client do
 
       expect { ProxyFetcher::Client.get('http://httpbin.org') }.to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
     end
+
+    it 'raises an error when http request returns an error' do
+      allow_any_instance_of(Net::HTTP).to receive(:request).and_return(Net::HTTPBadRequest.new('', '', ''))
+
+      expect { ProxyFetcher::Client.get('http://httpbin.org') }.to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
+    end
+
+    it 'refreshes proxy lists if no proxy found' do
+      ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [])
+
+      expect { ProxyFetcher::Client.get('http://httpbin.org') }.not_to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
+    end
   end
 
   context 'redirects' do
