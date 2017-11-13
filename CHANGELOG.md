@@ -2,6 +2,10 @@
 
 Reverse Chronological Order:
 
+## `0.5.1` (2017-11-13)
+
+* Fix ProxyFetcher CLI
+
 ## `0.5.0` (2017-09-06)
 
 * Remove HideMyName provider (not works anymore)

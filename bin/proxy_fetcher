@@ -41,7 +41,7 @@ OptionParser.new do |opts|
 end.parse!
 
 ProxyFetcher.config.providers = options[:providers] if options[:providers]
-ProxyFetcher.config.connection_timeout = options[:timeout] if options[:timeout]
+ProxyFetcher.config.timeout = options[:timeout] if options[:timeout]
 
 manager = ProxyFetcher::Manager.new(filters: options[:filters])
 manager.validate! if options[:validate]
