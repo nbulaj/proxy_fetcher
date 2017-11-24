@@ -1,3 +1,5 @@
+require 'irb'
+
 module ProxyFetcher
   module Providers
     class HTTPTunnel < Base
@@ -8,31 +10,31 @@ module ProxyFetcher
         doc.xpath('//table[contains(@id, "GridView")]/tr[(count(td)>2)]')
       end
 
-      def to_proxy(html_element)
+      def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
-          uri = parse_proxy_uri(html_element)
+          uri = parse_proxy_uri(html_node)
           proxy.addr = uri.host
           proxy.port = uri.port
 
-          proxy.country = parse_country(html_element)
-          proxy.anonymity = parse_anonymity(html_element)
+          proxy.country = parse_country(html_node)
+          proxy.anonymity = parse_anonymity(html_node)
           proxy.type = ProxyFetcher::Proxy::HTTP
         end
       end
 
       private
 
-      def parse_proxy_uri(element)
-        full_addr = parse_element(element, 'td[1]')
+      def parse_proxy_uri(html_node)
+        full_addr = html_node.content_at('td[1]')
         URI.parse("http://#{full_addr}")
       end
 
-      def parse_country(element)
-        element.at('img').attr('title')
+      def parse_country(html_node)
+        html_node.find('.//img').attr('title')
       end
 
-      def parse_anonymity(element)
-        transparency = parse_element(element, 'td[5]').to_sym
+      def parse_anonymity(html_node)
+        transparency = html_node.content_at('td[5]').to_sym
 
         {
           A: 'Anonimous',

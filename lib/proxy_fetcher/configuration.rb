@@ -1,7 +1,7 @@
 module ProxyFetcher
   class Configuration
-    attr_accessor :providers, :timeout, :pool_size, :user_agent
-    attr_accessor :http_client, :proxy_validator
+    attr_accessor :timeout, :pool_size, :user_agent
+    attr_reader :http_client, :proxy_validator, :providers, :adapter
 
     # rubocop:disable Metrics/LineLength
     DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze
@@ -33,6 +33,19 @@ module ProxyFetcher
       @proxy_validator = ProxyValidator
 
       self.providers = self.class.registered_providers
+      self.adapter = :nokogiri
+    end
+
+    def adapter=(name_or_class)
+      @adapter = case name_or_class
+                 when Symbol, String
+                   ProxyFetcher::Document::Adapters.const_get(name_or_class.to_s.capitalize)
+                 else
+                   name_or_class
+                 end
+
+      @adapter.setup!
+      @adapter
     end
 
     def providers=(value)

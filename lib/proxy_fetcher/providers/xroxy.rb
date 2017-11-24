@@ -8,21 +8,21 @@ module ProxyFetcher
         doc.xpath('//div[@id="content"]/table[1]/tr[contains(@class, "row")]')
       end
 
-      def to_proxy(html_element)
+      def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
-          proxy.addr = parse_element(html_element, 'td[2]')
-          proxy.port = convert_to_int(parse_element(html_element, 'td[3]'))
-          proxy.anonymity = parse_element(html_element, 'td[4]')
-          proxy.country = parse_element(html_element, 'td[6]')
-          proxy.response_time = convert_to_int(parse_element(html_element, 'td[7]'))
-          proxy.type = parse_type(html_element)
+          proxy.addr = html_node.content_at('td[2]')
+          proxy.port = convert_to_int(html_node.content_at('td[3]'))
+          proxy.anonymity = html_node.content_at('td[4]')
+          proxy.country = html_node.content_at('td[6]')
+          proxy.response_time = convert_to_int(html_node.content_at('td[7]'))
+          proxy.type = parse_type(html_node)
         end
       end
 
       private
 
-      def parse_type(element)
-        https = parse_element(element, 'td[5]')
+      def parse_type(html_node)
+        https = html_node.content_at('td[5]')
         https.casecmp('true').zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
       end
     end

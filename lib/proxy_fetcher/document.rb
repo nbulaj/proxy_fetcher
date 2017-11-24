@@ -1,8 +1,8 @@
 module ProxyFetcher
   class Document
     class << self
-      def parse(data, adapter:, options: {})
-        new(adapter.parse(data, options))
+      def parse(data, adapter:)
+        new(adapter.parse(data))
       end
     end
 
@@ -17,7 +17,7 @@ module ProxyFetcher
     end
 
     def css(*args)
-      backend.css(*args).map { |node| backend.proxy_node.new(node)}
+      backend.css(*args).map { |node| backend.proxy_node.new(node) }
     end
   end
 end

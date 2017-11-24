@@ -19,7 +19,5 @@ Gem::Specification.new do |gem|
   gem.license = 'MIT'
   gem.required_ruby_version = '>= 2.0.0'
 
-  gem.add_runtime_dependency 'nokogiri', '~> 1.6', '>= 1.6'
-
   gem.add_development_dependency 'rspec', '~> 3.5'
 end

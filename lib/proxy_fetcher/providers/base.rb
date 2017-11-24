@@ -28,7 +28,8 @@ module ProxyFetcher
         uri = URI.parse(url)
         uri.query = URI.encode_www_form(filters) if filters && filters.any?
 
-        Nokogiri::HTML(ProxyFetcher.config.http_client.fetch(uri.to_s))
+        html = ProxyFetcher.config.http_client.fetch(uri.to_s)
+        ProxyFetcher::Document.parse(html, adapter: ProxyFetcher.config.adapter)
       end
 
       # Get HTML elements with proxy info
@@ -42,8 +43,8 @@ module ProxyFetcher
       end
 
       # Return normalized HTML element content by selector
-      def parse_element(parent, selector, method = :at_xpath)
-        clear(parent.public_send(method, selector).content)
+      def extract_content(node, selector, method = :at_xpath)
+        clear(node.public_send(method, selector).parse)
       end
     end
   end

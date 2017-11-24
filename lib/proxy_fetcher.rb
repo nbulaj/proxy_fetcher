@@ -1,6 +1,5 @@
 require 'uri'
 require 'net/https'
-require 'nokogiri'
 
 require File.dirname(__FILE__) + '/proxy_fetcher/exceptions'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
@@ -15,9 +14,11 @@ require File.dirname(__FILE__) + '/proxy_fetcher/client/client'
 require File.dirname(__FILE__) + '/proxy_fetcher/client/request'
 require File.dirname(__FILE__) + '/proxy_fetcher/client/proxies_registry'
 
-require File.dirname(__FILE__) + '/proxy_fetcher/parser/document'
-require File.dirname(__FILE__) + '/proxy_fetcher/parser/node'
-require File.dirname(__FILE__) + '/proxy_fetcher/parser/adapters/abstract'
+require File.dirname(__FILE__) + '/proxy_fetcher/document'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/node'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/abstract'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/nokogiri'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/oga'
 
 module ProxyFetcher
   module Providers
