@@ -3,10 +3,6 @@ require 'forwardable'
 module ProxyFetcher
   module Providers
     class Base
-      extend Forwardable
-
-      def_delegators ProxyFetcher::HTML, :clear, :convert_to_int
-
       # Loads proxy provider page content, extract proxy list from it
       # and convert every entry to proxy object.
       def fetch_proxies!(filters = {})
@@ -40,11 +36,6 @@ module ProxyFetcher
       # Convert HTML element with proxy info to ProxyFetcher::Proxy instance
       def to_proxy(*)
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
-      end
-
-      # Return normalized HTML element content by selector
-      def extract_content(node, selector, method = :at_xpath)
-        clear(node.public_send(method, selector).parse)
       end
     end
   end

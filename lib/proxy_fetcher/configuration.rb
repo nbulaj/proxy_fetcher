@@ -37,14 +37,9 @@ module ProxyFetcher
     end
 
     def adapter=(name_or_class)
-      @adapter = case name_or_class
-                 when Symbol, String
-                   ProxyFetcher::Document::Adapters.const_get(name_or_class.to_s.capitalize)
-                 else
-                   name_or_class
-                 end
-
+      @adapter = ProxyFetcher::Document::Adapters.lookup(name_or_class)
       @adapter.setup!
+
       @adapter
     end
 

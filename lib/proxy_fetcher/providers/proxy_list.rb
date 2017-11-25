@@ -18,7 +18,7 @@ module ProxyFetcher
 
           proxy.type = html_node.content_at('li[2]')
           proxy.anonymity = html_node.content_at('li[4]')
-          proxy.country = clear(html_node.find("li[5]//span[@class='country']").attr('title'))
+          proxy.country = html_node.find("li[5]//span[@class='country']").attr('title')
         end
       end
 

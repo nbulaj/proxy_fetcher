@@ -11,6 +11,10 @@ module ProxyFetcher
         self.class.new(node.public_send(method, selector))
       end
 
+      def content_at(*args)
+        clear(find(*args).content)
+      end
+
       def content
         raise "#{__method__} must be implemented in descendant class!"
       end

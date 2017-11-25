@@ -26,7 +26,7 @@ module ProxyFetcher
       private
 
       def parse_json(html_node)
-        javascript = clear(html_node.content)[/{.+}/im]
+        javascript = html_node.content[/{.+}/im]
         JSON.parse(javascript)
       end
     end

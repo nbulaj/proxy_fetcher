@@ -11,10 +11,10 @@ module ProxyFetcher
       def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
           proxy.addr = html_node.content_at('td[2]')
-          proxy.port = convert_to_int(html_node.content_at('td[3]'))
+          proxy.port = Integer(html_node.content_at('td[3]'))
           proxy.anonymity = html_node.content_at('td[4]')
           proxy.country = html_node.content_at('td[6]')
-          proxy.response_time = convert_to_int(html_node.content_at('td[7]'))
+          proxy.response_time = Integer(html_node.content_at('td[7]'))
           proxy.type = parse_type(html_node)
         end
       end

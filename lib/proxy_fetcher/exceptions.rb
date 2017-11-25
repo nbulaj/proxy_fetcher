@@ -32,5 +32,17 @@ module ProxyFetcher
         super('reached the maximum number of retries')
       end
     end
+
+    class UnknownAdapter < Error
+      def initialize(name)
+        super("unknown adapter '#{name}'")
+      end
+    end
+
+    class AdapterSetupError < Error
+      def initialize(reason)
+        super("can't setup adapter during the following error:\n\t#{reason}'")
+      end
+    end
   end
 end
