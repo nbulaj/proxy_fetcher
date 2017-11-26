@@ -1,7 +1,7 @@
 module ProxyFetcher
   class Configuration
-    attr_accessor :timeout, :pool_size, :user_agent
-    attr_reader :http_client, :proxy_validator, :providers, :adapter
+    attr_accessor :timeout, :pool_size, :user_agent, :adapter
+    attr_reader :http_client, :proxy_validator, :providers
 
     # rubocop:disable Metrics/LineLength
     DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze

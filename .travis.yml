@@ -2,6 +2,9 @@ language: ruby
 before_install: gem install bundler
 bundler_args: --without yard guard benchmarks
 script: "rake spec"
+gemfile:
+  - gemfiles/oga.gemfile
+  - gemfiles/nokogiri.gemfile
 rvm:
   - 2.0
   - 2.1
@@ -12,3 +15,6 @@ rvm:
 matrix:
   allow_failures:
     - rvm: ruby-head
+  exclude:
+    - rvm: 2.0
+      gemfile: gemfiles/nokogiri.gemfile
