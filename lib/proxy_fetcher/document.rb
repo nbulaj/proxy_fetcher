@@ -1,8 +1,8 @@
 module ProxyFetcher
   class Document
     class << self
-      def parse(data, adapter:)
-        new(adapter.parse(data))
+      def parse(data)
+        new(ProxyFetcher.config.adapter.parse(data))
       end
     end
 

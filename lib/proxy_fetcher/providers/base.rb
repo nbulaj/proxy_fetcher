@@ -10,8 +10,8 @@ module ProxyFetcher
       end
 
       class << self
-        def fetch_proxies!(filters = {})
-          new.fetch_proxies!(filters)
+        def fetch_proxies!(*args)
+          new.fetch_proxies!(*args)
         end
       end
 
@@ -19,13 +19,13 @@ module ProxyFetcher
 
       # Loads HTML document with Nokogiri by the URL combined with custom filters
       def load_document(url, filters = {})
-        raise ArgumentError, 'filters must be a Hash' if filters && !filters.is_a?(Hash)
+        raise ArgumentError, 'filters must be a Hash' unless filters.is_a?(Hash)
 
         uri = URI.parse(url)
         uri.query = URI.encode_www_form(filters) if filters && filters.any?
 
         html = ProxyFetcher.config.http_client.fetch(uri.to_s)
-        ProxyFetcher::Document.parse(html, adapter: ProxyFetcher.config.adapter)
+        ProxyFetcher::Document.parse(html)
       end
 
       # Get HTML elements with proxy info
