@@ -1,9 +1,0 @@
-source 'https://rubygems.org'
-
-gemspec path: '../'
-
-gem 'oga', '~> 2.0'
-
-group :test do
-  gem 'rspec-rails', '~> 3.6'
-end

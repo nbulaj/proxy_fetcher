@@ -1,5 +1,3 @@
-require 'forwardable'
-
 module ProxyFetcher
   module Providers
     class Base

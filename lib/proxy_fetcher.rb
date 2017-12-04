@@ -40,5 +40,13 @@ module ProxyFetcher
     def configure
       yield config
     end
+
+    private
+
+    def configure_adapter!
+      config.adapter = Configuration::DEFAULT_ADAPTER if config.adapter.nil?
+    end
   end
+
+  configure_adapter!
 end

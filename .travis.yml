@@ -2,9 +2,12 @@ language: ruby
 before_install: gem install bundler
 bundler_args: --without yard guard benchmarks
 script: "rake spec"
-gemfile:
-  - gemfiles/oga.gemfile
-  - gemfiles/nokogiri.gemfile
+env:
+  global:
+    - "JRUBY_OPTS="$JRUBY_OPTS --debug"
+  matrix:
+    - ADAPTER=oga
+    - ADAPTER=nokogiri
 rvm:
   - 2.0
   - 2.1
@@ -12,9 +15,12 @@ rvm:
   - 2.3.3
   - 2.4.2
   - ruby-head
+  - jruby-9.1.6.0
 matrix:
   allow_failures:
     - rvm: ruby-head
+  include:
+
   exclude:
     - rvm: 2.0
-      gemfile: gemfiles/nokogiri.gemfile
+      env: ADAPTER=nokogiri # Nokogiri doesn't support Ruby 2.0

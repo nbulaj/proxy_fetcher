@@ -15,6 +15,14 @@ require 'proxy_fetcher'
 
 Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
 
+adapter = ENV['ADAPTER']
+
+if adapter
+  ProxyFetcher.configure do |config|
+    config.adapter = adapter
+  end
+end
+
 RSpec.configure do |config|
   config.order = 'random'
 end

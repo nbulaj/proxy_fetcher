@@ -1,20 +1,20 @@
 module ProxyFetcher
   class Document
     class AbstractAdapter
-      attr_reader :doc
+      attr_reader :document
 
-      def initialize(doc)
-        @doc = doc
+      def initialize(document)
+        @document = document
       end
 
       # You can override this method in your own adapter class
       def xpath(selector)
-        doc.xpath(selector)
+        document.xpath(selector)
       end
 
       # You can override this method in your own adapter class
       def css(selector)
-        doc.css(selector)
+        document.css(selector)
       end
 
       def proxy_node
@@ -24,7 +24,7 @@ module ProxyFetcher
       def self.setup!(*args)
         install_requirements!(*args)
       rescue LoadError => error
-        raise Exceptions::AdapterSetupError, error.message
+        raise Exceptions::AdapterSetupError.new(self.class.name, error.message)
       end
     end
   end

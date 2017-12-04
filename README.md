@@ -5,11 +5,12 @@
 [![Code Climate](https://codeclimate.com/github/nbulaj/proxy_fetcher/badges/gpa.svg)](https://codeclimate.com/github/nbulaj/proxy_fetcher)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
-This gem can help your Ruby application to make HTTP(S) requests from proxy by fetching and validating actual
+This gem can help your Ruby application to make HTTP(S) requests using proxy by fetching and validating actual
 proxy lists from multiple providers.
 
-It gives you a `Manager` class that can load proxy lists, validate them and return random or specific proxies. Take a look
-at the documentation below to find all the gem features.
+It gives you a special `Manager` class that can load proxy lists, validate them and return random or specific proxies.
+It also has a `Client` class that encapsulates all the logic for the sending HTTP requests using proxies.
+Take a look at the documentation below to find all the gem features.
 
 Also this gem can be used with any other programming language (Go / Python / etc) as standalone solution for downloading and
 validating proxy lists from the different providers. [Checkout examples](#standalone) of usage below.
@@ -33,7 +34,7 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.5'
+gem 'proxy_fetcher', '~> 0.6'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -234,7 +235,25 @@ Btw, if you need support of JavaScript or some other features, you need to imple
 
 ## Configuration
 
-To change open/read timeout for `cleanup!` and `connectable?` methods you need to change `ProxyFetcher.config`:
+ProxyFetcher is very flexible gem. You can configure the most important parts of the library and use your own solutions.
+
+Default configuration looks as follows:
+
+```ruby
+ProxyFetcher.configure do |config|
+  config.user_agent = ProxyFetcher::Configuration::DEFAULT_USER_AGENT
+  config.pool_size = 10
+  config.timeout = 3
+  config.http_client = ProxyFetcher::HTTPClient
+  config.proxy_validator = ProxyFetcher::ProxyValidator
+  config.providers = ProxyFetcher::Configuration.registered_providers
+  config.adapter = ProxyFetcher::Configuration::DEFAULT_ADAPTER # :nokogiri by default
+end
+```
+
+You can change any of the options above. Let's look at this deeper.
+
+To change open/read timeout for `cleanup!` and `connectable?` methods you need to change `timeout` options:
 
 ```ruby
 ProxyFetcher.configure do |config|
@@ -245,7 +264,7 @@ manager = ProxyFetcher::Manager.new
 manager.cleanup!
 ```
 
-Also you can set your custom User-Agent:
+Also you can set your custom User-Agent string:
 
 ```ruby
 ProxyFetcher.configure do |config|
@@ -253,10 +272,11 @@ ProxyFetcher.configure do |config|
 end
 ```
 
-ProxyFetcher uses simple Ruby solution for dealing with HTTP(S) requests - `net/http` library from the stdlib. If you wanna add, for example, your custom provider that
-was developed as a Single Page Application (SPA) with some JavaScript, then you will need something like [selenium-webdriver](https://github.com/SeleniumHQ/selenium/tree/master/rb)
-to properly load the content of the website. For those and other cases you can write your own class for fetching HTML content by the URL and setup it
-in the ProxyFetcher config:
+ProxyFetcher uses standard Ruby solution for dealing with HTTP(S) requests - `net/http` library from the Ruby core.
+If you wanna add, for example, your custom provider that was developed as a Single Page Application (SPA) with some JavaScript,
+then you will need something like [selenium-webdriver](https://github.com/SeleniumHQ/selenium/tree/master/rb) to properly
+load the content of the website. For those and other cases you can write your own class for fetching HTML content by
+the URL and setup it in the ProxyFetcher config:
 
 ```ruby
 class MyHTTPClient
@@ -298,6 +318,21 @@ manager.proxies
 manager.validate!
 
  #=> [ ... ]
+```
+
+Be default, ProxyFetcher gem uses [Nokogiri](https://github.com/sparklemotion/nokogiri) for parsing HTML. If you want
+to use [Oga](https://gitlab.com/yorickpeterse/oga) instead, then you need to add `gem 'oga'` to your Gemfile and configure
+ProxyFetcher as follows:
+
+```ruby
+ProxyFetcher.config.adapter = :oga
+```
+
+Also you can write your own HTML parser implementation and use it, take a look at the [abstract class and implementations](lib/proxy_fetcher/document).
+Configure it as:
+
+```ruby
+ProxyFetcher.config.adapter = MyHTMLParserClass
 ```
 
 ### Proxy validation speed
