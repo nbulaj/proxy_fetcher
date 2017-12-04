@@ -37,7 +37,7 @@ module ProxyFetcher
         transparency = html_node.content_at('td[5]').to_sym
 
         {
-          A: 'Anonimous',
+          A: 'Anonymous',
           E: 'Elite',
           T: 'Transparent',
           U: 'Unknown'

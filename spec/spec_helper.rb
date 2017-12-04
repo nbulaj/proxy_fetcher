@@ -15,12 +15,11 @@ require 'proxy_fetcher'
 
 Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
 
-adapter = ENV['ADAPTER']
+adapter = ENV['BUNDLE_GEMFILE'][/.+\/(.+)\.gemfile/i, 1]
+puts "Configured adapter: '#{adapter}'"
 
-if adapter
-  ProxyFetcher.configure do |config|
-    config.adapter = adapter
-  end
+ProxyFetcher.configure do |config|
+  config.adapter = adapter
 end
 
 RSpec.configure do |config|

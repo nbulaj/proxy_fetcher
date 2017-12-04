@@ -14,7 +14,7 @@ module ProxyFetcher
             name_or_class
           end
         rescue NameError
-          raise UnknownAdapter, name_or_class
+          raise Exceptions::UnknownAdapter, name_or_class
         end
       end
     end
