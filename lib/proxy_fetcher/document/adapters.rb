@@ -6,6 +6,8 @@ module ProxyFetcher
 
       class << self
         def lookup(name_or_class)
+          raise Exceptions::BlankAdapter if name_or_class.nil? || name_or_class.to_s.empty?
+
           case name_or_class
           when Symbol, String
             adapter_name = name_or_class.to_s.capitalize << ADAPTER

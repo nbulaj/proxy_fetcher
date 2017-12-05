@@ -39,6 +39,16 @@ module ProxyFetcher
       end
     end
 
+    class BlankAdapter < Error
+      def initialize(*)
+        super(<<-MSG.strip.squeeze
+          you need to specify adapter for HTML parsing: ProxyFetcher.config.adapter = :nokogiri.
+          You can use one of the predefined adapters (:nokogiri or :oga) or your own implementation.
+          MSG
+        )
+      end
+    end
+
     class AdapterSetupError < Error
       def initialize(adapter_name, reason)
         adapter = demodulize(adapter_name.remove('Adapter'))

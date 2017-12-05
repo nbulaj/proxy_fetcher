@@ -12,6 +12,11 @@ describe ProxyFetcher::Document::Adapters do
       expect(described_class.lookup(Struct)).to eq(Struct)
     end
 
+    it 'raises an exception if passed value is blank' do
+      expect { described_class.lookup(nil) }.to raise_error(ProxyFetcher::Exceptions::BlankAdapter)
+      expect { described_class.lookup('') }.to raise_error(ProxyFetcher::Exceptions::BlankAdapter)
+    end
+
     it "raises an exception if adapter doesn't exist" do
       expect { described_class.lookup('wrong') }.to raise_error(ProxyFetcher::Exceptions::UnknownAdapter)
     end

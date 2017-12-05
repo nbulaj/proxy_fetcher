@@ -1,5 +1,3 @@
-require 'irb'
-
 module ProxyFetcher
   module Providers
     class HTTPTunnel < Base
