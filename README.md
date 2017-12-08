@@ -17,6 +17,7 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 
 ## Table of Contents
 
+- [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Example of usage](#example-of-usage)
   - [In Ruby application](#in-ruby-application)
@@ -28,6 +29,18 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 - [Providers](#providers)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Dependencies
+
+ProxyFetcher gem itself requires only Ruby `>= 2.0.0`.
+
+However, it requires an adapter to parse HTML. If you do not specify any specific adapter, then it will use
+default one - [Nokogiri](https://github.com/sparklemotion/nokogiri). It's OK for any Ruby on Rails project
+(because they uses it by default).
+
+But if you want to use some specific adapter (for example your Ruby application uses [Oga](https://gitlab.com/yorickpeterse/oga),
+then you need to manually add your dependencies to your project and configure ProxyFetcher to use another adapter. Moreover,
+you can implement your own adapter if it your use-case. Take a look at the [Configuration](#configuration) section for more details.
 
 ## Installation
 

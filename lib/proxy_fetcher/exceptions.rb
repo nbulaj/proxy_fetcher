@@ -51,7 +51,7 @@ module ProxyFetcher
 
     class AdapterSetupError < Error
       def initialize(adapter_name, reason)
-        adapter = demodulize(adapter_name.remove('Adapter'))
+        adapter = demodulize(adapter_name.gsub('Adapter', ''))
 
         super("can't setup '#{adapter}' adapter during the following error:\n\t#{reason}'")
       end
@@ -62,11 +62,7 @@ module ProxyFetcher
         path = path.to_s
         index = path.rindex('::')
 
-        if index
-          path[(index + 2)..-1]
-        else
-          path
-        end
+        index ? path[(index + 2)..-1] : path
       end
     end
   end
