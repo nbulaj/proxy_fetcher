@@ -10,22 +10,22 @@ module ProxyFetcher
         doc.css('.table-wrap .table ul')
       end
 
-      def to_proxy(html_element)
+      def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
-          uri = parse_proxy_uri(html_element)
+          uri = parse_proxy_uri(html_node)
           proxy.addr = uri.host
           proxy.port = uri.port
 
-          proxy.type = parse_element(html_element, 'li[2]')
-          proxy.anonymity = parse_element(html_element, 'li[4]')
-          proxy.country = clear(html_element.at_xpath("li[5]//span[@class='country']").attr('title'))
+          proxy.type = html_node.content_at('li[2]')
+          proxy.anonymity = html_node.content_at('li[4]')
+          proxy.country = html_node.find("li[5]//span[@class='country']").attr('title')
         end
       end
 
       private
 
-      def parse_proxy_uri(element)
-        full_addr = ::Base64.decode64(element.at('li script').inner_html.match(/'(.+)'/)[1])
+      def parse_proxy_uri(html_node)
+        full_addr = ::Base64.decode64(html_node.at_css('li script').html.match(/'(.+)'/)[1])
         URI.parse("http://#{full_addr}")
       end
     end

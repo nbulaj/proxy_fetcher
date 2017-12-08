@@ -9,20 +9,20 @@ module ProxyFetcher
         doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
       end
 
-      def to_proxy(html_element)
+      def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
-          proxy.addr = parse_element(html_element, 'td[1]')
-          proxy.port = convert_to_int(parse_element(html_element, 'td[2]'))
-          proxy.country = parse_element(html_element, 'td[4]')
-          proxy.anonymity = parse_element(html_element, 'td[5]')
-          proxy.type = parse_type(html_element)
+          proxy.addr = html_node.content_at('td[1]')
+          proxy.port = Integer(html_node.content_at('td[2]'))
+          proxy.country = html_node.content_at('td[4]')
+          proxy.anonymity = html_node.content_at('td[5]')
+          proxy.type = parse_type(html_node)
         end
       end
 
       private
 
-      def parse_type(element)
-        https = parse_element(element, 'td[6]')
+      def parse_type(html_node)
+        https = html_node.content_at('td[6]')
         https && https.casecmp('yes').zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
       end
     end

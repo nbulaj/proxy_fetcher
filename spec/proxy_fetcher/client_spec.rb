@@ -118,7 +118,7 @@ describe ProxyFetcher::Client do
     it 'refreshes proxy lists if no proxy found' do
       ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [])
 
-      expect { ProxyFetcher::Client.get('http://httpbin.org') }.not_to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
+      expect { ProxyFetcher::Client.get('http://httpbin.org') }.not_to raise_error
     end
   end
 

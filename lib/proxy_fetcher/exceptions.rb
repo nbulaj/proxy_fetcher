@@ -32,5 +32,38 @@ module ProxyFetcher
         super('reached the maximum number of retries')
       end
     end
+
+    class UnknownAdapter < Error
+      def initialize(name)
+        super("unknown adapter '#{name}'")
+      end
+    end
+
+    class BlankAdapter < Error
+      def initialize(*)
+        super(<<-MSG.strip.squeeze
+          you need to specify adapter for HTML parsing: ProxyFetcher.config.adapter = :nokogiri.
+          You can use one of the predefined adapters (:nokogiri or :oga) or your own implementation.
+          MSG
+        )
+      end
+    end
+
+    class AdapterSetupError < Error
+      def initialize(adapter_name, reason)
+        adapter = demodulize(adapter_name.gsub('Adapter', ''))
+
+        super("can't setup '#{adapter}' adapter during the following error:\n\t#{reason}'")
+      end
+
+      private
+
+      def demodulize(path)
+        path = path.to_s
+        index = path.rindex('::')
+
+        index ? path[(index + 2)..-1] : path
+      end
+    end
   end
 end

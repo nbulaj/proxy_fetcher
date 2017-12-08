@@ -10,8 +10,8 @@ module ProxyFetcher
         doc.xpath('//div[@class="proxy-list"]/table/script')
       end
 
-      def to_proxy(html_element)
-        json = parse_json(html_element)
+      def to_proxy(html_node)
+        json = parse_json(html_node)
 
         ProxyFetcher::Proxy.new.tap do |proxy|
           proxy.addr = json['PROXY_IP']
@@ -25,8 +25,8 @@ module ProxyFetcher
 
       private
 
-      def parse_json(element)
-        javascript = clear(element.content)[/{.+}/im]
+      def parse_json(html_node)
+        javascript = html_node.content[/{.+}/im]
         JSON.parse(javascript)
       end
     end

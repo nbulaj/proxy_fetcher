@@ -1,7 +1,5 @@
 require 'uri'
 require 'net/https'
-require 'nokogiri'
-require 'thread'
 
 require File.dirname(__FILE__) + '/proxy_fetcher/exceptions'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
@@ -10,11 +8,17 @@ require File.dirname(__FILE__) + '/proxy_fetcher/proxy'
 require File.dirname(__FILE__) + '/proxy_fetcher/manager'
 
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/http_client'
-require File.dirname(__FILE__) + '/proxy_fetcher/utils/html'
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/proxy_validator'
 require File.dirname(__FILE__) + '/proxy_fetcher/client/client'
 require File.dirname(__FILE__) + '/proxy_fetcher/client/request'
 require File.dirname(__FILE__) + '/proxy_fetcher/client/proxies_registry'
+
+require File.dirname(__FILE__) + '/proxy_fetcher/document'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/node'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/abstract_adapter'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/nokogiri_adapter'
+require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/oga_adapter'
 
 module ProxyFetcher
   module Providers
@@ -36,5 +40,13 @@ module ProxyFetcher
     def configure
       yield config
     end
+
+    private
+
+    def configure_adapter!
+      config.adapter = Configuration::DEFAULT_ADAPTER if config.adapter.nil?
+    end
   end
+
+  configure_adapter!
 end

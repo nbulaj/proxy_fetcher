@@ -43,16 +43,33 @@ describe ProxyFetcher::Configuration do
   end
 
   context 'custom provider' do
-    it 'failed on registration if provider class already registered' do
+    it 'fails on registration if provider class already registered' do
       expect { ProxyFetcher::Configuration.register_provider(:xroxy, Class.new) }
         .to raise_error(ProxyFetcher::Exceptions::RegisteredProvider)
     end
 
-    it "failed on proxy list fetching if provider doesn't registered" do
+    it "fails on proxy list fetching if provider doesn't registered" do
       ProxyFetcher.config.provider = :not_existing_provider
 
       expect { ProxyFetcher::Manager.new }
         .to raise_error(ProxyFetcher::Exceptions::UnknownProvider)
+    end
+  end
+
+  context 'custom HTML parsing adapter' do
+    it "fails if adapter can't be installed" do
+      old_config = ProxyFetcher.config.dup
+
+      class CustomAdapter < ProxyFetcher::Document::AbstractAdapter
+        def self.install_requirements!
+          require 'not_existing_gem'
+        end
+      end
+
+      expect { ProxyFetcher.config.adapter = CustomAdapter }
+        .to raise_error(ProxyFetcher::Exceptions::AdapterSetupError)
+
+      ProxyFetcher.instance_variable_set('@config', old_config)
     end
   end
 end

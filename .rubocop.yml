@@ -1,7 +1,7 @@
 LineLength:
   Max: 120
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.1
   Exclude:
     - 'spec/**/*'
     - 'bin/*'

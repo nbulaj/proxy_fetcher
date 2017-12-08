@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-gemspec
+gemspec path: '../'
 
 gem 'nokogiri', '~> 1.8'
-gem 'oga', '~> 2.0'
 
 group :test do
   gem 'coveralls', require: false
   gem 'evil-proxy', '~> 0.2'
+  gem 'rspec-rails', '~> 3.6'
 end
