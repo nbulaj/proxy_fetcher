@@ -10,14 +10,6 @@ module ProxyFetcher
       end
 
       class Node < ProxyFetcher::Document::Node
-        def at_xpath(*args)
-          self.class.new(node.at_xpath(*args))
-        end
-
-        def at_css(*args)
-          self.class.new(node.at_css(*args))
-        end
-
         def attr(*args)
           clear(node.attr(*args))
         end

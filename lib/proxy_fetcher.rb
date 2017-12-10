@@ -1,6 +1,8 @@
 require 'uri'
 require 'net/https'
 
+require File.dirname(__FILE__) + '/proxy_fetcher/version'
+
 require File.dirname(__FILE__) + '/proxy_fetcher/exceptions'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration/providers_registry'

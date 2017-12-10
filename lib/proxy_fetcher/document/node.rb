@@ -16,11 +16,11 @@ module ProxyFetcher
       end
 
       def content
-        raise "#{__method__} must be implemented in descendant class!"
+        raise "`#{__method__}` must be implemented for specific adapter class!"
       end
 
       def html
-        raise "#{__method__} must be implemented in descendant class!"
+        raise "`#{__method__}` must be implemented for specific adapter class!"
       end
 
       protected
