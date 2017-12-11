@@ -11,6 +11,14 @@ module ProxyFetcher
         self.class.new(node.public_send(method, selector))
       end
 
+      def at_xpath(*args)
+        self.class.new(node.at_xpath(*args))
+      end
+
+      def at_css(*args)
+        self.class.new(node.at_css(*args))
+      end
+
       def content_at(*args)
         clear(find(*args).content)
       end

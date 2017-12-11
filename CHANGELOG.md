@@ -2,6 +2,17 @@
 
 Reverse Chronological Order:
 
+## `0.6.1` (2017-12-11)
+
+* Fix gem executable to check dependencies for adapters
+* Code clean
+* Some new specs
+
+## `0.6.0` (2017-12-08)
+
+* Make HTML parser configurable (Nokogiri, Oga, custom one)
+* Documentation
+
 ## `0.5.1` (2017-11-13)
 
 * Fix ProxyFetcher CLI
