@@ -1,5 +1,14 @@
 #!/usr/bin/env ruby
 
+begin
+  require 'nokogiri'
+rescue LoadError
+  puts "Seems like you haven't installed 'nokogiri' gem that is used by ProxyFetcher for HTML parsing.\n" \
+       "Install it with the command: `gem install nokogiri` or check out it's documentation:\n" \
+       'http://www.nokogiri.org/tutorials/installing_nokogiri.html'
+  exit(1)
+end
+
 require 'optparse'
 require 'proxy_fetcher'
 
@@ -37,6 +46,11 @@ OptionParser.new do |opts|
 
   opts.on('-j', '--json', '# Dump proxies to the JSON format') do
     options[:json] = true
+  end
+
+  opts.on('-v', '--version', '# Shows gem version') do
+    puts ProxyFetcher.gem_version.to_s
+    exit(0)
   end
 end.parse!
 
