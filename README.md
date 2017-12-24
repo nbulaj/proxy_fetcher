@@ -32,7 +32,8 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 
 ## Dependencies
 
-ProxyFetcher gem itself requires only Ruby `>= 2.0.0` (or [JRuby](http://jruby.org/ `> 9.0`, but maybe earlier too).
+ProxyFetcher gem itself requires only Ruby `>= 2.0.0` (or [JRuby](http://jruby.org/) `> 9.0`, but maybe earlier too,
+[see Travis build matrix](.travis.yml)).
 
 However, it requires an adapter to parse HTML. If you do not specify any specific adapter, then it will use
 default one - [Nokogiri](https://github.com/sparklemotion/nokogiri). It's OK for any Ruby on Rails project
