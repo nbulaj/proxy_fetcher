@@ -2,9 +2,10 @@ language: ruby
 before_install: gem install bundler
 bundler_args: --without yard guard benchmarks
 script: "rake spec"
-env:
-  global:
-    - "JRUBY_OPTS='$JRUBY_OPTS --debug'"
+env: JRUBY_OPTS="$JRUBY_OPTS --debug"
+gemfile:
+  - gemfiles/oga.gemfile
+  - gemfiles/nokogiri.gemfile
 gemfile:
   - gemfiles/oga.gemfile
   - gemfiles/nokogiri.gemfile
@@ -15,6 +16,7 @@ rvm:
   - 2.3.3
   - 2.4.2
   - ruby-head
+  - jruby-9.1.15.0
 matrix:
   allow_failures:
     - rvm: ruby-head
