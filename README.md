@@ -1,12 +1,12 @@
-# Ruby lib for managing proxies
+# Ruby / JRuby lib for managing proxies
 [![Gem Version](https://badge.fury.io/rb/proxy_fetcher.svg)](http://badge.fury.io/rb/proxy_fetcher)
 [![Build Status](https://travis-ci.org/nbulaj/proxy_fetcher.svg?branch=master)](https://travis-ci.org/nbulaj/proxy_fetcher)
 [![Coverage Status](https://coveralls.io/repos/github/nbulaj/proxy_fetcher/badge.svg)](https://coveralls.io/github/nbulaj/proxy_fetcher)
 [![Code Climate](https://codeclimate.com/github/nbulaj/proxy_fetcher/badges/gpa.svg)](https://codeclimate.com/github/nbulaj/proxy_fetcher)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](#license)
 
-This gem can help your Ruby application to make HTTP(S) requests using proxy by fetching and validating actual
-proxy lists from multiple providers.
+This gem can help your Ruby / JRuby application to make HTTP(S) requests using
+proxy by fetching and validating actual proxy lists from multiple providers.
 
 It gives you a special `Manager` class that can load proxy lists, validate them and return random or specific proxies.
 It also has a `Client` class that encapsulates all the logic for sending HTTP requests using proxies, automatically
@@ -32,13 +32,14 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 
 ## Dependencies
 
-ProxyFetcher gem itself requires only Ruby `>= 2.0.0`.
+ProxyFetcher gem itself requires only Ruby `>= 2.0.0` (or [JRuby](http://jruby.org/) `> 9.0`, but maybe earlier too,
+[see Travis build matrix](.travis.yml)).
 
 However, it requires an adapter to parse HTML. If you do not specify any specific adapter, then it will use
 default one - [Nokogiri](https://github.com/sparklemotion/nokogiri). It's OK for any Ruby on Rails project
-(because they uses it by default).
+(because they use it by default).
 
-But if you want to use some specific adapter (for example your Ruby application uses [Oga](https://gitlab.com/yorickpeterse/oga),
+But if you want to use some specific adapter (for example your application uses [Oga](https://gitlab.com/yorickpeterse/oga),
 then you need to manually add your dependencies to your project and configure ProxyFetcher to use another adapter. Moreover,
 you can implement your own adapter if it your use-case. Take a look at the [Configuration](#configuration) section for more details.
 
@@ -65,7 +66,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.5'
+gem install proxy_fetcher -v '0.6'
 ```
 
 ## Example of usage
