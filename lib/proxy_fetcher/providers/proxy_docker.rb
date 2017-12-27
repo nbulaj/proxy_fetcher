@@ -3,7 +3,7 @@ module ProxyFetcher
     # ProxyDocker provider class.
     class ProxyDocker < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'https://www.proxydocker.com/'.freeze
+      PROVIDER_URL = 'https://www.proxydocker.com/en/proxylist/'.freeze
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)

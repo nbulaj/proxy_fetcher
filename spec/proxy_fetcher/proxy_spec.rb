@@ -24,13 +24,20 @@ describe ProxyFetcher::Proxy do
     proxy.type = ProxyFetcher::Proxy::HTTP
     expect(proxy.http?).to be_truthy
     expect(proxy.https?).to be_falsey
+    expect(proxy.ssl?).to be_falsey
 
     proxy.type = ProxyFetcher::Proxy::HTTPS
     expect(proxy.https?).to be_truthy
     expect(proxy.http?).to be_truthy
+    expect(proxy.ssl?).to be_truthy
+
+    proxy.type = ProxyFetcher::Proxy::SOCKS4
+    expect(proxy.socks4?).to be_truthy
+    expect(proxy.ssl?).to be_truthy
 
     proxy.type = ProxyFetcher::Proxy::SOCKS5
     expect(proxy.socks5?).to be_truthy
+    expect(proxy.ssl?).to be_truthy
   end
 
   it 'not connectable if IP addr is wrong' do
@@ -51,6 +58,9 @@ describe ProxyFetcher::Proxy do
 
   it 'returns URI::Generic' do
     expect(proxy.uri).to be_a(URI::Generic)
+
+    expect(proxy.uri.host).not_to be_empty
+    expect(proxy.uri.port).not_to be_nil
   end
 
   it 'returns URL' do
