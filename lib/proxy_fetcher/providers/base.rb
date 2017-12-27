@@ -18,6 +18,16 @@ module ProxyFetcher
       protected
 
       # Loads HTML document with Nokogiri by the URL combined with custom filters
+      #
+      # @param url [String]
+      #   URL to fetch
+      #
+      # @param filters [Hash]
+      #   filters for proxy provider
+      #
+      # @return [ProxyFetcher::Document]
+      #   ProxyFetcher document object
+      #
       def load_document(url, filters = {})
         raise ArgumentError, 'filters must be a Hash' unless filters.is_a?(Hash)
 
@@ -32,13 +42,16 @@ module ProxyFetcher
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
       # to return all the proxy entries (HTML nodes).
       #
-      # Abstract method.
+      # Abstract method. Must be implemented in a descendant class
       #
       def load_proxy_list(*)
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end
 
-      # Convert HTML element with proxy info to ProxyFetcher::Proxy instance
+      # Convert HTML element with proxy info to ProxyFetcher::Proxy instance.
+      #
+      # Abstract method. Must be implemented in a descendant class
+      #
       def to_proxy(*)
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end

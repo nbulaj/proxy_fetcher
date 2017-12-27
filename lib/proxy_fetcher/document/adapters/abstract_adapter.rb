@@ -1,5 +1,7 @@
 module ProxyFetcher
   class Document
+    # Abstract HTML parser adapter class.
+    # Handles document manipulations.
     class AbstractAdapter
       attr_reader :document
 
@@ -17,10 +19,13 @@ module ProxyFetcher
         document.css(selector)
       end
 
+      # Returns <code>Node</code> class that will handle HTML
+      # nodes for particular adapter.
       def proxy_node
         self.class.const_get('Node')
       end
 
+      # Installs adapter requirements.
       def self.setup!(*args)
         install_requirements!(*args)
       rescue LoadError => error
