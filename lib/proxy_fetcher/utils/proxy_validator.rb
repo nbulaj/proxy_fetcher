@@ -1,5 +1,9 @@
 module ProxyFetcher
+  # Default ProxyFetcher proxy validator that checks either proxy
+  # connectable or not. It tries to send HEAD request to default
+  # URL to check if proxy can be used (aka connectable?).
   class ProxyValidator
+    # Default URL that will be used to check if proxy can be used.
     URL_TO_CHECK = 'https://google.com'.freeze
 
     def initialize(proxy_addr, proxy_port)

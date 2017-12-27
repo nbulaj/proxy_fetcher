@@ -1,4 +1,7 @@
 module ProxyFetcher
+  # Default ProxyFetcher HTTP client used to fetch proxy lists from
+  # the different providers. Uses ProxyFetcher configuration options
+  # for sending HTTP requests to providers URLs.
   class HTTPClient
     attr_reader :uri, :http
 

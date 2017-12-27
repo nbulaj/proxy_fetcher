@@ -2,14 +2,32 @@ require 'json'
 
 module ProxyFetcher
   module Providers
+    # GatherProxy provider class.
     class GatherProxy < Base
+      # Provider URL to fetch proxy list
       PROVIDER_URL = 'http://www.gatherproxy.com/'.freeze
 
+      # Fetches HTML content by sending HTTP request to the provider URL and
+      # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
+      # to return all the proxy entries (HTML nodes).
+      #
+      # @return [Array<ProxyFetcher::Document::Node>]
+      #   Collection of extracted HTML nodes with full proxy info
+      #
       def load_proxy_list(*)
         doc = load_document(PROVIDER_URL)
         doc.xpath('//div[@class="proxy-list"]/table/script')
       end
 
+      # Converts HTML node (entry of N tags) to <code>ProxyFetcher::Proxy</code>
+      # object.
+      #
+      # @param html_node [Object]
+      #   HTML node from the <code>ProxyFetcher::Document</code> DOM model.
+      #
+      # @return [ProxyFetcher::Proxy]
+      #   Proxy object
+      #
       def to_proxy(html_node)
         json = parse_json(html_node)
 

@@ -9,8 +9,8 @@ This gem can help your Ruby application to make HTTP(S) requests using proxy by 
 proxy lists from multiple providers.
 
 It gives you a special `Manager` class that can load proxy lists, validate them and return random or specific proxies.
-It also has a `Client` class that encapsulates all the logic for the sending HTTP requests using proxies.
-Take a look at the documentation below to find all the gem features.
+It also has a `Client` class that encapsulates all the logic for sending HTTP requests using proxies, automatically
+fetched and validated by the gem. Take a look at the documentation below to find all the gem features.
 
 Also this gem can be used with any other programming language (Go / Python / etc) as standalone solution for downloading and
 validating proxy lists from the different providers. [Checkout examples](#standalone) of usage below.

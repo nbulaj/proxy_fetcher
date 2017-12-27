@@ -1,8 +1,12 @@
 module ProxyFetcher
+  ##
+  # ProxyFetcher gem version.
   def self.gem_version
     Gem::Version.new VERSION::STRING
   end
 
+  ##
+  # ProxyFetcher gem semantic versioning.
   module VERSION
     # Major version number
     MAJOR = 0

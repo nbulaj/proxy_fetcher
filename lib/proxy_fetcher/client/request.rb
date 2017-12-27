@@ -1,10 +1,15 @@
 module ProxyFetcher
   module Client
+    # ProxyFetcher::Client HTTP request abstraction.
     class Request
+      # URL encoding HTTP headers.
       URL_ENCODED = {
         'Content-Type' => 'application/x-www-form-urlencoded'
       }.freeze
 
+      # Default SSL options that will be used for connecting to resources
+      # the uses secure connection. By default ProxyFetcher wouldn't verify
+      # SSL certs.
       DEFAULT_SSL_OPTIONS = {
         verify_mode: OpenSSL::SSL::VERIFY_NONE
       }.freeze
@@ -46,7 +51,7 @@ module ProxyFetcher
         return if payload.nil?
 
         if payload.is_a?(Hash)
-          headers.merge(URL_ENCODED)
+          headers.merge!(URL_ENCODED)
           URI.encode_www_form(payload)
         else
           payload

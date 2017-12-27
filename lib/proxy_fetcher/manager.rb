@@ -1,4 +1,5 @@
 module ProxyFetcher
+  # ProxyFetcher Manager class for interacting with proxy lists from various providers.
   class Manager
     attr_reader :proxies
 

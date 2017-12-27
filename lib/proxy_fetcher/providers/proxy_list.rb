@@ -2,14 +2,32 @@ require 'base64'
 
 module ProxyFetcher
   module Providers
+    # ProxyList provider class.
     class ProxyList < Base
+      # Provider URL to fetch proxy list
       PROVIDER_URL = 'https://proxy-list.org/english/index.php'.freeze
 
+      # Fetches HTML content by sending HTTP request to the provider URL and
+      # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
+      # to return all the proxy entries (HTML nodes).
+      #
+      # @return [Array<ProxyFetcher::Document::Node>]
+      #   Collection of extracted HTML nodes with full proxy info
+      #
       def load_proxy_list(filters = {})
         doc = load_document(PROVIDER_URL, filters)
         doc.css('.table-wrap .table ul')
       end
 
+      # Converts HTML node (entry of N tags) to <code>ProxyFetcher::Proxy</code>
+      # object.
+      #
+      # @param html_node [Object]
+      #   HTML node from the <code>ProxyFetcher::Document</code> DOM model.
+      #
+      # @return [ProxyFetcher::Proxy]
+      #   Proxy object
+      #
       def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
           uri = parse_proxy_uri(html_node)
@@ -24,6 +42,14 @@ module ProxyFetcher
 
       private
 
+      # Parses HTML node to extract URI object with proxy host and port.
+      #
+      # @param html_node [Object]
+      #   HTML node from the <code>ProxyFetcher::Document</code> DOM model.
+      #
+      # @return [URI]
+      #   URI object
+      #
       def parse_proxy_uri(html_node)
         full_addr = ::Base64.decode64(html_node.at_css('li script').html.match(/'(.+)'/)[1])
         URI.parse("http://#{full_addr}")

@@ -1,11 +1,23 @@
 module ProxyFetcher
+  # ProxyFetcher configuration. Stores all the options for dealing
+  # with HTTP requests, adapters, custom classes.
+  #
   class Configuration
     attr_accessor :timeout, :pool_size, :user_agent
     attr_reader :adapter, :http_client, :proxy_validator, :providers
 
-    # rubocop:disable Metrics/LineLength
-    DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze
+    # User-Agent string that will be used by the ProxyFetcher HTTP client (to
+    # send requests via proxy) and to fetch proxy lists from the sources.
+    #
+    # Default is Google Chrome 60, but can be changed in <code>ProxyFetcher.config</code>.
+    #
+    DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 ' \
+                         '(KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze
 
+    # HTML parser adapter name.
+    #
+    # Default is Nokogiri, but can be changed in <code>ProxyFetcher.config</code>.
+    #
     DEFAULT_ADAPTER = :nokogiri
 
     class << self
@@ -13,6 +25,15 @@ module ProxyFetcher
         @registry ||= ProvidersRegistry.new
       end
 
+      # Register new proxy provider. Requires provider name and class
+      # that will process proxy list.
+      #
+      # @param name [String, Symbol]
+      #   name of the provider
+      #
+      # @param klass [Class]
+      #   Class that will fetch and process proxy list
+      #
       def register_provider(name, klass)
         providers_registry.register(name, klass)
       end

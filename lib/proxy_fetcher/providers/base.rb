@@ -1,5 +1,6 @@
 module ProxyFetcher
   module Providers
+    # Base class for all the ProxyFetcher providers.
     class Base
       # Loads proxy provider page content, extract proxy list from it
       # and convert every entry to proxy object.
@@ -8,6 +9,7 @@ module ProxyFetcher
       end
 
       class << self
+        # Just synthetic sugar to make it easier to call #fetch_proxies! method.
         def fetch_proxies!(*args)
           new.fetch_proxies!(*args)
         end
@@ -26,7 +28,12 @@ module ProxyFetcher
         ProxyFetcher::Document.parse(html)
       end
 
-      # Get HTML elements with proxy info
+      # Fetches HTML content by sending HTTP request to the provider URL and
+      # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
+      # to return all the proxy entries (HTML nodes).
+      #
+      # Abstract method.
+      #
       def load_proxy_list(*)
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end

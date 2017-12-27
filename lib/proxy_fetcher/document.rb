@@ -1,4 +1,7 @@
 module ProxyFetcher
+  # HTML document abstraction class. Used to work with different HTML parser adapters
+  # such as Nokogiri, Oga or a custom one. Stores <i>backend</i< that will handle all
+  # the DOM manipulation logic.
   class Document
     class << self
       def parse(data)
