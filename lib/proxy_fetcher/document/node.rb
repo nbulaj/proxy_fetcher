@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   class Document
     # Abstract class for storing HTML elements that was parsed by

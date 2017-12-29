@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   # Default ProxyFetcher HTTP client used to fetch proxy lists from
   # the different providers. Uses ProxyFetcher configuration options

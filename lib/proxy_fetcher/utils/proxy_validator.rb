@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   # Default ProxyFetcher proxy validator that checks either proxy
   # connectable or not. It tries to send HEAD request to default

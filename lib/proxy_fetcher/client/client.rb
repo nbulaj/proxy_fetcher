@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   # ProxyFetcher HTTP client that encapsulates all the logic for sending
   # HTTP(S) requests using proxies, automatically fetched and validated by the gem.
@@ -122,6 +124,8 @@ module ProxyFetcher
 
       private
 
+      # Executes HTTP request with user payload.
+      #
       def request_with_payload(method, url, payload, headers, options)
         safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
           opts = options.merge(url: url, payload: payload, proxy: proxy, headers: default_headers.merge(headers))
@@ -130,6 +134,8 @@ module ProxyFetcher
         end
       end
 
+      # Executes HTTP request without user payload.
+      #
       def request_without_payload(method, url, headers, options)
         safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
           opts = options.merge(url: url, proxy: proxy, headers: default_headers.merge(headers))
@@ -138,6 +144,12 @@ module ProxyFetcher
         end
       end
 
+      # Default ProxyFetcher::Client http headers. Uses some options
+      # from the configuration object, such as User-Agent string.
+      #
+      # @return [Hash]
+      #   headers
+      #
       def default_headers
         {
           'User-Agent' => ProxyFetcher.config.user_agent

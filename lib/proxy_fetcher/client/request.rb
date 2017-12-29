@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   module Client
     # ProxyFetcher::Client HTTP request abstraction.
@@ -37,6 +39,8 @@ module ProxyFetcher
         build_http_client
       end
 
+      # Executes HTTP request with defined options.
+      #
       def execute
         request = request_class_for(method).new(uri, headers)
 
@@ -47,6 +51,9 @@ module ProxyFetcher
 
       private
 
+      # Converts payload to the required format, so <code>Hash</code>
+      # must be a WWW-Form encoded for example.
+      #
       def preprocess_payload(payload)
         return if payload.nil?
 
@@ -58,6 +65,8 @@ module ProxyFetcher
         end
       end
 
+      # Builds HTTP client based on stdlib Net::HTTP.
+      #
       def build_http_client
         @http = Net::HTTP.new(uri.host, uri.port, proxy.addr, proxy.port)
 
@@ -76,6 +85,8 @@ module ProxyFetcher
         end
       end
 
+      # Follows redirection for response.
+      #
       def follow_redirection(http_response)
         raise ProxyFetcher::Exceptions::MaximumRedirectsReached if max_redirects <= 0
 
@@ -85,6 +96,9 @@ module ProxyFetcher
         Request.execute(method: :get, url: url, proxy: proxy, headers: headers, timeout: timeout, max_redirects: max_redirects - 1)
       end
 
+      # Returns particular Net::HTTP method object
+      # for processing required request.
+      #
       def request_class_for(method)
         Net::HTTP.const_get(method, false)
       end

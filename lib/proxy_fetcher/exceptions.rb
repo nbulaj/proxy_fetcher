@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   # Base exception class for all the ProxyFetcher exceptions.
   Error = Class.new(StandardError)

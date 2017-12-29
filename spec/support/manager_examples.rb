@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples 'a manager' do
   it 'loads proxy list on initialization by default' do
     manager = ProxyFetcher::Manager.new

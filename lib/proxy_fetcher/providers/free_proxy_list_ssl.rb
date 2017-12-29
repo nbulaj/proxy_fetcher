@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   module Providers
     # FreeProxyListSSL provider class.

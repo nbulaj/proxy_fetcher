@@ -2,10 +2,14 @@
 
 Reverse Chronological Order:
 
+## `0.6.2` (2017-12-27)
+
+* Fix ProxyDocker provider.
+
 ## `0.6.1` (2017-12-11)
 
 * Fix gem executable to check dependencies for adapters
-* Code clean
+* Code cleanup
 * Some new specs
 
 ## `0.6.0` (2017-12-08)

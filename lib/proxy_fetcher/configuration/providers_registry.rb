@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   # ProxyFetcher providers registry that stores all registered proxy providers.
   class ProvidersRegistry

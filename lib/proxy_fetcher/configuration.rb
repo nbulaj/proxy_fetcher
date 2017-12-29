@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   # ProxyFetcher configuration. Stores all the options for dealing
   # with HTTP requests, adapters, custom classes.
@@ -21,6 +23,11 @@ module ProxyFetcher
     DEFAULT_ADAPTER = :nokogiri
 
     class << self
+      # Registry for handling proxy providers.
+      #
+      # @return [ProxyFetcher::ProvidersRegistry]
+      #   providers registry
+      #
       def providers_registry
         @registry ||= ProvidersRegistry.new
       end
@@ -38,11 +45,21 @@ module ProxyFetcher
         providers_registry.register(name, klass)
       end
 
+      # Returns registered providers names.
+      #
+      # @return [Array<String>, Array<Symbol>]
+      #   registered providers names
+      #
       def registered_providers
         providers_registry.providers.keys
       end
     end
 
+    # Initialize ProxyFetcher configuration with default options.
+    #
+    # @return [ProxyFetcher::Configuration]
+    #   ProxyFetcher gem configuration object
+    #
     def initialize
       reset!
     end

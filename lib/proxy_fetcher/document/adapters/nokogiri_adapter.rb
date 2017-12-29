@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyFetcher
   class Document
     # HTML parser adapter that uses Nokogiri as a backend.
