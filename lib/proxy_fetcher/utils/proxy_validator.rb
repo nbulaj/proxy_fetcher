@@ -8,6 +8,14 @@ module ProxyFetcher
     # Default URL that will be used to check if proxy can be used.
     URL_TO_CHECK = 'https://google.com'.freeze
 
+    # Initialize new ProxyValidator instance
+    #
+    # @param proxy_addr [String] proxy address or IP
+    # @param proxy_port [String, Integer] proxy port
+    #
+    # @return [ProxyValidator]
+    #
+    # @api private
     def initialize(proxy_addr, proxy_port)
       uri = URI.parse(URL_TO_CHECK)
       @http = Net::HTTP.new(uri.host, uri.port, proxy_addr, proxy_port.to_i)
@@ -18,6 +26,12 @@ module ProxyFetcher
       @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
 
+    # Checks if proxy is connectable (can be used to connect
+    # resources via proxy server).
+    #
+    # @return [Boolean]
+    #   true if connection to the server using proxy established, otherwise false
+    #
     def connectable?
       @http.open_timeout = ProxyFetcher.config.timeout
       @http.read_timeout = ProxyFetcher.config.timeout
@@ -29,10 +43,16 @@ module ProxyFetcher
       false
     end
 
-    class << self
-      def connectable?(proxy_addr, proxy_port)
-        new(proxy_addr, proxy_port).connectable?
-      end
+    # Short variant to validate proxy.
+    #
+    # @param proxy_addr [String] proxy address or IP
+    # @param proxy_port [String, Integer] proxy port
+    #
+    # @return [Boolean]
+    #   true if connection to the server using proxy established, otherwise false
+    #
+    def self.connectable?(proxy_addr, proxy_port)
+      new(proxy_addr, proxy_port).connectable?
     end
   end
 end

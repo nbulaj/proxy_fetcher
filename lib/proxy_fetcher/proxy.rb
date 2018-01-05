@@ -33,6 +33,15 @@ module ProxyFetcher
       https? || socks4? || socks5?
     end
 
+    # Initialize new Proxy
+    #
+    # @param attributes [Hash]
+    #   proxy attributes
+    #
+    # @return [Proxy]
+    #
+    # @api private
+    #
     def initialize(attributes = {})
       attributes.each do |attr, value|
         public_send("#{attr}=", value)

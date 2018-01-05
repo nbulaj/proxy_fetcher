@@ -8,6 +8,11 @@ module ProxyFetcher
   module Exceptions
     # Exception for wrong custom classes (such as ProxyValidator or HTTP Client).
     class WrongCustomClass < Error
+      # Initialize new exception
+      #
+      # @return [WrongCustomClass]
+      #
+      # @api private
       def initialize(klass, methods)
         required_methods = Array(methods).join(', ')
         super("#{klass} must respond to [#{required_methods}] class methods!")
@@ -17,6 +22,13 @@ module ProxyFetcher
     # Exception for wrong provider name, that raises when configured provider
     # that is not registered via <code>register_provider</code> interface.
     class UnknownProvider < Error
+      # Initialize new exception
+      #
+      # @param provider_name [String] provider name
+      #
+      # @return [UnknownProvider]
+      #
+      # @api private
       def initialize(provider_name)
         super("unregistered proxy provider `#{provider_name}`")
       end
@@ -24,6 +36,13 @@ module ProxyFetcher
 
     # Exception for cases when user tries to register already existing provider.
     class RegisteredProvider < Error
+      # Initialize new exception
+      #
+      # @param name [String, Symbol] provider name
+      #
+      # @return [RegisteredProvider]
+      #
+      # @api private
       def initialize(name)
         super("`#{name}` provider already registered!")
       end

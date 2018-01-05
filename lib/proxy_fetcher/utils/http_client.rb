@@ -5,8 +5,20 @@ module ProxyFetcher
   # the different providers. Uses ProxyFetcher configuration options
   # for sending HTTP requests to providers URLs.
   class HTTPClient
-    attr_reader :uri, :http
+    # @!attribute [r] uri
+    #   @return [URI] URI
+    attr_reader :uri
 
+    # @!attribute [r] http
+    #   @return [Net::HTTP] HTTP client
+    attr_reader :http
+
+    # Initialize HTTP client instance
+    #
+    # @return [HTTPClient]
+    #
+    # @api private
+    #
     def initialize(url)
       @uri = URI.parse(url)
       @http = Net::HTTP.new(@uri.host, @uri.port)

@@ -3,10 +3,19 @@
 module ProxyFetcher
   # ProxyFetcher Manager class for interacting with proxy lists from various providers.
   class Manager
+    # @!attribute [r] proxies
+    #   @return [Array<ProxyFetcher::Proxy>] An array of proxies
     attr_reader :proxies
 
+    # Initialize ProxyFetcher Manager instance for managing proxies
+    #
     # refresh: true - load proxy list from the remote server on initialization
     # refresh: false - just initialize the class, proxy list will be empty ([])
+    #
+    # @return [Manager]
+    #
+    # @api private
+    #
     def initialize(refresh: true, validate: false, filters: {})
       if refresh
         refresh_list!(filters)
@@ -78,7 +87,11 @@ module ProxyFetcher
 
     alias validate! cleanup!
 
-    # Return random proxy
+    # Returns random proxy
+    #
+    # @return [Proxy]
+    #   random proxy from the loaded list
+    #
     def random_proxy
       proxies.sample
     end
@@ -86,11 +99,15 @@ module ProxyFetcher
     alias random random_proxy
 
     # Returns array of proxy URLs (just schema + host + port)
+    #
+    # @return [Array<String>]
+    #   collection of proxies
+    #
     def raw_proxies
       proxies.map(&:url)
     end
 
-    # No need to put all the attr_readers
+    # @private No need to put all the attr_readers to the output
     def inspect
       to_s
     end

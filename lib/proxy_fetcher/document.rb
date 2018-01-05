@@ -5,22 +5,45 @@ module ProxyFetcher
   # such as Nokogiri, Oga or a custom one. Stores <i>backend</i< that will handle all
   # the DOM manipulation logic.
   class Document
-    class << self
-      def parse(data)
-        new(ProxyFetcher.config.adapter.parse(data))
-      end
-    end
-
+    # @!attribute [r] backend
+    #   @return [Object] Backend object that handles DOM processing
     attr_reader :backend
 
+    # Parses raw HTML data to abstract ProxyFetcher document.
+    #
+    # @param data [String] HTML
+    #
+    # @return [ProxyFetcher::Document]
+    #   ProxyFetcher document model
+    #
+    def self.parse(data)
+      new(ProxyFetcher.config.adapter.parse(data))
+    end
+
+    # Initialize abstract ProxyFetcher HTML Document
+    #
+    # @return [Document]
+    #
+    # @api private
+    #
     def initialize(backend)
       @backend = backend
     end
 
+    # Searches elements by XPath selector.
+    #
+    # @return [Array<ProxyFetcher::Document::Node>]
+    #   collection of nodes
+    #
     def xpath(*args)
       backend.xpath(*args).map { |node| backend.proxy_node.new(node) }
     end
 
+    # Searches elements by CSS selector.
+    #
+    # @return [Array<ProxyFetcher::Document::Node>]
+    #   collection of nodes
+    #
     def css(*args)
       backend.css(*args).map { |node| backend.proxy_node.new(node) }
     end

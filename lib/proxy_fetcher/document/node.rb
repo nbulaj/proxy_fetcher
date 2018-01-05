@@ -6,7 +6,8 @@ module ProxyFetcher
     # one of the <code>ProxyFetcher::Document<code> adapters class.
     class Node
       # Original document node from adapter backend.
-      # @attr_reader [Object] node
+      # @!attribute [r] node
+      #   @return [Object] original DOM node, parsed by adapter
       attr_reader :node
 
       def initialize(node)
