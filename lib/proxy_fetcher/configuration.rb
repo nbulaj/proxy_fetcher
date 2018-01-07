@@ -75,11 +75,21 @@ module ProxyFetcher
       self.providers = self.class.registered_providers
     end
 
+    # Setups HTML parser adapter for all the proxy providers.
+    #
+    # @param name_of_class [String, Symbol, Class]
+    #   name of the adapter or it's class
+    #
     def adapter=(name_or_class)
       @adapter = ProxyFetcher::Document::Adapters.lookup(name_or_class)
       @adapter.setup!
     end
 
+    # Setups collection of providers that will be used to fetch proxies.
+    #
+    # @param value [String, Symbol, Array<String>, Array<Symbol>]
+    #   provider names
+    #
     def providers=(value)
       @providers = Array(value)
     end
@@ -87,10 +97,22 @@ module ProxyFetcher
     alias provider providers
     alias provider= providers=
 
+    # Setups HTTP client class that will be used to fetch proxy lists.
+    # Validates class for the required methods to be defined.
+    #
+    # @param [klass]
+    #   HTTP client class
+    #
     def http_client=(klass)
       @http_client = setup_custom_class(klass, required_methods: :fetch)
     end
 
+    # Setups class that will be used to validate proxy lists.
+    # Validates class for the required methods to be defined.
+    #
+    # @param [klass]
+    #   Proxy validator class
+    #
     def proxy_validator=(klass)
       @proxy_validator = setup_custom_class(klass, required_methods: :connectable?)
     end

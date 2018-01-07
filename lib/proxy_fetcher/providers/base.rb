@@ -10,11 +10,9 @@ module ProxyFetcher
         load_proxy_list(filters).map { |html| to_proxy(html) }
       end
 
-      class << self
-        # Just synthetic sugar to make it easier to call #fetch_proxies! method.
-        def fetch_proxies!(*args)
-          new.fetch_proxies!(*args)
-        end
+      # Just synthetic sugar to make it easier to call #fetch_proxies! method.
+      def self.fetch_proxies!(*args)
+        new.fetch_proxies!(*args)
       end
 
       protected
@@ -46,6 +44,9 @@ module ProxyFetcher
       #
       # Abstract method. Must be implemented in a descendant class
       #
+      # @return [Array<Document::Node>]
+      #   list of proxy elements from the providers HTML content
+      #
       def load_proxy_list(*)
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end
@@ -53,6 +54,9 @@ module ProxyFetcher
       # Convert HTML element with proxy info to ProxyFetcher::Proxy instance.
       #
       # Abstract method. Must be implemented in a descendant class
+      #
+      # @return [Proxy]
+      #   new proxy object from the HTML node
       #
       def to_proxy(*)
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"

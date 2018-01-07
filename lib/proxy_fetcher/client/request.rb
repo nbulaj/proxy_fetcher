@@ -16,9 +16,32 @@ module ProxyFetcher
         verify_mode: OpenSSL::SSL::VERIFY_NONE
       }.freeze
 
+      # @!attribute [r] http
+      #   HTTP client
+      # @!attribute [r] method
+      #   HTTP request method
+      # @!attribute [r] uri
+      #   Request URI
+      # @!attribute [r] headers
+      #   HTTP headers
+      # @!attribute [r] timeout
+      #   Request timeout
+      # @!attribute [r] payload
+      #   Request payload
+      # @!attribute [r] proxy
+      #   Proxy to process the request
+      # @!attribute [r] max_redirects
+      #   Maximum count of requests (if fails)
+      # @!attribute [r] ssl_options
+      #   SSL options
       attr_reader :http, :method, :uri, :headers, :timeout,
                   :payload, :proxy, :max_redirects, :ssl_options
 
+      # Initializes a new HTTP request and processes it
+      #
+      # @return [String]
+      #   response body (requested resource content)
+      #
       def self.execute(args)
         new(args).execute
       end
@@ -47,6 +70,9 @@ module ProxyFetcher
 
       # Executes HTTP request with defined options.
       #
+      # @return [String]
+      #   response body (requested resource content)
+      #
       def execute
         request = request_class_for(method).new(uri, headers)
 
@@ -72,6 +98,9 @@ module ProxyFetcher
       end
 
       # Builds HTTP client based on stdlib Net::HTTP.
+      #
+      # @return [Net::HTTP]
+      #   HTTP client
       #
       def build_http_client
         @http = Net::HTTP.new(uri.host, uri.port, proxy.addr, proxy.port)

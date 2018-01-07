@@ -156,6 +156,14 @@ module ProxyFetcher
         }
       end
 
+      # Sends request to the URL using proxy with specific number
+      # of retries (default is 1000) if request failed (404, 500, timeout, etc).
+      #
+      # @param url [String] request URL
+      # @param max_retires [Integer] maximum count of retries
+      #
+      # @raise [ProxyFetcher::Error] internal error
+      #
       def safe_request_to(url, max_retries = 1000)
         tries = 0
 

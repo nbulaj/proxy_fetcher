@@ -54,6 +54,10 @@ module ProxyFetcher
 
     # Pop first valid proxy (and back it to the end of the proxy list)
     # Invalid proxies will be removed from the list
+    #
+    # @return [Proxy]
+    #   proxy object
+    #
     def get!
       index = proxies.find_index(&:connectable?)
       return if index.nil?
