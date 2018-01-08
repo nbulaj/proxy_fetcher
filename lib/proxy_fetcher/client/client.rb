@@ -160,7 +160,7 @@ module ProxyFetcher
       # of retries (default is 1000) if request failed (404, 500, timeout, etc).
       #
       # @param url [String] request URL
-      # @param max_retires [Integer] maximum count of retries
+      # @param max_retries [Integer] maximum number of retries
       #
       # @raise [ProxyFetcher::Error] internal error
       #

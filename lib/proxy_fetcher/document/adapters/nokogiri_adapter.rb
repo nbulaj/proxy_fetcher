@@ -20,6 +20,7 @@ module ProxyFetcher
         new(::Nokogiri::HTML(data))
       end
 
+      # Nokogiri DOM node
       class Node < ProxyFetcher::Document::Node
         def attr(*args)
           clear(node.attr(*args))

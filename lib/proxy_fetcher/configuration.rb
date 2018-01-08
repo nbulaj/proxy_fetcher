@@ -77,7 +77,7 @@ module ProxyFetcher
 
     # Setups HTML parser adapter for all the proxy providers.
     #
-    # @param name_of_class [String, Symbol, Class]
+    # @param name_or_class [String, Symbol, Class]
     #   name of the adapter or it's class
     #
     def adapter=(name_or_class)
@@ -100,7 +100,7 @@ module ProxyFetcher
     # Setups HTTP client class that will be used to fetch proxy lists.
     # Validates class for the required methods to be defined.
     #
-    # @param [klass]
+    # @param klass [Class]
     #   HTTP client class
     #
     def http_client=(klass)
@@ -110,7 +110,7 @@ module ProxyFetcher
     # Setups class that will be used to validate proxy lists.
     # Validates class for the required methods to be defined.
     #
-    # @param [klass]
+    # @param klass [Class]
     #   Proxy validator class
     #
     def proxy_validator=(klass)

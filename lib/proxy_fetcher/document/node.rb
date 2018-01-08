@@ -7,7 +7,7 @@ module ProxyFetcher
     class Node
       # Original document node from adapter backend.
       # @!attribute [r] node
-      #   @return [Object] original DOM node, parsed by adapter
+      #   @return [Object] original DOM node, parsed by adapter backend
       attr_reader :node
 
       def initialize(node)

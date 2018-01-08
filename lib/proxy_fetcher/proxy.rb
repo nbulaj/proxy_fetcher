@@ -4,18 +4,28 @@ module ProxyFetcher
   # Proxy object
   class Proxy
     # @!attribute [rw] addr
-    #   Proxy address (IP or domain)
+    #   @return [String] Proxy address (IP or domain)
+    attr_accessor :addr
+
     # @!attribute [rw] port
-    #   Proxy port
+    #   @return [Integer] Proxy port
+    attr_accessor :port
+
     # @!attribute [rw] type
-    #   Proxy type (SOCKS, HTTP(S))
+    #   @return [String] Proxy type (SOCKS, HTTP(S))
+    attr_accessor :type
+
     # @!attribute [rw] country
-    #   Proxy country
+    #   @return [String] Proxy country
+    attr_accessor :country
+
     # @!attribute [rw] response_time
-    #   Proxy response time (depends on provider)
+    #   @return [Integer] Proxy response time (depends on provider)
+    attr_accessor :response_time
+
     # @!attribute [rw] anonymity
-    #   Proxy anonymity level (high, elite, transparent, etc)
-    attr_accessor :addr, :port, :type, :country, :response_time, :anonymity
+    #   @return [String] Proxy anonymity level (high, elite, transparent, etc)
+    attr_accessor :anonymity
 
     # Proxy type
     TYPES = [

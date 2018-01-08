@@ -72,6 +72,9 @@ module ProxyFetcher
 
     private
 
+    # Configures default adapter if it isn't defined by the user.
+    # @api private
+    #
     def configure_adapter!
       config.adapter = Configuration::DEFAULT_ADAPTER if config.adapter.nil?
     end

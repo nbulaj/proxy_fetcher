@@ -20,6 +20,7 @@ module ProxyFetcher
         new(::Oga.parse_html(data))
       end
 
+      # Oga DOM node
       class Node < ProxyFetcher::Document::Node
         def attr(*args)
           clear(node.attribute(*args).value)

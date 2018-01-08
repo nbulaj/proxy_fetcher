@@ -2,6 +2,9 @@
 
 module ProxyFetcher
   module Client
+    # ProxyFetcher proxies registry for managing proxy lists used by the Client.
+    # It is used to fetch proxy lists and instantiate Manager object that will
+    # handle proxies.
     class ProxiesRegistry
       class << self
         # Removes proxy from the list of the current proxy manager

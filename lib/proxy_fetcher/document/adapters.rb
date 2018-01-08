@@ -6,8 +6,8 @@ module ProxyFetcher
     #
     # ProxyFetcher default supported adapters are:
     #
-    # * {Nokogiri}
-    # * {*Oga}
+    # * Nokogiri
+    # * Oga
     #
     # Any custom adapter can be used and must be inherited from
     # <code>ProxyFetcher::Document::AbstractAdapter</code>.

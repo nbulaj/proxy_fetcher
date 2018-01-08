@@ -17,25 +17,40 @@ module ProxyFetcher
       }.freeze
 
       # @!attribute [r] http
-      #   HTTP client
+      #   @return [Class] HTTP client
+      attr_reader :http
+
       # @!attribute [r] method
-      #   HTTP request method
+      #   @return [String, Symbol] HTTP request method
+      attr_reader :method
+
       # @!attribute [r] uri
-      #   Request URI
+      #   @return [URI] Request URI
+      attr_reader :uri
+
       # @!attribute [r] headers
-      #   HTTP headers
+      #   @return [Hash] HTTP headers
+      attr_reader :headers
+
       # @!attribute [r] timeout
-      #   Request timeout
+      #   @return [Integer] Request timeout
+      attr_reader :timeout
+
       # @!attribute [r] payload
-      #   Request payload
+      #   @return [String, Hash] Request payload
+      attr_reader :payload
+
       # @!attribute [r] proxy
-      #   Proxy to process the request
+      #   @return [Proxy] Proxy to process the request
+      attr_reader :proxy
+
       # @!attribute [r] max_redirects
-      #   Maximum count of requests (if fails)
+      #   @return [Integer] Maximum count of requests (if fails)
+      attr_reader :max_redirects
+
       # @!attribute [r] ssl_options
-      #   SSL options
-      attr_reader :http, :method, :uri, :headers, :timeout,
-                  :payload, :proxy, :max_redirects, :ssl_options
+      #   @return [Hash] SSL options
+      attr_reader :ssl_options
 
       # Initializes a new HTTP request and processes it
       #
@@ -111,6 +126,15 @@ module ProxyFetcher
         @http.read_timeout = timeout
       end
 
+      # Processes HTTP response: checks it status and follows redirect if required.
+      # If response returned an error, then throws it.
+      #
+      # @param http_response [Net::HTTPResponse]
+      #   HTTP response object
+      #
+      # @return [String]
+      #   requested resource content
+      #
       def process_response!(http_response)
         case http_response
         when Net::HTTPSuccess then http_response.read_body
