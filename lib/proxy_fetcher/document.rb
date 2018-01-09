@@ -24,8 +24,6 @@ module ProxyFetcher
     #
     # @return [Document]
     #
-    # @api private
-    #
     def initialize(backend)
       @backend = backend
     end

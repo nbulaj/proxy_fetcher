@@ -15,7 +15,6 @@ module ProxyFetcher
     #
     # @return [ProxyValidator]
     #
-    # @api private
     def initialize(proxy_addr, proxy_port)
       uri = URI.parse(URL_TO_CHECK)
       @http = Net::HTTP.new(uri.host, uri.port, proxy_addr, proxy_port.to_i)

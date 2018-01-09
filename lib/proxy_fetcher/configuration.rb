@@ -5,8 +5,33 @@ module ProxyFetcher
   # with HTTP requests, adapters, custom classes.
   #
   class Configuration
-    attr_accessor :timeout, :pool_size, :user_agent
-    attr_reader :adapter, :http_client, :proxy_validator, :providers
+    # @!attribute timeout
+    #   @return [Integer] HTTP request connection / open timeout
+    attr_accessor :timeout
+
+    # @!attribute pool_size
+    #   @return [Integer] proxy validator pool size (max number of threads)
+    attr_accessor :pool_size
+
+    # @!attribute user_agent
+    #   @return [String] User-Agent string
+    attr_accessor :user_agent
+
+    # @!attribute [r] adapter
+    #   @return [Object] HTML parser adapter
+    attr_reader :adapter
+
+    # @!attribute [r] http_client
+    #   @return [Class] HTTP client class
+    attr_reader :http_client
+
+    # @!attribute [r] proxy_validator
+    #   @return [Class] proxy validator class
+    attr_reader :proxy_validator
+
+    # @!attribute [r] providers
+    #   @return [Array<String>, Array<Symbol>] proxy providers list to be used
+    attr_reader :providers
 
     # User-Agent string that will be used by the ProxyFetcher HTTP client (to
     # send requests via proxy) and to fetch proxy lists from the sources.

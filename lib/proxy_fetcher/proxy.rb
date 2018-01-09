@@ -4,30 +4,30 @@ module ProxyFetcher
   # Proxy object
   class Proxy
     # @!attribute [rw] addr
-    #   @return [String] Proxy address (IP or domain)
+    #   @return [String] address (IP or domain)
     attr_accessor :addr
 
     # @!attribute [rw] port
-    #   @return [Integer] Proxy port
+    #   @return [Integer] port
     attr_accessor :port
 
     # @!attribute [rw] type
-    #   @return [String] Proxy type (SOCKS, HTTP(S))
+    #   @return [String] type (SOCKS, HTTP(S))
     attr_accessor :type
 
     # @!attribute [rw] country
-    #   @return [String] Proxy country
+    #   @return [String] country or country code
     attr_accessor :country
 
     # @!attribute [rw] response_time
-    #   @return [Integer] Proxy response time (depends on provider)
+    #   @return [Integer] response time (value and measurements depends on the provider)
     attr_accessor :response_time
 
     # @!attribute [rw] anonymity
-    #   @return [String] Proxy anonymity level (high, elite, transparent, etc)
+    #   @return [String] anonymity level (high, elite, transparent, etc)
     attr_accessor :anonymity
 
-    # Proxy type
+    # Proxy types
     TYPES = [
       HTTP = 'HTTP'.freeze,
       HTTPS = 'HTTPS'.freeze,
@@ -62,16 +62,14 @@ module ProxyFetcher
     #
     # @return [Proxy]
     #
-    # @api private
-    #
     def initialize(attributes = {})
       attributes.each do |attr, value|
         public_send("#{attr}=", value)
       end
     end
 
-    # Checks if proxy object is connectable? (can be used as a proxy for
-    # network requests).
+    # Checks if proxy object is connectable (can be used as a proxy for
+    # HTTP requests).
     #
     # @return [Boolean]
     #   true if proxy connectable, otherwise false.
@@ -91,7 +89,7 @@ module ProxyFetcher
       URI::Generic.build(host: addr, port: port)
     end
 
-    # Returns <code>String</object> object with <i>addr:port<i> values of the proxy.
+    # Returns <code>String</code> object with <i>addr:port</i> values of the proxy.
     #
     # @return [String]
     #   true if proxy connectable, otherwise false.

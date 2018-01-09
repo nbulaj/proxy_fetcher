@@ -17,8 +17,6 @@ module ProxyFetcher
     #
     # @return [HTTPClient]
     #
-    # @api private
-    #
     def initialize(url)
       @uri = URI.parse(url)
       @http = Net::HTTP.new(@uri.host, @uri.port)

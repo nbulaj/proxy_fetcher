@@ -65,8 +65,6 @@ module ProxyFetcher
       #
       # @return [Request]
       #
-      # @api private
-      #
       def initialize(args)
         raise ArgumentError, 'args must be a Hash!' unless args.is_a?(Hash)
 

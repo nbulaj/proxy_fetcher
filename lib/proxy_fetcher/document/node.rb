@@ -5,20 +5,29 @@ module ProxyFetcher
     # Abstract class for storing HTML elements that was parsed by
     # one of the <code>ProxyFetcher::Document<code> adapters class.
     class Node
-      # Original document node from adapter backend.
       # @!attribute [r] node
       #   @return [Object] original DOM node, parsed by adapter backend
       attr_reader :node
 
+      # Initialize new HTML node
+      #
+      # @return [Node]
+      #
       def initialize(node)
         @node = node
       end
 
+      # Searches for node in children using some selector (CSS or XPath).
+      #
+      # @param selector [String] selector (CSS or XPath)
+      #
+      # @return [Node] child node
+      #
       def find(selector, method = :at_xpath)
         self.class.new(node.public_send(method, selector))
       end
 
-      # Searches HTML element by XPath. Returns only one element.
+      # Searches exact HTML element by XPath. Returns only one element.
       #
       # @return [ProxyFetcher::Document::Node]
       #   node
@@ -27,7 +36,7 @@ module ProxyFetcher
         self.class.new(node.at_xpath(*args))
       end
 
-      # Searches HTML element by CSS. Returns only one element.
+      # Searches exact HTML element by CSS. Returns only one element.
       #
       # @return [ProxyFetcher::Document::Node]
       #   node
@@ -56,6 +65,7 @@ module ProxyFetcher
       # Returns HTML node inner HTML.
       #
       # Abstract method, must be implemented for specific adapter class.
+      #
       def html
         raise "`#{__method__}` must be implemented for specific adapter class!"
       end

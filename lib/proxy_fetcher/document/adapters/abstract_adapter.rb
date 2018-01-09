@@ -13,8 +13,6 @@ module ProxyFetcher
       #
       # @return [AbstractAdapter]
       #
-      # @api private
-      #
       def initialize(document)
         @document = document
       end
@@ -48,6 +46,10 @@ module ProxyFetcher
       end
 
       # Installs adapter requirements.
+      #
+      # @raise [Exceptions::AdapterSetupError]
+      #   adapter can't be install due to some error
+      #
       def self.setup!(*args)
         install_requirements!(*args)
       rescue LoadError => error

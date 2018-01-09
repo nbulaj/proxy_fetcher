@@ -14,8 +14,6 @@ module ProxyFetcher
     #
     # @return [Manager]
     #
-    # @api private
-    #
     def initialize(refresh: true, validate: false, filters: {})
       if refresh
         refresh_list!(filters)
@@ -26,7 +24,10 @@ module ProxyFetcher
       cleanup! if validate
     end
 
-    # Update current proxy list from the provider
+    # Update current proxy list using configured providers.
+    #
+    # @param filters [Hash] providers filters
+    #
     def refresh_list!(filters = nil)
       @proxies = []
 
@@ -40,7 +41,11 @@ module ProxyFetcher
 
     alias fetch! refresh_list!
 
-    # Pop just first proxy (and back it to the end of the proxy list)
+    # Pop just first proxy (and back it to the end of the proxy list).
+    #
+    # @return [Proxy]
+    #   proxy object from the list
+    #
     def get
       return if @proxies.empty?
 
@@ -56,7 +61,7 @@ module ProxyFetcher
     # Invalid proxies will be removed from the list
     #
     # @return [Proxy]
-    #   proxy object
+    #   proxy object from the list
     #
     def get!
       index = proxies.find_index(&:connectable?)
