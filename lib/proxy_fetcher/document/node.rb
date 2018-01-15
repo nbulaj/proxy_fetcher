@@ -3,7 +3,7 @@
 module ProxyFetcher
   class Document
     # Abstract class for storing HTML elements that was parsed by
-    # one of the <code>ProxyFetcher::Document<code> adapters class.
+    # one of the <code>ProxyFetcher::Document</code> adapters class.
     class Node
       # @!attribute [r] node
       #   @return [Object] original DOM node, parsed by adapter backend
