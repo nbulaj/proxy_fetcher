@@ -245,6 +245,17 @@ require 'proxy-fetcher'
 ProxyFetcher::Client.get 'https://example.com/resource', options: { max_retries: 10_000 }
 ```
 
+You can also use your own proxy object when using ProxyFetcher client:
+
+```ruby
+require 'proxy-fetcher'
+
+manager = ProxyFetcher::Manager.new # will immediately load proxy list from the server
+
+#random will return random proxy object from the list
+ProxyFetcher::Client.get 'https://example.com/resource', options: { proxy: manager.random }
+```
+
 Btw, if you need support of JavaScript or some other features, you need to implement your own client using, for example,
 `selenium-webdriver`.
 

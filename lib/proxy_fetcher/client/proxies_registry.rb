@@ -41,7 +41,7 @@ module ProxyFetcher
           find_proxy_for(url)
         end
 
-        # Instantiate or returns <code>ProxyFetcher::Manager</code> instance
+        # Instantiates or returns <code>ProxyFetcher::Manager</code> instance
         # for current <code>Thread</code>.
         #
         # @return [ProxyFetcher::Manager]

@@ -127,20 +127,20 @@ module ProxyFetcher
       # Executes HTTP request with user payload.
       #
       def request_with_payload(method, url, payload, headers, options)
-        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(url: url, payload: payload, proxy: proxy, headers: default_headers.merge(headers))
+        with_proxy_for(url, options.fetch(:max_retries, 1000)) do |proxy|
+          opts = options.merge(payload: payload, proxy: options.fetch(:proxy, proxy), headers: default_headers.merge(headers))
 
-          Request.execute(method: method, **opts)
+          Request.execute(url: url, method: method, **opts)
         end
       end
 
       # Executes HTTP request without user payload.
       #
       def request_without_payload(method, url, headers, options)
-        safe_request_to(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(url: url, proxy: proxy, headers: default_headers.merge(headers))
+        with_proxy_for(url, options.fetch(:max_retries, 1000)) do |proxy|
+          opts = options.merge(proxy: options.fetch(:proxy, proxy), headers: default_headers.merge(headers))
 
-          Request.execute(method: method, **opts)
+          Request.execute(url: url, method: method, **opts)
         end
       end
 
@@ -156,15 +156,16 @@ module ProxyFetcher
         }
       end
 
-      # Sends request to the URL using proxy with specific number
-      # of retries (default is 1000) if request failed (404, 500, timeout, etc).
+      # Searches for valid proxy (suitable for URL type) using <code>ProxyFetcher::Manager</code>
+      # instance and executes the block with found proxy with retries (N times, default is 1000) if
+      # something goes wrong.
       #
       # @param url [String] request URL
       # @param max_retries [Integer] maximum number of retries
       #
-      # @raise [ProxyFetcher::Error] internal error
+      # @raise [ProxyFetcher::Error] internal error happened during block execution
       #
-      def safe_request_to(url, max_retries = 1000)
+      def with_proxy_for(url, max_retries = 1000)
         tries = 0
 
         begin

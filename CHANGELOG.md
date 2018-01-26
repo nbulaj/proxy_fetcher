@@ -2,6 +2,11 @@
 
 Reverse Chronological Order:
 
+## `0.6.3` (2018-01-26)
+
+* Add ability to use own proxy for `ProxyFetcher::Client`
+* Improve specs
+
 ## `0.6.2` (2017-12-27)
 
 * Fix ProxyDocker provider.

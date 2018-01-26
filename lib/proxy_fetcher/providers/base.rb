@@ -29,7 +29,7 @@ module ProxyFetcher
       #   ProxyFetcher document object
       #
       def load_document(url, filters = {})
-        raise ArgumentError, 'filters must be a Hash' unless filters.is_a?(Hash)
+        raise ArgumentError, 'filters must be a Hash' if filters && !filters.is_a?(Hash)
 
         uri = URI.parse(url)
         uri.query = URI.encode_www_form(filters) if filters && filters.any?
