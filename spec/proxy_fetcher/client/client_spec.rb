@@ -42,6 +42,14 @@ describe ProxyFetcher::Client do
       expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
+
+    it 'successfully returns page content using custom proxy' do
+      manager = ProxyFetcher::Manager.new
+      content = ProxyFetcher::Client.get('http://httpbin.org', options: { proxy: manager.get! })
+
+      expect(content).not_to be_nil
+      expect(content).not_to be_empty
+    end
   end
 
   context 'POST request with the valid proxy' do
