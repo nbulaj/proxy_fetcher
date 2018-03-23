@@ -7,7 +7,7 @@ module ProxyFetcher
       # Loads proxy provider page content, extract proxy list from it
       # and convert every entry to proxy object.
       def fetch_proxies!(filters = {})
-        load_proxy_list(filters).map { |html| to_proxy(html) }
+        load_proxy_list(filters).map { |html_node| to_proxy(html_node) }
       end
 
       # Just synthetic sugar to make it easier to call #fetch_proxies! method.

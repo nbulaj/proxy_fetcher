@@ -81,7 +81,7 @@ module ProxyFetcher
       #   clean text
       #
       def clear(text)
-        return if text.nil? || text.empty?
+        return '' if text.nil? || text.empty?
 
         text.strip.gsub(/[ \t]/i, '')
       end
