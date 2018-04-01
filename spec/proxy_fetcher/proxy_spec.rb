@@ -68,4 +68,8 @@ describe ProxyFetcher::Proxy do
   it 'returns URL' do
     expect(proxy.url).to be_a(String)
   end
+
+  it 'returns URL with schema' do
+    expect(proxy.url(scheme: true)).to include('://')
+  end
 end

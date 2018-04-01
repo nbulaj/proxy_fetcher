@@ -401,7 +401,7 @@ Also you can call next instance methods for every Proxy object:
 * `socks4?`
 * `socks5?`
 * `uri` (returns `URI::Generic` object)
-* `url` (returns a formatted URL like "_http://IP:PORT_" )
+* `url` (returns a formatted URL like "_IP:PORT_" or "_http://IP:PORT_" if `scheme: true` provided)
 
 ## Providers
 

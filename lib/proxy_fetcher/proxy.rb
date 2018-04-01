@@ -91,11 +91,18 @@ module ProxyFetcher
 
     # Returns <code>String</code> object with <i>addr:port</i> values of the proxy.
     #
+    # @param scheme [Boolean]
+    #   Indicates if URL must include proxy type
+    #
     # @return [String]
     #   true if proxy connectable, otherwise false.
     #
-    def url
-      "#{addr}:#{port}"
+    def url(scheme: false)
+      if scheme
+        URI::Generic.build(scheme: type, host: addr, port: port).to_s
+      else
+        URI::Generic.build(host: addr, port: port).to_s
+      end
     end
   end
 end
