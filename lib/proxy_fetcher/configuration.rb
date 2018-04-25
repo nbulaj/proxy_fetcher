@@ -17,16 +17,20 @@ module ProxyFetcher
     #   @return [String] User-Agent string
     attr_accessor :user_agent
 
+    # @!attribute [r] logger
+    #   @return [Object] Logger object
+    attr_accessor :logger
+
     # @!attribute [r] adapter
     #   @return [Object] HTML parser adapter
     attr_reader :adapter
 
     # @!attribute [r] http_client
-    #   @return [Class] HTTP client class
+    #   @return [Object] HTTP client class
     attr_reader :http_client
 
     # @!attribute [r] proxy_validator
-    #   @return [Class] proxy validator class
+    #   @return [Object] proxy validator class
     attr_reader :proxy_validator
 
     # @!attribute [r] providers
@@ -54,7 +58,7 @@ module ProxyFetcher
       #   providers registry
       #
       def providers_registry
-        @registry ||= ProvidersRegistry.new
+        @providers_registry ||= ProvidersRegistry.new
       end
 
       # Register new proxy provider. Requires provider name and class
@@ -91,6 +95,7 @@ module ProxyFetcher
 
     # Sets default configuration options
     def reset!
+      @logger = Logger.new(STDOUT)
       @user_agent = DEFAULT_USER_AGENT
       @pool_size = 10
       @timeout = 3

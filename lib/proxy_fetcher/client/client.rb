@@ -174,7 +174,10 @@ module ProxyFetcher
         rescue ProxyFetcher::Error
           raise
         rescue StandardError
-          raise ProxyFetcher::Exceptions::MaximumRetriesReached if max_retries && tries >= max_retries
+          if max_retries && tries >= max_retries
+            ProxyFetcher.logger.warn("reached maximum amount of retries (#{max_retries})")
+            raise ProxyFetcher::Exceptions::MaximumRetriesReached
+          end
 
           ProxiesRegistry.invalidate_proxy!(proxy)
           tries += 1

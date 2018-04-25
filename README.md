@@ -33,8 +33,8 @@ validating proxy lists from the different providers. [Checkout examples](#standa
 
 ## Dependencies
 
-ProxyFetcher gem itself requires only Ruby `>= 2.0.0` (or [JRuby](http://jruby.org/) `> 9.0`, but maybe earlier too,
-[see Travis build matrix](.travis.yml)).
+ProxyFetcher gem itself requires Ruby `>= 2.0.0` (or [JRuby](http://jruby.org/) `> 9.0`, but maybe earlier too,
+[see Travis build matrix](.travis.yml)) and great [HTTP.rb gem](https://github.com/httprb/http).
 
 However, it requires an adapter to parse HTML. If you do not specify any specific adapter, then it will use
 default one - [Nokogiri](https://github.com/sparklemotion/nokogiri). It's OK for any Ruby on Rails project
@@ -49,7 +49,7 @@ you can implement your own adapter if it your use-case. Take a look at the [Conf
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.6'
+gem 'proxy_fetcher', '~> 0.7'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -67,7 +67,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.6'
+gem install proxy_fetcher -v '0.7'
 ```
 
 ## Example of usage
@@ -267,6 +267,7 @@ Default configuration looks as follows:
 
 ```ruby
 ProxyFetcher.configure do |config|
+  config.logger = Logger.new(STDOUT)
   config.user_agent = ProxyFetcher::Configuration::DEFAULT_USER_AGENT
   config.pool_size = 10
   config.timeout = 3
@@ -298,7 +299,7 @@ ProxyFetcher.configure do |config|
 end
 ```
 
-ProxyFetcher uses standard Ruby solution for dealing with HTTP(S) requests - `net/http` library from the Ruby core.
+ProxyFetcher uses HTTP.rb gem for dealing with HTTP(S) requests. It is fast enough and has a great chainable API.
 If you wanna add, for example, your custom provider that was developed as a Single Page Application (SPA) with some JavaScript,
 then you will need something like [selenium-webdriver](https://github.com/SeleniumHQ/selenium/tree/master/rb) to properly
 load the content of the website. For those and other cases you can write your own class for fetching HTML content by

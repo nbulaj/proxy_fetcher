@@ -80,7 +80,7 @@ describe ProxyFetcher::Client do
 
       json = JSON.parse(content)
 
-      expect(json['form']['param']).to eq('PutValue')
+      expect(json['data']).to eq('param=PutValue')
     end
   end
 
@@ -110,7 +110,7 @@ describe ProxyFetcher::Client do
     it 'successfully works' do
       content = ProxyFetcher::Client.head('http://httpbin.org')
 
-      expect(content).to be_nil
+      expect(content).to be_empty
     end
   end
 
@@ -122,7 +122,7 @@ describe ProxyFetcher::Client do
     end
 
     it 'raises an error when http request returns an error' do
-      allow_any_instance_of(Net::HTTP).to receive(:request).and_return(Net::HTTPBadRequest.new('', '', ''))
+      allow_any_instance_of(HTTP::Client).to receive(:get).and_return(StandardError.new)
 
       expect { ProxyFetcher::Client.get('http://httpbin.org') }.to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
     end

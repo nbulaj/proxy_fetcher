@@ -32,16 +32,10 @@ module ProxyFetcher
       @proxies = []
 
       ProxyFetcher.config.providers.each do |provider_name|
-        begin
-          provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
-          provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
+        provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
+        provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
 
-          @proxies.concat(provider.fetch_proxies!(provider_filters))          
-        rescue Net::ReadTimeout => timeout_exception
-          # Let's not crash the entire list fetching just because
-          # one site might not be reachable
-          puts "Provider '#{provider_name}' not reachable.: #{timeout_exception.message}"    
-        end
+        @proxies.concat(provider.fetch_proxies!(provider_filters))
       end
     end
 

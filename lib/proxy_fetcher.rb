@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'uri'
-require 'net/https'
+require 'http'
+require 'logger'
 
 require File.dirname(__FILE__) + '/proxy_fetcher/version'
 
@@ -68,6 +69,10 @@ module ProxyFetcher
     #
     def configure
       yield config
+    end
+
+    def logger
+      config.logger
     end
 
     private

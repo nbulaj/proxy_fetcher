@@ -5,39 +5,17 @@ module ProxyFetcher
   # the different providers. Uses ProxyFetcher configuration options
   # for sending HTTP requests to providers URLs.
   class HTTPClient
-    # @!attribute [r] uri
-    #   @return [URI] URI
-    attr_reader :uri
+    # @!attribute [r] url
+    #   @return [String] URL
+    attr_reader :url
 
     # @!attribute [r] http
     #   @return [Net::HTTP] HTTP client
     attr_reader :http
 
-    # Initialize HTTP client instance
-    #
-    # @return [HTTPClient]
-    #
-    def initialize(url)
-      @uri = URI.parse(url)
-      @http = Net::HTTP.new(@uri.host, @uri.port)
-      return unless https?
-
-      @http.use_ssl = true
-      @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    end
-
-    # Fetches resource content by sending HTTP request to it.
-    #
-    # @return [String]
-    #   response body
-    #
-    def fetch
-      request = Net::HTTP::Get.new(@uri.to_s)
-      request['Connection'] = 'keep-alive'
-      request['User-Agent'] = ProxyFetcher.config.user_agent
-      response = @http.request(request)
-      response.body
-    end
+    # @!attribute [r] ssl_ctx
+    #   @return [OpenSSL::SSL::SSLContext] SSL context
+    attr_reader :ssl_ctx
 
     # Fetches resource content by sending HTTP request to it.
     # Synthetic sugar to simplify URIes fetching.
@@ -51,13 +29,41 @@ module ProxyFetcher
       new(url).fetch
     end
 
-    # Checks if URI requires secure connection (HTTPS)
+    # Initialize HTTP client instance
     #
-    # @return [Boolean]
-    #   true if URI is HTTPS, false otherwise
+    # @return [HTTPClient]
     #
-    def https?
-      @uri.is_a?(URI::HTTPS)
+    def initialize(url)
+      @url = url.to_s
+      @http = HTTP.headers(default_headers)
+
+      @ssl_ctx = OpenSSL::SSL::SSLContext.new
+      @ssl_ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
+
+    # Fetches resource content by sending HTTP request to it.
+    #
+    # @return [String]
+    #   response body
+    #
+    def fetch
+      @http.get(url, ssl_context: ssl_ctx).body.to_s
+    rescue StandardError
+      ProxyFetcher.logger.warn("Failed to load proxy list for #{url}")
+      String.new
+    end
+
+    protected
+
+    # Default HTTP client headers
+    #
+    # @return [Hash]
+    #   hash of HTTP headers
+    #
+    def default_headers
+      {
+        'User-Agent' => ProxyFetcher.config.user_agent
+      }
     end
   end
 end

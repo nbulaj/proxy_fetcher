@@ -27,4 +27,25 @@ describe ProxyFetcher::Providers::Base do
       expect(error.message).to include('to_proxy')
     end
   end
+
+  it 'logs failed to load proxy providers' do
+    CustomProvider = Class.new(ProxyFetcher::Providers::Base) do
+      def load_proxy_list(*)
+        doc = load_document('https://google.com', {})
+        doc.xpath('//table[contains(@class, "table")]/tr[(not(@id="proxy-table-header")) and (count(td)>2)]')
+      end
+    end
+
+    logger = Logger.new(StringIO.new)
+
+    ProxyFetcher::Configuration.register_provider(:custom_provider, CustomProvider)
+    ProxyFetcher.config.provider = :custom_provider
+    ProxyFetcher.config.logger = logger
+
+    allow_any_instance_of(HTTP::Client).to receive(:get).and_raise(StandardError)
+
+    expect(logger).to receive(:warn).with(/Failed to load proxy list for http[s:\/]/)
+
+    ProxyFetcher::Manager.new
+  end
 end
