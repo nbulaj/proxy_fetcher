@@ -4,17 +4,13 @@ module ProxyFetcher
   module Client
     # ProxyFetcher::Client HTTP request abstraction.
     class Request
-      # @!attribute [r] http
-      #   @return [Object] HTTP client
-      attr_reader :http
-
       # @!attribute [r] method
       #   @return [String, Symbol] HTTP request method
       attr_reader :method
 
-      # @!attribute [r] uri
-      #   @return [URI] Request URI
-      attr_reader :uri
+      # @!attribute [r] url
+      #   @return [String] Request URL
+      attr_reader :url
 
       # @!attribute [r] headers
       #   @return [Hash] HTTP headers
@@ -46,6 +42,7 @@ module ProxyFetcher
       #   response body (requested resource content)
       #
       def self.execute(args)
+        puts ' 2222'
         new(args).execute
       end
 
@@ -56,7 +53,7 @@ module ProxyFetcher
       def initialize(args)
         raise ArgumentError, 'args must be a Hash!' unless args.is_a?(Hash)
 
-        @uri = URI.parse(args.fetch(:url))
+        @url = args.fetch(:url)
         @method = args.fetch(:method).to_s.downcase
         @headers = (args[:headers] || {}).dup
         @payload = args[:payload]
@@ -66,7 +63,7 @@ module ProxyFetcher
         @proxy = args.fetch(:proxy)
         @max_redirects = args.fetch(:max_redirects, 10)
 
-        build_http_client
+        @http = build_http_client
       end
 
       # Executes HTTP request with defined options.
@@ -75,32 +72,25 @@ module ProxyFetcher
       #   response body (requested resource content)
       #
       def execute
-        response = begin
-          if payload
-            payload_type = payload.is_a?(String) ? :body : :form
-
-            http.public_send(method, uri.to_s, payload_type => payload, ssl_context: ssl_options)
-          else
-            http.public_send(method, uri.to_s, ssl_context: ssl_options)
-          end
-        rescue HTTP::Redirector::TooManyRedirectsError
-          raise ProxyFetcher::Exceptions::MaximumRedirectsReached
-        end
-
+        response = send_request
         response.body.to_s
+      rescue HTTP::Redirector::TooManyRedirectsError
+        raise ProxyFetcher::Exceptions::MaximumRedirectsReached
       end
 
       private
 
-      # Builds HTTP client based on stdlib Net::HTTP.
+      # Builds HTTP client.
       #
-      # @return [Net::HTTP]
+      # @return [HTTP::Client]
       #   HTTP client
       #
       def build_http_client
-        @http = HTTP.headers(headers)
-                    .timeout(connect: timeout, read: timeout)
-                    .follow(max_hops: max_redirects)
+        puts " CLIENT #{proxy.addr} #{proxy.port}"
+        HTTP.via(proxy.addr, proxy.port.to_i)
+            .headers(headers)
+            .timeout(connect: timeout, read: timeout)
+            .follow(max_hops: max_redirects)
       end
 
       # Default SSL options that will be used for connecting to resources
@@ -113,6 +103,21 @@ module ProxyFetcher
         ssl_ctx = OpenSSL::SSL::SSLContext.new
         ssl_ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
         ssl_ctx
+      end
+
+      # Sends HTTP request to the URL. Check for the payload and it's type
+      # in order to build valid request.
+      #
+      # @return [HTTP::Response] request response
+      #
+      def send_request
+        if payload
+          payload_type = payload.is_a?(String) ? :body : :form
+
+          @http.public_send(method, url, payload_type => payload, ssl_context: ssl_options)
+        else
+          @http.public_send(method, url, ssl_context: ssl_options)
+        end
       end
     end
   end

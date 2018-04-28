@@ -50,7 +50,7 @@ module ProxyFetcher
       @http.get(url, ssl_context: ssl_ctx).body.to_s
     rescue StandardError
       ProxyFetcher.logger.warn("Failed to load proxy list for #{url}")
-      String.new
+      ''
     end
 
     protected

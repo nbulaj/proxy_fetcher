@@ -32,14 +32,12 @@ describe ProxyFetcher::Client do
     it 'successfully returns page content for HTTP' do
       content = ProxyFetcher::Client.get('http://httpbin.org')
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
 
     it 'successfully returns page content for HTTPS' do
       content = ProxyFetcher::Client.get('https://httpbin.org')
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
 
@@ -49,7 +47,6 @@ describe ProxyFetcher::Client do
       proxy = manager.get! until proxy
       content = ProxyFetcher::Client.get('http://httpbin.org', options: { proxy: proxy })
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
   end
@@ -59,9 +56,8 @@ describe ProxyFetcher::Client do
       headers = {
         'X-Proxy-Fetcher-Version' => ProxyFetcher::VERSION::STRING
       }
-      content = ProxyFetcher::Client.post('http://httpbin.org/post', { param: 'value'} , headers: headers)
+      content = ProxyFetcher::Client.post('http://httpbin.org/post', { param: 'value' } , headers: headers)
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
 
       json = JSON.parse(content)
@@ -75,7 +71,6 @@ describe ProxyFetcher::Client do
     it 'successfully returns page content for HTTP' do
       content = ProxyFetcher::Client.put('http://httpbin.org/put', 'param=PutValue')
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
 
       json = JSON.parse(content)
@@ -88,7 +83,6 @@ describe ProxyFetcher::Client do
     it 'successfully returns page content for HTTP' do
       content = ProxyFetcher::Client.patch('http://httpbin.org/patch', param: 'value')
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
 
       json = JSON.parse(content)
@@ -101,7 +95,6 @@ describe ProxyFetcher::Client do
     it 'successfully returns page content for HTTP' do
       content = ProxyFetcher::Client.delete('http://httpbin.org/delete')
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
   end
@@ -138,7 +131,6 @@ describe ProxyFetcher::Client do
     it 'follows redirect when present' do
       content = ProxyFetcher::Client.get('http://httpbin.org/absolute-redirect/2')
 
-      expect(content).not_to be_nil
       expect(content).not_to be_empty
     end
 

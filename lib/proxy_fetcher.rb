@@ -11,6 +11,7 @@ require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
 require File.dirname(__FILE__) + '/proxy_fetcher/configuration/providers_registry'
 require File.dirname(__FILE__) + '/proxy_fetcher/proxy'
 require File.dirname(__FILE__) + '/proxy_fetcher/manager'
+require File.dirname(__FILE__) + '/proxy_fetcher/null_logger'
 
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/http_client'
 require File.dirname(__FILE__) + '/proxy_fetcher/utils/proxy_validator'
@@ -71,8 +72,13 @@ module ProxyFetcher
       yield config
     end
 
+    # Returns ProxyFetcher logger instance.
+    #
+    # @return [Logger, NullLogger] logger object
+    #
     def logger
-      config.logger
+      return @logger if defined?(@logger)
+      @logger = config.logger || NullLogger.new
     end
 
     private

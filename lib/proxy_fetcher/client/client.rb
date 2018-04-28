@@ -165,6 +165,8 @@ module ProxyFetcher
       #
       # @raise [ProxyFetcher::Error] internal error happened during block execution
       #
+      # Requires refactoring :(
+      #
       def with_proxy_for(url, max_retries = 1000)
         tries = 0
 

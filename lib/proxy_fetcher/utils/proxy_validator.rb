@@ -16,13 +16,9 @@ module ProxyFetcher
     # @return [ProxyValidator]
     #
     def initialize(proxy_addr, proxy_port)
-      uri = URI.parse(URL_TO_CHECK)
-      @http = Net::HTTP.new(uri.host, uri.port, proxy_addr, proxy_port.to_i)
+      timeout = ProxyFetcher.config.timeout
 
-      return unless uri.is_a?(URI::HTTPS)
-
-      @http.use_ssl = true
-      @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      @http = HTTP.via(proxy_addr, proxy_port.to_i).timeout(connect: timeout, read: timeout)
     end
 
     # Checks if proxy is connectable (can be used to connect
@@ -32,12 +28,7 @@ module ProxyFetcher
     #   true if connection to the server using proxy established, otherwise false
     #
     def connectable?
-      @http.open_timeout = ProxyFetcher.config.timeout
-      @http.read_timeout = ProxyFetcher.config.timeout
-
-      @http.start { |connection| return true if connection.request_head('/') }
-
-      false
+      @http.head(URL_TO_CHECK)
     rescue StandardError
       false
     end

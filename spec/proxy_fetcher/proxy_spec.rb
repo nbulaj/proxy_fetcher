@@ -48,14 +48,8 @@ describe ProxyFetcher::Proxy do
   end
 
   it 'not connectable if there are some error during connection request' do
-    allow_any_instance_of(Net::HTTP).to receive(:start).and_raise(Errno::ECONNABORTED)
+    allow_any_instance_of(HTTP::Client).to receive(:get).and_raise(HTTP::TimeoutError)
     expect(proxy.connectable?).to be_falsey
-  end
-
-  it "not connectable if server doesn't respond to head" do
-    allow_any_instance_of(Net::HTTP).to receive(:start).and_return(false)
-    expect(proxy.connectable?).to be_falsey
-    expect(proxy.valid?).to be_falsey
   end
 
   it 'returns URI::Generic' do
@@ -69,7 +63,7 @@ describe ProxyFetcher::Proxy do
     expect(proxy.url).to be_a(String)
   end
 
-  it 'returns URL with schema' do
+  it 'returns URL with scheme' do
     expect(proxy.url(scheme: true)).to include('://')
   end
 end
