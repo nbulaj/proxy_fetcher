@@ -6,7 +6,7 @@ require 'json'
 require 'evil-proxy'
 require 'evil-proxy/async'
 
-describe ProxyFetcher::Client do
+xdescribe ProxyFetcher::Client do
   before :all do
     ProxyFetcher.configure do |config|
       config.provider = :xroxy

@@ -42,7 +42,6 @@ module ProxyFetcher
       #   response body (requested resource content)
       #
       def self.execute(args)
-        puts ' 2222'
         new(args).execute
       end
 
@@ -86,7 +85,6 @@ module ProxyFetcher
       #   HTTP client
       #
       def build_http_client
-        puts " CLIENT #{proxy.addr} #{proxy.port}"
         HTTP.via(proxy.addr, proxy.port.to_i)
             .headers(headers)
             .timeout(connect: timeout, read: timeout)

@@ -48,7 +48,7 @@ describe ProxyFetcher::Proxy do
   end
 
   it 'not connectable if there are some error during connection request' do
-    allow_any_instance_of(HTTP::Client).to receive(:get).and_raise(HTTP::TimeoutError)
+    allow_any_instance_of(HTTP::Client).to receive(:head).and_raise(HTTP::TimeoutError)
     expect(proxy.connectable?).to be_falsey
   end
 
