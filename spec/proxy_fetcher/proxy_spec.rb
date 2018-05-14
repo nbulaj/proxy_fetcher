@@ -3,15 +3,7 @@
 require 'spec_helper'
 
 describe ProxyFetcher::Proxy do
-  before :all do
-    ProxyFetcher.config.provider = :proxy_docker
-  end
-
-  before do
-    @manager = ProxyFetcher::Manager.new
-  end
-
-  let(:proxy) { @manager.proxies.first.dup }
+  let(:proxy) { described_class.new(addr: '192.169.1.1', port: 8080, type: 'HTTP') }
 
   it 'can initialize a new proxy object' do
     proxy = described_class.new(addr: '192.169.1.1', port: 8080, type: 'HTTP')
