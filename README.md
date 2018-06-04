@@ -16,6 +16,11 @@ fetched and validated by the gem. Take a look at the documentation below to find
 Also this gem can be used with any other programming language (Go / Python / etc) as standalone solution for downloading and
 validating proxy lists from the different providers. [Checkout examples](#standalone) of usage below.
 
+## Documentation valid for `master` branch
+
+Please check the documentation for the version of doorkeeper you are using in:
+https://github.com/nbulaj/proxy_fetcher/releases
+
 ## Table of Contents
 
 - [Dependencies](#dependencies)
