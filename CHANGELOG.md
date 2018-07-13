@@ -2,6 +2,19 @@
 
 Reverse Chronological Order:
 
+## `0.7.0` (2018-06-04)
+
+* Migrate to `HTTP.rb` instead of `Net::HTTP`
+* Fixes
+
+## `0.6.5` (2018-04-20)
+
+* Fix providers
+
+## `0.6.4` (2018-03-26)
+
+* Fix providers
+
 ## `0.6.3` (2018-01-26)
 
 * Add ability to use own proxy for `ProxyFetcher::Client`

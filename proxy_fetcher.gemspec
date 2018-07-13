@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.email = 'bulajnikita@gmail.com'
   gem.require_paths = ['lib']
   gem.bindir = 'bin'
-  gem.files = `git ls-files`.split($RS)
+  gem.files = `git ls-files`.split($RS) - %w[README.md .travis.yml .rubocop.yml]
   gem.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   gem.homepage = 'http://github.com/nbulaj/proxy_fetcher'
   gem.license = 'MIT'

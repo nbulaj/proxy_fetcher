@@ -5,7 +5,7 @@ module ProxyFetcher
     # XRoxy provider class.
     class XRoxy < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'http://www.xroxy.com/proxylist.php'.freeze
+      PROVIDER_URL = 'https://www.xroxy.com/proxylist.php'.freeze
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
