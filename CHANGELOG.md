@@ -2,6 +2,10 @@
 
 Reverse Chronological Order:
 
+## `0.7.1` (2018-07-13)
+
+* Fix XRoxy provider
+
 ## `0.7.0` (2018-06-04)
 
 * Migrate to `HTTP.rb` instead of `Net::HTTP`
