@@ -2,6 +2,10 @@
 
 Reverse Chronological Order:
 
+## `0.7.2` (2018-08-13)
+
+* Fix XRoxy provider
+
 ## `0.7.1` (2018-07-13)
 
 * Fix XRoxy provider
