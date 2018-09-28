@@ -102,7 +102,7 @@ manager.proxies
 ```
 
 `ProxyFetcher::Manager` class is very helpful when you need to manipulate and manager proxies. To get the proxy
-from the list yoy can call `.get` or `.pop` method that will return first proxy and move it to the end of the list.
+from the list you can call `.get` or `.pop` method that will return first proxy and move it to the end of the list.
 This methods has some equivalents like `get!` or aliased `pop!` that will return first **connectable** proxy and
 move it to the end of the list. They both marked as danger methods because all dead proxies will be removed from the list.
 
@@ -446,7 +446,7 @@ If you want to use all the possible proxy providers then you can configure Proxy
 ```ruby
 ProxyFetcher.config.providers = ProxyFetcher::Configuration.registered_providers
 
-manager = ProxyFetcher::Manager.new.proxies
+manager = ProxyFetcher::Manager.new
 manager.proxies
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA", 
