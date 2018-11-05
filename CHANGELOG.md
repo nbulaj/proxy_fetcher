@@ -2,6 +2,12 @@
 
 Reverse Chronological Order:
 
+## `0.7.3` (2018-11-10)
+
+* Improve speed of proxy list loading.
+* Improve speed of proxies cleanup. 
+* Fix ProxyDocker provider
+
 ## `0.7.2` (2018-08-13)
 
 * Fix XRoxy provider
