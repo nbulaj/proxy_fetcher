@@ -3,7 +3,7 @@
 module ProxyFetcher
   # This class validates list of proxies.
   # Each proxy is validated using <code>ProxyFetcher::ProxyValidator</code>.
-  class BulkProxyValidator
+  class ProxyListValidator
     # @!attribute [r] proxies
     #   @return [Array<ProxyFetcher::Proxy>] Source array of proxies
     attr_reader :proxies

@@ -35,7 +35,9 @@ RSpec.shared_examples 'a manager' do
 
     manager = ProxyFetcher::Manager.new
 
-    expect { manager.cleanup! }.to change { manager.proxies }.to([])
+    expect do
+      manager.cleanup!
+    end.to change { manager.proxies }.to([])
   end
 
   it "doesn't pollute the output with array of proxies" do

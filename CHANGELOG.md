@@ -2,7 +2,11 @@
 
 Reverse Chronological Order:
 
-## `0.7.3` (2018-11-10)
+## `master`
+
+* Add your changelog here
+
+## `0.8.0` (2018-11-12)
 
 * Improve speed of proxy list loading.
 * Improve speed of proxies cleanup. 

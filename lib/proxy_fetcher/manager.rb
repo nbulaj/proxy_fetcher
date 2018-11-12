@@ -94,7 +94,7 @@ module ProxyFetcher
     # @return [Array<ProxyFetcher::Proxy>]
     #   list of valid proxies
     def cleanup!
-      valid_proxies = BulkProxyValidator.new(@proxies).validate
+      valid_proxies = ProxyListValidator.new(@proxies).validate
       @proxies &= valid_proxies
     end
 
