@@ -223,7 +223,7 @@ with the proxy lists for you (load, validate, refresh, find proxy by type, follo
 make HTTP(S) requests:
 
 ```ruby
-require 'proxy-fetcher'
+require 'proxy_fetcher'
 
 ProxyFetcher::Client.get 'https://example.com/resource'
 
@@ -245,7 +245,7 @@ remote server returns an error. You can increase or decrease this number for you
 make infinite number of requests (or before your Ruby process will die :skull:):
 
 ```ruby
-require 'proxy-fetcher'
+require 'proxy_fetcher'
 
 ProxyFetcher::Client.get 'https://example.com/resource', options: { max_retries: 10_000 }
 ```
@@ -253,7 +253,7 @@ ProxyFetcher::Client.get 'https://example.com/resource', options: { max_retries:
 You can also use your own proxy object when using ProxyFetcher client:
 
 ```ruby
-require 'proxy-fetcher'
+require 'proxy_fetcher'
 
 manager = ProxyFetcher::Manager.new # will immediately load proxy list from the server
 
