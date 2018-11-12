@@ -31,12 +31,24 @@ module ProxyFetcher
     def refresh_list!(filters = nil)
       @proxies = []
 
-      ProxyFetcher.config.providers.each do |provider_name|
-        provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
-        provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
+      threads = []
+      lock = Mutex.new
 
-        @proxies.concat(provider.fetch_proxies!(provider_filters))
+      ProxyFetcher.config.providers.each do |provider_name|
+        threads << Thread.new do
+          provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
+          provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
+          provider_proxies = provider.fetch_proxies!(provider_filters)
+
+          lock.synchronize do
+            @proxies.concat(provider_proxies)
+          end
+        end
       end
+
+      threads.each(&:join)
+
+      @proxies
     end
 
     alias fetch! refresh_list!
@@ -78,20 +90,12 @@ module ProxyFetcher
     alias pop! get!
 
     # Clean current proxy list from dead proxies (that doesn't respond by timeout)
+    #
+    # @return [Array<ProxyFetcher::Proxy>]
+    #   list of valid proxies
     def cleanup!
-      lock = Mutex.new
-
-      proxies.dup.each_slice(ProxyFetcher.config.pool_size) do |proxy_group|
-        threads = proxy_group.map do |group_proxy|
-          Thread.new(group_proxy, proxies) do |proxy, proxies|
-            lock.synchronize { proxies.delete(proxy) } unless proxy.connectable?
-          end
-        end
-
-        threads.each(&:join)
-      end
-
-      @proxies
+      valid_proxies = BulkProxyValidator.new(@proxies).validate
+      @proxies &= valid_proxies
     end
 
     alias validate! cleanup!
