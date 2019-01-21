@@ -1,26 +1,33 @@
 language: ruby
-before_install: gem install bundler
+cache: bundler
+
+before_install:
+  - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
+  - rvm @global do gem uninstall bundler -a -x -I || true
+  - gem install bundler -v '~> 1.10'
+
 bundler_args: --without yard guard benchmarks
-script: "rake spec"
 env: JRUBY_OPTS="$JRUBY_OPTS --debug"
+
 gemfile:
   - gemfiles/oga.gemfile
   - gemfiles/nokogiri.gemfile
-gemfile:
-  - gemfiles/oga.gemfile
-  - gemfiles/nokogiri.gemfile
+
 rvm:
   - 2.0
   - 2.1
-  - 2.2.4
-  - 2.3.3
-  - 2.4.3
-  - 2.5.0
+  - 2.2
+  - 2.3
+  - 2.4
+  - 2.5
+  - 2.6
   - ruby-head
   - jruby-9.2.1
+
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - rvm: jruby-9.2.1
   exclude:
     - rvm: 2.0
       gemfile: gemfiles/nokogiri.gemfile # Nokogiri doesn't support Ruby 2.0
