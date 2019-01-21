@@ -10,7 +10,7 @@ xdescribe ProxyFetcher::Client do
   before :all do
     ProxyFetcher.configure do |config|
       config.provider = :xroxy
-      config.timeout = 5
+      config.client_timeout = 5
     end
 
     @server = EvilProxy::MITMProxyServer.new Port: 3128, Quiet: true

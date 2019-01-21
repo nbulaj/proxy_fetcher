@@ -5,9 +5,21 @@ module ProxyFetcher
   # with HTTP requests, adapters, custom classes.
   #
   class Configuration
-    # @!attribute timeout
-    #   @return [Integer] HTTP request connection / open timeout
-    attr_accessor :timeout
+    # @!attribute client_timeout
+    #   @return [Integer] HTTP request timeout (connect / open) for [ProxyFetcher::Client]
+    attr_accessor :client_timeout
+
+    # @!attribute provider_proxies_load_timeout
+    #   @return [Integer] HTTP request timeout (connect / open) for loading of proxies list by provider
+    attr_accessor :provider_proxies_load_timeout
+
+    # @!attribute proxy_validation_timeout
+    #   @return [Integer] HTTP request timeout (connect / open) for proxy validation with [ProxyFetcher::ProxyValidator]
+    attr_accessor :proxy_validation_timeout
+
+    # to save compatibility
+    alias timeout client_timeout
+    alias timeout= client_timeout=
 
     # @!attribute pool_size
     #   @return [Integer] proxy validator pool size (max number of threads)
@@ -98,7 +110,10 @@ module ProxyFetcher
       @logger = Logger.new(STDOUT)
       @user_agent = DEFAULT_USER_AGENT
       @pool_size = 10
-      @timeout = 3
+      @client_timeout = 3
+      @provider_proxies_load_timeout = 30
+      @proxy_validation_timeout = 3
+
       @http_client = HTTPClient
       @proxy_validator = ProxyValidator
 

@@ -4,7 +4,14 @@ Reverse Chronological Order:
 
 ## `master`
 
-* Add your changelog here
+* Fix a problem with stuck of proxies list loading.
+
+* Add a possibility to configure different timeouts for different cases:
+  - `client_timeout` - timeout for `ProxyFetcher::Client`.
+  - `provider_proxies_load_timeout` - timeout for loading of proxies list by provider.
+  - `proxy_validation_timeout` - timeout for proxy validation with `ProxyFetcher::ProxyValidator`. 
+  
+  (old option `timeout` sets and returns value of `client_timeout`)
 
 ## `0.8.0` (2018-11-12)
 
