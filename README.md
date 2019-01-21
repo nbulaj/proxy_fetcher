@@ -275,7 +275,9 @@ ProxyFetcher.configure do |config|
   config.logger = Logger.new(STDOUT)
   config.user_agent = ProxyFetcher::Configuration::DEFAULT_USER_AGENT
   config.pool_size = 10
-  config.timeout = 3
+  config.client_timeout = 3
+  config.provider_proxies_load_timeout = 30
+  config.proxy_validation_timeout = 3
   config.http_client = ProxyFetcher::HTTPClient
   config.proxy_validator = ProxyFetcher::ProxyValidator
   config.providers = ProxyFetcher::Configuration.registered_providers
@@ -283,20 +285,9 @@ ProxyFetcher.configure do |config|
 end
 ```
 
-You can change any of the options above. Let's look at this deeper.
+You can change any of the options above.
 
-To change open/read timeout for `cleanup!` and `connectable?` methods you need to change `timeout` options:
-
-```ruby
-ProxyFetcher.configure do |config|
-  config.timeout = 1 # default is 3
-end
-
-manager = ProxyFetcher::Manager.new
-manager.cleanup!
-```
-
-Also you can set your custom User-Agent string:
+For example, you can set your custom User-Agent string:
 
 ```ruby
 ProxyFetcher.configure do |config|
@@ -382,7 +373,7 @@ ProxyFetcher.config.pool_size = 50
 You can experiment with the threads pool size to find an optimal number of maximum threads count for you PC and OS.
 This will definitely give you some performance improvements.
 
-Moreover, the common proxy validation speed depends on `ProxyFetcher.config.timeout` option that is equal
+Moreover, the common proxy validation speed depends on `ProxyFetcher.config.proxy_validation_timeout` option that is equal
 to `3` by default. It means that gem will wait 3 seconds for the server answer to check if particular proxy is connectable.
 You can decrease this option to `1`, for example, and it will heavily increase proxy validation speed (**but remember**
 that some proxies could be connectable, but slow, so with this option you will clear proxy list from the proxies that

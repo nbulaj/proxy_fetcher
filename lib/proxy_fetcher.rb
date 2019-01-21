@@ -54,7 +54,8 @@ module ProxyFetcher
     #   ProxyFetcher.config
     #
     #   #=> #<ProxyFetcher::Configuration:0x0000000241eec8 @user_agent="Mozilla/5.0, ...", @pool_size=10,
-    #           @timeout=3, @http_client=ProxyFetcher::HTTPClient, @proxy_validator=ProxyFetcher::ProxyValidator,
+    #           @client_timeout=3, @proxy_validation_timeout=3, @provider_proxies_load_timeout=30,
+    #           @http_client=ProxyFetcher::HTTPClient, @proxy_validator=ProxyFetcher::ProxyValidator,
     #           @providers=[:free_proxy_list, ...], @adapter=ProxyFetcher::Document::NokogiriAdapter>
     #
     def config

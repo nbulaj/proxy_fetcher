@@ -56,7 +56,7 @@ module ProxyFetcher
         @method = args.fetch(:method).to_s.downcase
         @headers = (args[:headers] || {}).dup
         @payload = args[:payload]
-        @timeout = args.fetch(:timeout, ProxyFetcher.config.timeout)
+        @timeout = args.fetch(:timeout, ProxyFetcher.config.client_timeout)
         @ssl_options = args.fetch(:ssl_options, default_ssl_options)
 
         @proxy = args.fetch(:proxy)

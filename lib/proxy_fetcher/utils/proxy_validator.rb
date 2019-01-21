@@ -28,7 +28,7 @@ module ProxyFetcher
     # @return [ProxyValidator]
     #
     def initialize(proxy_addr, proxy_port)
-      timeout = ProxyFetcher.config.timeout
+      timeout = ProxyFetcher.config.proxy_validation_timeout
 
       @http = HTTP.follow.via(proxy_addr, proxy_port.to_i).timeout(connect: timeout, read: timeout)
     end

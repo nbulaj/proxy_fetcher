@@ -17,6 +17,10 @@ module ProxyFetcher
     #   @return [OpenSSL::SSL::SSLContext] SSL context
     attr_reader :ssl_ctx
 
+    # @!attribute [r] timeout
+    #   @return [Integer] Request timeout
+    attr_reader :timeout
+
     # Fetches resource content by sending HTTP request to it.
     # Synthetic sugar to simplify URIes fetching.
     #
@@ -36,6 +40,7 @@ module ProxyFetcher
     def initialize(url)
       @url = url.to_s
       @http = HTTP.headers(default_headers)
+      @timeout = ProxyFetcher.config.provider_proxies_load_timeout
 
       @ssl_ctx = OpenSSL::SSL::SSLContext.new
       @ssl_ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -47,7 +52,9 @@ module ProxyFetcher
     #   response body
     #
     def fetch
-      @http.get(url, ssl_context: ssl_ctx).body.to_s
+      @http.timeout(connect: timeout, read: timeout)
+           .get(url, ssl_context: ssl_ctx)
+           .body.to_s
     rescue StandardError
       ProxyFetcher.logger.warn("Failed to load proxy list for #{url}")
       ''
