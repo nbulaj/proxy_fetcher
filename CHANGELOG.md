@@ -4,6 +4,10 @@ Reverse Chronological Order:
 
 ## `master`
 
+* Add your description here
+
+## `0.9.0` (2019-01-22)
+
 * Fix a problem with stuck of proxies list loading.
 
 * Add a possibility to configure different timeouts for different cases:
