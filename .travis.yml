@@ -23,11 +23,15 @@ rvm:
   - 2.6
   - ruby-head
   - jruby-9.2.1
+  - truffleruby
 
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-9.2.1
+    - rvm: truffleruby
   exclude:
     - rvm: 2.0
       gemfile: gemfiles/nokogiri.gemfile # Nokogiri doesn't support Ruby 2.0
+    - rvm: truffleruby
+      gemfile: gemfiles/nokogiri.gemfile # Truffle doesn't support Nokogiri
