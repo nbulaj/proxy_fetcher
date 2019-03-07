@@ -74,7 +74,10 @@ module ProxyFetcher
       def build_proxy(*args)
         to_proxy(*args)
       rescue StandardError => error
-        ProxyFetcher.logger.warn("Failed to build Proxy object due to error: #{error.message}")
+        ProxyFetcher.logger.warn(
+          "Failed to build Proxy object for #{self.class.name} due to error: #{error.message}"
+        )
+
         nil
       end
 

@@ -6,6 +6,8 @@ module ProxyFetcher
   module Providers
     # ProxyDocker provider class.
     class ProxyDocker < Base
+      attr_reader :cookie, :token
+
       # Provider URL to fetch proxy list
       def provider_url
         'https://www.proxydocker.com/en/api/proxylist/'
@@ -17,7 +19,7 @@ module ProxyFetcher
 
       def provider_params
         {
-          token: 'GmZyl0OJmmgrWakdzO7AFf6AWfkdledR6xmKvGmwmJg',
+          token: @token,
           country: 'all',
           city: 'all',
           state: 'all',
@@ -31,7 +33,7 @@ module ProxyFetcher
 
       def provider_headers
         {
-          cookie: 'PHPSESSID=7f59558ee58b1e4352c4ab4c2f1a3c11'
+          cookie: @cookie
         }
       end
 
@@ -44,6 +46,8 @@ module ProxyFetcher
       #
       # [NOTE] Doesn't support direct filters
       def load_proxy_list(*)
+        load_dependencies
+
         json = JSON.parse(load_html(provider_url, {}))
         json.fetch('proxies', [])
       rescue JSON::ParserError
@@ -70,6 +74,8 @@ module ProxyFetcher
         end
       end
 
+      private
+
       def types_mapping
         {
           '16' => ProxyFetcher::Proxy::HTTP,
@@ -79,6 +85,24 @@ module ProxyFetcher
           '56' => ProxyFetcher::Proxy::HTTP, # CON25
           '6' => ProxyFetcher::Proxy::HTTP # CON80
         }
+      end
+
+      def load_dependencies
+        client = ProxyFetcher.config.http_client.new('https://www.proxydocker.com')
+        response = client.fetch_with_headers
+
+        @cookie = load_cookie_from(response)
+        @token = load_token_from(response)
+      end
+
+      def load_cookie_from(response)
+        cookie_headers = (response.headers['Set-Cookie'] || [])
+        cookie_headers.join('; ')
+      end
+
+      def load_token_from(response)
+        html = response.body.to_s
+        html[/meta\s+name\s*=["']_token["']\s+content.+["'](.+?)["']\s*>/i, 1]
       end
     end
 

@@ -68,20 +68,31 @@ module ProxyFetcher
     #   response body
     #
     def fetch
-      # TODO: must be more generic
-      response = if method == :post
-                   http.post(url, form: params, ssl_context: ssl_ctx)
-                 else
-                   http.get(url, ssl_context: ssl_ctx)
-                 end
-
+      response = process_http_request
       response.body.to_s
     rescue StandardError => error
-      ProxyFetcher.logger.warn("Failed to load proxy list for #{url} (#{error.message})")
+      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{error.message})")
       ''
     end
 
+    def fetch_with_headers
+      process_http_request
+    rescue StandardError => error
+      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{error.message})")
+       HTTP::Response.new(version: '1.1', status: 500, body: '')
+    end
+
     protected
+
+    def process_http_request(http_method: method, http_params: params)
+      raise ArgumentError, 'wrong http method name!' unless HTTP::Request::METHODS.include?(http_method)
+
+      http.public_send(
+        http_method.to_sym, url,
+        form: http_params,
+        ssl_context: ssl_ctx
+      )
+    end
 
     # Default HTTP client headers
     #

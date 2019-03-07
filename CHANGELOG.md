@@ -6,6 +6,11 @@ Reverse Chronological Order:
 
 * Add your description here
 
+## `0.10.1` (2019-03-07)
+
+* Fix broken ProxyDocker provider.
+* Refactor gem internals.
+
 ## `0.9.0` (2019-01-22)
 
 * Fix a problem with stuck of proxies list loading.
