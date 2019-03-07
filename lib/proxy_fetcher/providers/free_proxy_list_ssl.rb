@@ -5,7 +5,9 @@ module ProxyFetcher
     # FreeProxyListSSL provider class.
     class FreeProxyListSSL < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'https://www.sslproxies.org/'.freeze
+      def provider_url
+        'https://www.sslproxies.org/'
+      end
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
@@ -15,8 +17,8 @@ module ProxyFetcher
       #   Collection of extracted HTML nodes with full proxy info
       #
       # [NOTE] Doesn't support filtering
-      def load_proxy_list(*)
-        doc = load_document(PROVIDER_URL, {})
+      def load_proxy_list(_filters = {})
+        doc = load_document(provider_url, {})
         doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
       end
 

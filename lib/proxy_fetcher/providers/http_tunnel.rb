@@ -5,7 +5,9 @@ module ProxyFetcher
     # HTTPTunnel provider class.
     class HTTPTunnel < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'http://www.httptunnel.ge/ProxyListForFree.aspx'.freeze
+      def provider_url
+        'http://www.httptunnel.ge/ProxyListForFree.aspx'
+      end
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
@@ -14,8 +16,8 @@ module ProxyFetcher
       # @return [Array<ProxyFetcher::Document::Node>]
       #   Collection of extracted HTML nodes with full proxy info
       #
-      def load_proxy_list(*)
-        doc = load_document(PROVIDER_URL)
+      def load_proxy_list(_filters = {})
+        doc = load_document(provider_url)
         doc.xpath('//table[contains(@id, "GridView")]/tr[(count(td)>2)]')
       end
 

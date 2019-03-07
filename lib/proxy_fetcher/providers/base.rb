@@ -7,7 +7,25 @@ module ProxyFetcher
       # Loads proxy provider page content, extract proxy list from it
       # and convert every entry to proxy object.
       def fetch_proxies!(filters = {})
-        load_proxy_list(filters).map { |html_node| to_proxy(html_node) }
+        raw_proxies = load_proxy_list(filters)
+        proxies = raw_proxies.map { |html_node| build_proxy(html_node) }.compact
+        proxies.reject { |proxy| proxy.addr.nil? }
+      end
+
+      def provider_url
+        raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
+      end
+
+      def provider_method
+        :get
+      end
+
+      def provider_params
+        {}
+      end
+
+      def provider_headers
+        {}
       end
 
       # Just synthetic sugar to make it easier to call #fetch_proxies! method.
@@ -17,7 +35,27 @@ module ProxyFetcher
 
       protected
 
-      # Loads HTML document with Nokogiri by the URL combined with custom filters
+      # Loads raw provider HTML with proxies.
+      #
+      # @return [String]
+      #   HTML body
+      #
+      def load_html(url, filters = {})
+        raise ArgumentError, 'filters must be a Hash' if filters && !filters.is_a?(Hash)
+
+        uri = URI.parse(url)
+        # TODO: query for post request?
+        uri.query = URI.encode_www_form(provider_params.merge(filters)) if filters && filters.any?
+
+        ProxyFetcher.config.http_client.fetch(
+          uri.to_s,
+          method: provider_method,
+          headers: provider_headers,
+          params: provider_params
+        )
+      end
+
+      # Loads provider HTML and parses it with internal document object.
       #
       # @param url [String]
       #   URL to fetch
@@ -29,13 +67,15 @@ module ProxyFetcher
       #   ProxyFetcher document object
       #
       def load_document(url, filters = {})
-        raise ArgumentError, 'filters must be a Hash' if filters && !filters.is_a?(Hash)
-
-        uri = URI.parse(url)
-        uri.query = URI.encode_www_form(filters) if filters && filters.any?
-
-        html = ProxyFetcher.config.http_client.fetch(uri.to_s)
+        html = load_html(url, filters)
         ProxyFetcher::Document.parse(html)
+      end
+
+      def build_proxy(*args)
+        to_proxy(*args)
+      rescue StandardError => error
+        ProxyFetcher.logger.warn("Failed to build Proxy object due to error: #{error.message}")
+        nil
       end
 
       # Fetches HTML content by sending HTTP request to the provider URL and

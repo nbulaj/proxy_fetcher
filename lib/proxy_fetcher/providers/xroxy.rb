@@ -5,7 +5,9 @@ module ProxyFetcher
     # XRoxy provider class.
     class XRoxy < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'https://www.xroxy.com/free-proxy-lists/'.freeze
+      def provider_url
+        'https://www.xroxy.com/free-proxy-lists/'
+      end
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
@@ -15,7 +17,7 @@ module ProxyFetcher
       #   Collection of extracted HTML nodes with full proxy info
       #
       def load_proxy_list(filters = { type: 'All_http' })
-        doc = load_document(PROVIDER_URL, filters)
+        doc = load_document(provider_url, filters)
         doc.xpath('//div/table/tbody/tr')
       end
 

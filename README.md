@@ -54,7 +54,7 @@ you can implement your own adapter if it your use-case. Take a look at the [Conf
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.7'
+gem 'proxy_fetcher', '~> 0.10'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -72,7 +72,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.7'
+gem install proxy_fetcher -v '0.10'
 ```
 
 ## Example of usage
@@ -141,8 +141,8 @@ manager.refresh_list! # or manager.fetch!
  #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
-If you need to filter proxy list, for example, by country or response time and selected provider supports filtering with GET params,
-then you can just pass your filters like a simple Ruby hash to the Manager instance:
+If you need to filter proxy list, for example, by country or response time and **selected provider supports filtering**
+with GET params, then you can just pass your filters like a simple Ruby hash to the Manager instance:
 
 ```ruby
 ProxyFetcher.config.providers = :proxy_docker
@@ -153,7 +153,9 @@ manager.proxies
  # => [...]
 ```
 
-If you are using multiple providers, then you can split your filters by proxy provider names:
+**[IMPORTANT]**: All the providers have their own filtering params! So you can't just use something like `country` to
+filter all the proxies by country. If you are using multiple providers, then you can split your filters by proxy
+provider names:
 
 ```ruby
 ProxyFetcher.config.providers = [:proxy_docker, :xroxy]

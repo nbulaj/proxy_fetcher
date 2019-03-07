@@ -7,7 +7,9 @@ module ProxyFetcher
     # GatherProxy provider class.
     class GatherProxy < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'http://www.gatherproxy.com/'.freeze
+      def provider_url
+        'http://www.gatherproxy.com/'
+      end
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
@@ -17,7 +19,7 @@ module ProxyFetcher
       #   Collection of extracted HTML nodes with full proxy info
       #
       def load_proxy_list(*)
-        doc = load_document(PROVIDER_URL)
+        doc = load_document(provider_url)
         doc.xpath('//div[@class="proxy-list"]/table/script')
       end
 

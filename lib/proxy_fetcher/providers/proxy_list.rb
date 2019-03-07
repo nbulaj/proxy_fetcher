@@ -7,7 +7,9 @@ module ProxyFetcher
     # ProxyList provider class.
     class ProxyList < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'https://proxy-list.org/english/index.php'.freeze
+      def provider_url
+        'https://proxy-list.org/english/index.php'
+      end
 
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
@@ -17,7 +19,7 @@ module ProxyFetcher
       #   Collection of extracted HTML nodes with full proxy info
       #
       def load_proxy_list(filters = {})
-        doc = load_document(PROVIDER_URL, filters)
+        doc = load_document(provider_url, filters)
         doc.css('.table-wrap .table ul')
       end
 

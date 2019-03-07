@@ -5,11 +5,13 @@ module ProxyFetcher
     # FreeProxyList provider class.
     class FreeProxyList < Base
       # Provider URL to fetch proxy list
-      PROVIDER_URL = 'https://free-proxy-list.net/'.freeze
+      def provider_url
+        'https://free-proxy-list.net/'
+      end
 
       # [NOTE] Doesn't support filtering
-      def load_proxy_list(*)
-        doc = load_document(PROVIDER_URL, {})
+      def load_proxy_list(_filters = {})
+        doc = load_document(provider_url, {})
         doc.xpath('//table[@id="proxylisttable"]/tbody/tr')
       end
 

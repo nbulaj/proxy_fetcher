@@ -80,6 +80,7 @@ module ProxyFetcher
     #
     def logger
       return @logger if defined?(@logger)
+
       @logger = config.logger || NullLogger.new
     end
 
