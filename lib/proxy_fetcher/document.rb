@@ -17,7 +17,7 @@ module ProxyFetcher
     #   ProxyFetcher document model
     #
     def self.parse(data)
-      new(ProxyFetcher.config.adapter.parse(data))
+      new(ProxyFetcher.config.adapter_class.parse(data))
     end
 
     # Initialize abstract ProxyFetcher HTML Document

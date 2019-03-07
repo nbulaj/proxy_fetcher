@@ -30,7 +30,7 @@ module ProxyFetcher
 
           case name_or_class
           when Symbol, String
-            adapter_name = name_or_class.to_s.capitalize << ADAPTER
+            adapter_name = "#{name_or_class.to_s.capitalize}#{ADAPTER}"
             ProxyFetcher::Document.const_get(adapter_name)
           else
             name_or_class

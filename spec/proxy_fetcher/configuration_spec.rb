@@ -68,7 +68,9 @@ describe ProxyFetcher::Configuration do
         end
       end
 
-      expect { ProxyFetcher.config.adapter = CustomAdapter }
+      ProxyFetcher.config.adapter = CustomAdapter
+
+      expect { ProxyFetcher::Manager.new }
         .to raise_error(ProxyFetcher::Exceptions::AdapterSetupError)
 
       ProxyFetcher.instance_variable_set('@config', old_config)

@@ -35,7 +35,11 @@ module ProxyFetcher
 
     # @!attribute [r] adapter
     #   @return [Object] HTML parser adapter
-    attr_reader :adapter
+    attr_accessor :adapter
+
+    # @!attribute [r] adapter_class
+    #   @return [Object] HTML adapter class
+    attr_reader :adapter_class
 
     # @!attribute [r] http_client
     #   @return [Object] HTTP client class
@@ -120,14 +124,11 @@ module ProxyFetcher
       self.providers = self.class.registered_providers
     end
 
-    # Setups HTML parser adapter for all the proxy providers.
-    #
-    # @param name_or_class [String, Symbol, Class]
-    #   name of the adapter or it's class
-    #
-    def adapter=(name_or_class)
-      @adapter = ProxyFetcher::Document::Adapters.lookup(name_or_class)
-      @adapter.setup!
+    def adapter_class
+      return @adapter_class if defined?(@adapter_class)
+
+      @adapter_class = ProxyFetcher::Document::Adapters.lookup(adapter)
+      @adapter_class.setup!
     end
 
     # Setups collection of providers that will be used to fetch proxies.

@@ -44,7 +44,7 @@ describe ProxyFetcher::Providers::Base do
 
     allow_any_instance_of(HTTP::Client).to receive(:get).and_raise(StandardError)
 
-    expect(logger).to receive(:warn).with(/Failed to load proxy list for http[s:\/]/)
+    expect(logger).to receive(:warn).with(/Failed to process request to http[s:\/]/)
 
     ProxyFetcher::Manager.new
   end
