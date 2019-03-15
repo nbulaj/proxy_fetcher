@@ -124,11 +124,17 @@ module ProxyFetcher
       self.providers = self.class.registered_providers
     end
 
+    def adapter=(value)
+      remove_instance_variable(:@adapter_class) if defined?(@adapter_class)
+      @adapter = value
+    end
+
     def adapter_class
       return @adapter_class if defined?(@adapter_class)
 
       @adapter_class = ProxyFetcher::Document::Adapters.lookup(adapter)
       @adapter_class.setup!
+      @adapter_class
     end
 
     # Setups collection of providers that will be used to fetch proxies.
