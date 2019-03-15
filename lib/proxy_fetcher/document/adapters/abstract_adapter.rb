@@ -53,7 +53,7 @@ module ProxyFetcher
       def self.setup!(*args)
         install_requirements!(*args)
         self
-      rescue LoadError => error
+      rescue LoadError, StandardError => error
         raise Exceptions::AdapterSetupError.new(name, error.message)
       end
     end

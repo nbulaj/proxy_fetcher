@@ -145,7 +145,7 @@ If you need to filter proxy list, for example, by country or response time and *
 with GET params, then you can just pass your filters like a simple Ruby hash to the Manager instance:
 
 ```ruby
-ProxyFetcher.config.providers = :proxy_docker
+ProxyFetcher.config.providers = :xroxy
 
 manager = ProxyFetcher::Manager.new(filters: { country: 'PL', maxtime: '500' })
 manager.proxies
@@ -199,7 +199,7 @@ proxy_fetcher >> proxies.txt # Will download proxies from the default provider, 
 If you need a list of proxies from some specific provider, then you need to pass it's name with `-p` option:
 
 ```bash
-proxy_fetcher -p proxy_docker >> proxies.txt # Will download proxies from the default provider, validate them and write to file
+proxy_fetcher -p xroxy >> proxies.txt # Will download proxies from the default provider, validate them and write to file
 ```
 
 If you need a list of proxies in JSON format just pass a `--json` option to the command:

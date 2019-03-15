@@ -14,7 +14,7 @@ module ProxyFetcher
     end
 
     # Add custom provider to common registry.
-    # Requires proxy provider name ('proxy_docker' for example) and a class
+    # Requires proxy provider name ('xroxy' for example) and a class
     # that implements the parsing logic.
     #
     # @param name [String, Symbol]

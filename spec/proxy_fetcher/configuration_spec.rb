@@ -60,7 +60,7 @@ describe ProxyFetcher::Configuration do
 
   context 'custom HTML parsing adapter' do
     it "fails if adapter can't be installed" do
-      old_config = ProxyFetcher.config.dup
+      old_adapter = ProxyFetcher.config.adapter.dup
 
       class CustomAdapter < ProxyFetcher::Document::AbstractAdapter
         def self.install_requirements!
@@ -70,10 +70,10 @@ describe ProxyFetcher::Configuration do
 
       ProxyFetcher.config.adapter = CustomAdapter
 
-      expect { ProxyFetcher::Manager.new }
+      expect { ProxyFetcher.config.adapter_class }
         .to raise_error(ProxyFetcher::Exceptions::AdapterSetupError)
 
-      ProxyFetcher.instance_variable_set('@config', old_config)
+      ProxyFetcher.config.adapter = old_adapter
     end
   end
 end

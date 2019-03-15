@@ -6,6 +6,10 @@ Reverse Chronological Order:
 
 * Add your description here
 
+## `0.10.2` (2019-03-15)
+
+* Remove ProxyDocker provider (no longer workable)
+
 ## `0.10.1` (2019-03-07)
 
 * Fix broken ProxyDocker provider.
