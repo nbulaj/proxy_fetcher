@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.license = 'MIT'
   gem.required_ruby_version = '>= 2.0.0'
 
-  gem.add_runtime_dependency 'http', '~> 3.0'
+  gem.add_runtime_dependency 'http', '>= 3', '< 5'
 
   gem.add_development_dependency 'rake', '>= 12.0'
   gem.add_development_dependency 'rspec', '~> 3.5'
