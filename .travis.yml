@@ -22,12 +22,12 @@ rvm:
   - 2.5
   - 2.6
   - ruby-head
-  - jruby-9.2.1
+  - jruby-9.2.8
 
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - rvm: jruby-9.2.1
+    - rvm: jruby-9.2.8
     - rvm: truffleruby
   exclude:
     - rvm: 2.0

@@ -6,11 +6,12 @@ require "json"
 require "evil-proxy"
 require "evil-proxy/async"
 
-xdescribe ProxyFetcher::Client do
+describe ProxyFetcher::Client do
   before :all do
     ProxyFetcher.configure do |config|
       config.provider = :xroxy
       config.client_timeout = 5
+      config.logger = ProxyFetcher::NullLogger.new
     end
 
     @server = EvilProxy::MITMProxyServer.new Port: 3128, Quiet: true
@@ -21,31 +22,30 @@ xdescribe ProxyFetcher::Client do
     @server.shutdown
   end
 
+  let(:local_proxy) { ProxyFetcher::Proxy.new(addr: "127.0.0.1", port: 3128, type: "HTTP, HTTPS") }
+
   # Use local proxy server in order to avoid side effects, non-working proxies, etc
   before :each do
-    proxy = ProxyFetcher::Proxy.new(addr: "127.0.0.1", port: 3128, type: "HTTP, HTTPS")
-    ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [proxy])
-    allow_any_instance_of(ProxyFetcher::Providers::Base).to receive(:fetch_proxies!).and_return([proxy])
+    ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [local_proxy])
+    allow_any_instance_of(ProxyFetcher::Providers::Base).to receive(:fetch_proxies).and_return([local_proxy])
   end
 
   context "GET request with the valid proxy" do
     it "successfully returns page content for HTTP" do
-      content = ProxyFetcher::Client.get("http://httpbin.org")
+      content = ProxyFetcher::Client.get("http://httpbin.org/get")
 
       expect(content).not_to be_empty
     end
 
-    it "successfully returns page content for HTTPS" do
-      content = ProxyFetcher::Client.get("https://httpbin.org")
+    # TODO: oh this SSL / MITM proxies ....
+    xit "successfully returns page content for HTTPS" do
+      content = ProxyFetcher::Client.get("https://httpbin.org/get")
 
       expect(content).not_to be_empty
     end
 
     it "successfully returns page content using custom proxy" do
-      manager = ProxyFetcher::Manager.new
-
-      proxy = manager.get! until proxy
-      content = ProxyFetcher::Client.get("http://httpbin.org", options: { proxy: proxy })
+      content = ProxyFetcher::Client.get("http://httpbin.org/get", options: { proxy: local_proxy })
 
       expect(content).not_to be_empty
     end
@@ -80,7 +80,7 @@ xdescribe ProxyFetcher::Client do
 
       json = JSON.parse(content)
 
-      expect(json["data"]).to eq("param=PutValue")
+      expect(json["form"]["param"]).to eq("PutValue")
     end
   end
 
@@ -112,7 +112,7 @@ xdescribe ProxyFetcher::Client do
     end
   end
 
-  context "retries" do
+  xcontext "retries" do
     it "raises an error when reaches max retries limit" do
       allow(ProxyFetcher::Client::Request).to receive(:execute).and_raise(StandardError)
 
@@ -128,7 +128,7 @@ xdescribe ProxyFetcher::Client do
     end
 
     it "refreshes proxy lists if no proxy found" do
-      ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:'@proxies', [])
+      ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:"@proxies", [])
 
       expect { ProxyFetcher::Client.get("http://httpbin.org") }
         .not_to raise_error

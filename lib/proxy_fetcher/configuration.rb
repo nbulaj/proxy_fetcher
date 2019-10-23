@@ -30,7 +30,7 @@ module ProxyFetcher
     attr_accessor :user_agent
 
     # @!attribute [r] logger
-    #   @return [Object] Logger object
+    #   @return [Logger] Logger object
     attr_accessor :logger
 
     # @!attribute [r] adapter

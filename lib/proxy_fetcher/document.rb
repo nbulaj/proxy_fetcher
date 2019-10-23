@@ -36,14 +36,5 @@ module ProxyFetcher
     def xpath(*args)
       backend.xpath(*args).map { |node| backend.proxy_node.new(node) }
     end
-
-    # Searches elements by CSS selector.
-    #
-    # @return [Array<ProxyFetcher::Document::Node>]
-    #   collection of nodes
-    #
-    def css(*args)
-      backend.css(*args).map { |node| backend.proxy_node.new(node) }
-    end
   end
 end

@@ -26,15 +26,6 @@ module ProxyFetcher
         document.xpath(selector)
       end
 
-      # You can override this method in your own adapter class
-      #
-      # @param selector [String]
-      #   CSS selector
-      #
-      def css(selector)
-        document.css(selector)
-      end
-
       # Returns <code>Node</code> class that will handle HTML
       # nodes for particular adapter.
       #
