@@ -14,7 +14,9 @@ describe ProxyFetcher::Client do
       config.logger = ProxyFetcher::NullLogger.new
     end
 
-    @server = EvilProxy::MITMProxyServer.new Port: 3128, Quiet: true
+    quiet = ENV.key?("LOG_MITM") ? ENV["LOG_MITM"] == "false" : true
+
+    @server = EvilProxy::MITMProxyServer.new Port: 3128, Quiet: quiet
     @server.start
   end
 
@@ -72,27 +74,31 @@ describe ProxyFetcher::Client do
     end
   end
 
-  context "PUT request with the valid proxy" do
-    it "successfully returns page content for HTTP" do
-      content = ProxyFetcher::Client.put("http://httpbin.org/put", "param=PutValue")
+  # TODO: EvilProxy incompatible with latest Ruby/Webrick
+  # @see https://github.com/bbtfr/evil-proxy/issues/10
+  if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.6")
+    context "PUT request with the valid proxy" do
+      it "successfully returns page content for HTTP" do
+        content = ProxyFetcher::Client.put("http://httpbin.org/put", "param=PutValue")
 
-      expect(content).not_to be_empty
+        expect(content).not_to be_empty
 
-      json = JSON.parse(content)
+        json = JSON.parse(content)
 
-      expect(json["form"]["param"]).to eq("PutValue")
+        expect(json["form"]["param"]).to eq("PutValue")
+      end
     end
-  end
 
-  context "PATCH request with the valid proxy" do
-    it "successfully returns page content for HTTP" do
-      content = ProxyFetcher::Client.patch("http://httpbin.org/patch", param: "value")
+    context "PATCH request with the valid proxy" do
+      it "successfully returns page content for HTTP" do
+        content = ProxyFetcher::Client.patch("http://httpbin.org/patch", param: "value")
 
-      expect(content).not_to be_empty
+        expect(content).not_to be_empty
 
-      json = JSON.parse(content)
+        json = JSON.parse(content)
 
-      expect(json["form"]["param"]).to eq("value")
+        expect(json["form"]["param"]).to eq("value")
+      end
     end
   end
 
