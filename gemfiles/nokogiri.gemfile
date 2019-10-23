@@ -1,11 +1,13 @@
-source 'https://rubygems.org'
+# frozen_string_literal: true
 
-gemspec path: '../'
+source "https://rubygems.org"
 
-gem 'nokogiri', '~> 1.8'
+gemspec path: "../"
+
+gem "nokogiri", "~> 1.8"
 
 group :test do
-  gem 'coveralls', require: false
-  gem 'evil-proxy', '~> 0.2'
-  gem 'rspec', '~> 3.6'
+  gem "coveralls", require: false
+  gem "evil-proxy", "~> 0.2"
+  gem "rspec", "~> 3.6"
 end

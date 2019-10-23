@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ProxyFetcher::Proxy do
-  let(:proxy) { described_class.new(addr: '192.169.1.1', port: 8080, type: 'HTTP') }
+  let(:proxy) { described_class.new(addr: "192.169.1.1", port: 8080, type: "HTTP") }
 
-  it 'can initialize a new proxy object' do
-    proxy = described_class.new(addr: '192.169.1.1', port: 8080, type: 'HTTP')
+  it "can initialize a new proxy object" do
+    proxy = described_class.new(addr: "192.169.1.1", port: 8080, type: "HTTP")
 
     expect(proxy).not_to be_nil
-    expect(proxy.addr).to eq('192.169.1.1')
+    expect(proxy.addr).to eq("192.169.1.1")
     expect(proxy.port).to eq(8080)
-    expect(proxy.type).to eq('HTTP')
+    expect(proxy.type).to eq("HTTP")
   end
 
-  it 'checks schema' do
+  it "checks schema" do
     proxy.type = ProxyFetcher::Proxy::HTTP
     expect(proxy.http?).to be_truthy
     expect(proxy.https?).to be_falsey
@@ -34,28 +34,28 @@ describe ProxyFetcher::Proxy do
     expect(proxy.ssl?).to be_truthy
   end
 
-  it 'not connectable if IP addr is wrong' do
-    proxy.addr = '192.168.1.0'
+  it "not connectable if IP addr is wrong" do
+    proxy.addr = "192.168.1.0"
     expect(proxy.connectable?).to be_falsey
   end
 
-  it 'not connectable if there are some error during connection request' do
+  it "not connectable if there are some error during connection request" do
     allow_any_instance_of(HTTP::Client).to receive(:head).and_raise(HTTP::TimeoutError)
     expect(proxy.connectable?).to be_falsey
   end
 
-  it 'returns URI::Generic' do
+  it "returns URI::Generic" do
     expect(proxy.uri).to be_a(URI::Generic)
 
     expect(proxy.uri.host).not_to be_empty
     expect(proxy.uri.port).not_to be_nil
   end
 
-  it 'returns URL' do
+  it "returns URL" do
     expect(proxy.url).to be_a(String)
   end
 
-  it 'returns URL with scheme' do
-    expect(proxy.url(scheme: true)).to include('://')
+  it "returns URL with scheme" do
+    expect(proxy.url(scheme: true)).to include("://")
   end
 end

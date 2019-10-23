@@ -55,7 +55,7 @@ module ProxyFetcher
 
     # Pop just first proxy (and back it to the end of the proxy list).
     #
-    # @return [Proxy]
+    # @return [ProxyFetcher::Proxy, NilClass]
     #   proxy object from the list
     #
     def get
@@ -72,7 +72,7 @@ module ProxyFetcher
     # Pop first valid proxy (and back it to the end of the proxy list)
     # Invalid proxies will be removed from the list
     #
-    # @return [Proxy]
+    # @return [ProxyFetcher::Proxy, NilClass]
     #   proxy object from the list
     #
     def get!

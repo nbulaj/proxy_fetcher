@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ProxyFetcher::Providers::FreeProxyList do
   before :all do
@@ -9,5 +9,5 @@ describe ProxyFetcher::Providers::FreeProxyList do
     end
   end
 
-  it_behaves_like 'a manager'
+  it_behaves_like "a manager"
 end

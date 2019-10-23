@@ -29,10 +29,10 @@ module ProxyFetcher
 
     # Proxy types
     TYPES = [
-      HTTP = 'HTTP'.freeze,
-      HTTPS = 'HTTPS'.freeze,
-      SOCKS4 = 'SOCKS4'.freeze,
-      SOCKS5 = 'SOCKS5'.freeze
+      HTTP = "HTTP".freeze,
+      HTTPS = "HTTPS".freeze,
+      SOCKS4 = "SOCKS4".freeze,
+      SOCKS5 = "SOCKS5".freeze
     ].freeze
 
     # Proxy type predicates (#socks4?, #https?)

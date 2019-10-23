@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-SimpleCov.add_filter 'spec'
-SimpleCov.add_filter 'version'
+require "simplecov"
+SimpleCov.add_filter "spec"
+SimpleCov.add_filter "version"
 
-if ENV['CI'] || ENV['TRAVIS'] || ENV['COVERALLS'] || ENV['JENKINS_URL']
-  require 'coveralls'
+if ENV["CI"] || ENV["TRAVIS"] || ENV["COVERALLS"] || ENV["JENKINS_URL"]
+  require "coveralls"
   Coveralls.wear!
 else
   SimpleCov.start
 end
 
-require 'bundler/setup'
+require "bundler/setup"
 Bundler.setup
 
-require 'proxy_fetcher'
+require "proxy_fetcher"
 
-Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
+Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
 
-adapter = ENV['BUNDLE_GEMFILE'][/.+\/(.+)\.gemfile/i, 1] || :nokogiri
+adapter = ENV["BUNDLE_GEMFILE"][%r{.+/(.+)\.gemfile}i, 1] || :nokogiri
 puts "Configured adapter: '#{adapter}'"
 
 ProxyFetcher.configure do |config|
@@ -26,5 +26,5 @@ ProxyFetcher.configure do |config|
 end
 
 RSpec.configure do |config|
-  config.order = 'random'
+  config.order = "random"
 end

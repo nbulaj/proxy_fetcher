@@ -6,11 +6,14 @@ module ProxyFetcher
     class Base
       # Loads proxy provider page content, extract proxy list from it
       # and convert every entry to proxy object.
-      def fetch_proxies!(filters = {})
+      def fetch_proxies(filters = {})
         raw_proxies = load_proxy_list(filters)
         proxies = raw_proxies.map { |html_node| build_proxy(html_node) }.compact
         proxies.reject { |proxy| proxy.addr.nil? }
       end
+
+      # For retro-compatibility
+      alias fetch_proxies! fetch_proxies
 
       def provider_url
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
@@ -24,8 +27,15 @@ module ProxyFetcher
         {}
       end
 
+      # @return [Hash]
+      #   Provider headers required to fetch the proxy list
+      #
       def provider_headers
         {}
+      end
+
+      def xpath
+        raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end
 
       # Just synthetic sugar to make it easier to call #fetch_proxies! method.
@@ -41,7 +51,7 @@ module ProxyFetcher
       #   HTML body
       #
       def load_html(url, filters = {})
-        raise ArgumentError, 'filters must be a Hash' if filters && !filters.is_a?(Hash)
+        raise ArgumentError, "filters must be a Hash" if filters && !filters.is_a?(Hash)
 
         uri = URI.parse(url)
         # TODO: query for post request?
@@ -71,27 +81,26 @@ module ProxyFetcher
         ProxyFetcher::Document.parse(html)
       end
 
-      def build_proxy(*args)
-        to_proxy(*args)
-      rescue StandardError => error
-        ProxyFetcher.logger.warn(
-          "Failed to build Proxy object for #{self.class.name} due to error: #{error.message}"
-        )
-
-        nil
-      end
-
       # Fetches HTML content by sending HTTP request to the provider URL and
       # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
       # to return all the proxy entries (HTML nodes).
       #
-      # Abstract method. Must be implemented in a descendant class
+      # @return [Array<ProxyFetcher::Document::Node>]
+      #   Collection of extracted HTML nodes with full proxy info
       #
-      # @return [Array<Document::Node>]
-      #   list of proxy elements from the providers HTML content
-      #
-      def load_proxy_list(*)
-        raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
+      def load_proxy_list(filters = {})
+        doc = load_document(provider_url, filters)
+        doc.xpath(xpath)
+      end
+
+      def build_proxy(*args)
+        to_proxy(*args)
+      rescue StandardError => e
+        ProxyFetcher.logger.warn(
+          "Failed to build Proxy object for #{self.class.name} due to error: #{e.message}"
+        )
+
+        nil
       end
 
       # Convert HTML element with proxy info to ProxyFetcher::Proxy instance.

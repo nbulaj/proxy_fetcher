@@ -6,7 +6,7 @@ module ProxyFetcher
     class NokogiriAdapter < AbstractAdapter
       # Requires Nokogiri gem to the application.
       def self.install_requirements!
-        require 'nokogiri'
+        require "nokogiri"
       end
 
       # Parses raw HTML content with specific gem.

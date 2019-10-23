@@ -152,7 +152,7 @@ module ProxyFetcher
       #
       def default_headers
         {
-          'User-Agent' => ProxyFetcher.config.user_agent
+          "User-Agent" => ProxyFetcher.config.user_agent
         }
       end
 

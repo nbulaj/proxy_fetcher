@@ -42,7 +42,7 @@ module ProxyFetcher
       #   node
       #
       def proxy_node
-        self.class.const_get('Node')
+        self.class.const_get("Node")
       end
 
       # Installs adapter requirements.
@@ -53,8 +53,8 @@ module ProxyFetcher
       def self.setup!(*args)
         install_requirements!(*args)
         self
-      rescue LoadError, StandardError => error
-        raise Exceptions::AdapterSetupError.new(name, error.message)
+      rescue LoadError, StandardError => e
+        raise Exceptions::AdapterSetupError.new(name, e.message)
       end
     end
   end
