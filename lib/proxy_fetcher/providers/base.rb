@@ -47,18 +47,29 @@ module ProxyFetcher
 
       # Loads raw provider HTML with proxies.
       #
+      # @param url [String]
+      #   Provider URL
+      #
+      # @param filters [#to_h]
+      #   Provider filters (Hash-like object)
+      #
       # @return [String]
-      #   HTML body
+      #   HTML body from the response
       #
       def load_html(url, filters = {})
-        raise ArgumentError, "filters must be a Hash" if filters && !filters.is_a?(Hash)
+        unless filters.respond_to?(:to_h)
+          raise ArgumentError, "filters must be a Hash or respond to #to_h"
+        end
 
-        uri = URI.parse(url)
-        # TODO: query for post request?
-        uri.query = URI.encode_www_form(provider_params.merge(filters)) if filters && filters.any?
+        if filters&.any?
+          # TODO: query for post request?
+          uri = URI.parse(url)
+          uri.query = URI.encode_www_form(provider_params.merge(filters.to_h))
+          url = uri.to_s
+        end
 
         ProxyFetcher.config.http_client.fetch(
-          uri.to_s,
+          url,
           method: provider_method,
           headers: provider_headers,
           params: provider_params

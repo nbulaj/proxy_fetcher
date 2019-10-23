@@ -6,7 +6,7 @@ module ProxyFetcher
   # URL to check if proxy can be used (aka connectable?).
   class ProxyValidator
     # Default URL that will be used to check if proxy can be used.
-    URL_TO_CHECK = "https://google.com".freeze
+    URL_TO_CHECK = "https://google.com"
 
     # Short variant to validate proxy.
     #

@@ -45,7 +45,28 @@ module ProxyFetcher
       #
       def parse_type(html_node)
         https = html_node.content_at("td[6]")
-        https && https.casecmp("yes").zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
+        # frozen_string_literal: true
+        # FreeProxyList provider class.
+        # Provider URL to fetch proxy list
+        # [NOTE] Doesn't support filtering
+        # Converts HTML node (entry of N tags) to <code>ProxyFetcher::Proxy</code>
+        # object.
+        #
+        # @param html_node [Object]
+        #   HTML node from the <code>ProxyFetcher::Document</code> DOM model.
+        #
+        # @return [ProxyFetcher::Proxy]
+        #   Proxy object
+        #
+        # Parses HTML node to extract proxy type.
+        #
+        # @param html_node [Object]
+        #   HTML node from the <code>ProxyFetcher::Document</code> DOM model.
+        #
+        # @return [String]
+        #   Proxy type
+        #
+        https&.casecmp("yes")&.zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
       end
     end
 
