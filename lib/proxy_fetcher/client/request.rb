@@ -50,7 +50,7 @@ module ProxyFetcher
       # @return [Request]
       #
       def initialize(args)
-        raise ArgumentError, 'args must be a Hash!' unless args.is_a?(Hash)
+        raise ArgumentError, "args must be a Hash!" unless args.is_a?(Hash)
 
         @url = args.fetch(:url)
         @method = args.fetch(:method).to_s.downcase
@@ -86,9 +86,9 @@ module ProxyFetcher
       #
       def build_http_client
         HTTP.via(proxy.addr, proxy.port.to_i)
-            .headers(headers)
-            .timeout(connect: timeout, read: timeout)
-            .follow(max_hops: max_redirects)
+          .headers(headers)
+          .timeout(connect: timeout, read: timeout)
+          .follow(max_hops: max_redirects)
       end
 
       # Default SSL options that will be used for connecting to resources

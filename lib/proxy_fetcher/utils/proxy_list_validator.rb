@@ -34,7 +34,9 @@ module ProxyFetcher
             proxy = target_proxies_lock.synchronize { target_proxies.shift }
             break unless proxy
 
-            connectable_proxies_lock.synchronize { connectable_proxies << proxy } if proxy.connectable?
+            if proxy.connectable?
+              connectable_proxies_lock.synchronize { connectable_proxies << proxy }
+            end
           end
         end
       end

@@ -13,7 +13,7 @@ module ProxyFetcher
     # <code>ProxyFetcher::Document::AbstractAdapter</code>.
     class Adapters
       # Adapters class name suffix
-      ADAPTER = 'Adapter'.freeze
+      ADAPTER = "Adapter"
       private_constant :ADAPTER
 
       class << self

@@ -128,7 +128,11 @@ module ProxyFetcher
       #
       def request_with_payload(method, url, payload, headers, options)
         with_proxy_for(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(payload: payload, proxy: options.fetch(:proxy, proxy), headers: default_headers.merge(headers))
+          opts = options.merge(
+            payload: payload,
+            proxy: options.fetch(:proxy, proxy),
+            headers: default_headers.merge(headers)
+          )
 
           Request.execute(url: url, method: method, **opts)
         end
@@ -138,7 +142,10 @@ module ProxyFetcher
       #
       def request_without_payload(method, url, headers, options)
         with_proxy_for(url, options.fetch(:max_retries, 1000)) do |proxy|
-          opts = options.merge(proxy: options.fetch(:proxy, proxy), headers: default_headers.merge(headers))
+          opts = options.merge(
+            proxy: options.fetch(:proxy, proxy),
+            headers: default_headers.merge(headers)
+          )
 
           Request.execute(url: url, method: method, **opts)
         end
@@ -152,7 +159,7 @@ module ProxyFetcher
       #
       def default_headers
         {
-          'User-Agent' => ProxyFetcher.config.user_agent
+          "User-Agent" => ProxyFetcher.config.user_agent
         }
       end
 

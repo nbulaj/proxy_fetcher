@@ -6,7 +6,7 @@ module ProxyFetcher
     class OgaAdapter < AbstractAdapter
       # Requires Oga gem to the application.
       def self.install_requirements!
-        require 'oga'
+        require "oga"
       end
 
       # Parses raw HTML content with specific gem.

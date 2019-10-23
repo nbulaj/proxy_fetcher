@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'Multiple proxy providers' do
+describe "Multiple proxy providers" do
   before { ProxyFetcher.config.reset! }
   after { ProxyFetcher.config.reset! }
 
-  it 'combine proxies from multiple providers' do
-    proxy_stub = ProxyFetcher::Proxy.new(addr: '192.168.1.1', port: 8080)
+  it "combine proxies from multiple providers" do
+    proxy_stub = ProxyFetcher::Proxy.new(addr: "192.168.1.1", port: 8080)
 
     # Each proxy provider will return 2 proxies
     ProxyFetcher::Configuration.providers_registry.providers.each do |_name, klass|

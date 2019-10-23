@@ -6,19 +6,11 @@ module ProxyFetcher
     class HTTPTunnel < Base
       # Provider URL to fetch proxy list
       def provider_url
-        'http://www.httptunnel.ge/ProxyListForFree.aspx'
+        "http://www.httptunnel.ge/ProxyListForFree.aspx"
       end
 
-      # Fetches HTML content by sending HTTP request to the provider URL and
-      # parses the document (built as abstract <code>ProxyFetcher::Document</code>)
-      # to return all the proxy entries (HTML nodes).
-      #
-      # @return [Array<ProxyFetcher::Document::Node>]
-      #   Collection of extracted HTML nodes with full proxy info
-      #
-      def load_proxy_list(_filters = {})
-        doc = load_document(provider_url)
-        doc.xpath('//table[contains(@id, "GridView")]/tr[(count(td)>2)]')
+      def xpath
+        '//table[contains(@id, "GridView")]/tr[(count(td)>2)]'
       end
 
       # Converts HTML node (entry of N tags) to <code>ProxyFetcher::Proxy</code>
@@ -53,7 +45,7 @@ module ProxyFetcher
       #   URI object
       #
       def parse_proxy_uri(html_node)
-        full_addr = html_node.content_at('td[1]')
+        full_addr = html_node.content_at("td[1]")
         URI.parse("http://#{full_addr}")
       end
 
@@ -66,7 +58,7 @@ module ProxyFetcher
       #   Country code
       #
       def parse_country(html_node)
-        html_node.find('.//img').attr('title')
+        html_node.find(".//img").attr("title")
       end
 
       # Parses HTML node to extract proxy anonymity level.
@@ -78,14 +70,14 @@ module ProxyFetcher
       #   Anonymity level
       #
       def parse_anonymity(html_node)
-        transparency = html_node.content_at('td[5]').to_sym
+        transparency = html_node.content_at("td[5]").to_sym
 
         {
-          A: 'Anonymous',
-          E: 'Elite',
-          T: 'Transparent',
-          U: 'Unknown'
-        }.fetch(transparency, 'Unknown')
+          A: "Anonymous",
+          E: "Elite",
+          T: "Transparent",
+          U: "Unknown"
+        }.fetch(transparency, "Unknown")
       end
     end
 

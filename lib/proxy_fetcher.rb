@@ -1,44 +1,44 @@
 # frozen_string_literal: true
 
-require 'uri'
-require 'http'
-require 'logger'
+require "uri"
+require "http"
+require "logger"
 
-require File.dirname(__FILE__) + '/proxy_fetcher/version'
+require File.dirname(__FILE__) + "/proxy_fetcher/version"
 
-require File.dirname(__FILE__) + '/proxy_fetcher/exceptions'
-require File.dirname(__FILE__) + '/proxy_fetcher/configuration'
-require File.dirname(__FILE__) + '/proxy_fetcher/configuration/providers_registry'
-require File.dirname(__FILE__) + '/proxy_fetcher/proxy'
-require File.dirname(__FILE__) + '/proxy_fetcher/manager'
-require File.dirname(__FILE__) + '/proxy_fetcher/null_logger'
+require File.dirname(__FILE__) + "/proxy_fetcher/exceptions"
+require File.dirname(__FILE__) + "/proxy_fetcher/configuration"
+require File.dirname(__FILE__) + "/proxy_fetcher/configuration/providers_registry"
+require File.dirname(__FILE__) + "/proxy_fetcher/proxy"
+require File.dirname(__FILE__) + "/proxy_fetcher/manager"
+require File.dirname(__FILE__) + "/proxy_fetcher/null_logger"
 
-require File.dirname(__FILE__) + '/proxy_fetcher/utils/http_client'
-require File.dirname(__FILE__) + '/proxy_fetcher/utils/proxy_validator'
-require File.dirname(__FILE__) + '/proxy_fetcher/utils/proxy_list_validator'
-require File.dirname(__FILE__) + '/proxy_fetcher/client/client'
-require File.dirname(__FILE__) + '/proxy_fetcher/client/request'
-require File.dirname(__FILE__) + '/proxy_fetcher/client/proxies_registry'
+require File.dirname(__FILE__) + "/proxy_fetcher/utils/http_client"
+require File.dirname(__FILE__) + "/proxy_fetcher/utils/proxy_validator"
+require File.dirname(__FILE__) + "/proxy_fetcher/utils/proxy_list_validator"
+require File.dirname(__FILE__) + "/proxy_fetcher/client/client"
+require File.dirname(__FILE__) + "/proxy_fetcher/client/request"
+require File.dirname(__FILE__) + "/proxy_fetcher/client/proxies_registry"
 
-require File.dirname(__FILE__) + '/proxy_fetcher/document'
-require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters'
-require File.dirname(__FILE__) + '/proxy_fetcher/document/node'
-require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/abstract_adapter'
-require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/nokogiri_adapter'
-require File.dirname(__FILE__) + '/proxy_fetcher/document/adapters/oga_adapter'
+require File.dirname(__FILE__) + "/proxy_fetcher/document"
+require File.dirname(__FILE__) + "/proxy_fetcher/document/adapters"
+require File.dirname(__FILE__) + "/proxy_fetcher/document/node"
+require File.dirname(__FILE__) + "/proxy_fetcher/document/adapters/abstract_adapter"
+require File.dirname(__FILE__) + "/proxy_fetcher/document/adapters/nokogiri_adapter"
+require File.dirname(__FILE__) + "/proxy_fetcher/document/adapters/oga_adapter"
 
 ##
 # Ruby / JRuby lib for managing proxies
 module ProxyFetcher
   # ProxyFetcher providers namespace
   module Providers
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/base'
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/free_proxy_list'
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/free_proxy_list_ssl'
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/gather_proxy'
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/http_tunnel'
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/proxy_list'
-    require File.dirname(__FILE__) + '/proxy_fetcher/providers/xroxy'
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/base"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list_ssl"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/gather_proxy"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/http_tunnel"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxy_list"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/xroxy"
   end
 
   # Main ProxyFetcher module.
@@ -75,7 +75,7 @@ module ProxyFetcher
 
     # Returns ProxyFetcher logger instance.
     #
-    # @return [Logger, NullLogger] logger object
+    # @return [Logger, ProxyFetcher::NullLogger] logger object
     #
     def logger
       return @logger if defined?(@logger)

@@ -6,15 +6,20 @@ module ProxyFetcher
   #
   class Configuration
     # @!attribute client_timeout
-    #   @return [Integer] HTTP request timeout (connect / open) for [ProxyFetcher::Client]
+    #   @return [Integer]
+    #     HTTP request timeout (connect / open) for [ProxyFetcher::Client]
     attr_accessor :client_timeout
 
     # @!attribute provider_proxies_load_timeout
-    #   @return [Integer] HTTP request timeout (connect / open) for loading of proxies list by provider
+    #   @return [Integer]
+    #     HTTP request timeout (connect / open) for loading
+    #     of proxies list by provider
     attr_accessor :provider_proxies_load_timeout
 
     # @!attribute proxy_validation_timeout
-    #   @return [Integer] HTTP request timeout (connect / open) for proxy validation with [ProxyFetcher::ProxyValidator]
+    #   @return [Integer]
+    #     HTTP request timeout (connect / open) for proxy
+    #     validation with [ProxyFetcher::ProxyValidator]
     attr_accessor :proxy_validation_timeout
 
     # to save compatibility
@@ -30,16 +35,12 @@ module ProxyFetcher
     attr_accessor :user_agent
 
     # @!attribute [r] logger
-    #   @return [Object] Logger object
+    #   @return [Logger] Logger object
     attr_accessor :logger
 
     # @!attribute [r] adapter
     #   @return [Object] HTML parser adapter
-    attr_accessor :adapter
-
-    # @!attribute [r] adapter_class
-    #   @return [Object] HTML adapter class
-    attr_reader :adapter_class
+    attr_reader :adapter
 
     # @!attribute [r] http_client
     #   @return [Object] HTTP client class
@@ -58,8 +59,8 @@ module ProxyFetcher
     #
     # Default is Google Chrome 60, but can be changed in <code>ProxyFetcher.config</code>.
     #
-    DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 ' \
-                         '(KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36'.freeze
+    DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 " \
+                         "(KHTML, like Gecko) Chrome/60.0.3112 Safari/537.36"
 
     # HTML parser adapter name.
     #

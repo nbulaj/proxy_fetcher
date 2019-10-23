@@ -70,22 +70,24 @@ module ProxyFetcher
     def fetch
       response = process_http_request
       response.body.to_s
-    rescue StandardError => error
-      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{error.message})")
-      ''
+    rescue StandardError => e
+      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{e.message})")
+      ""
     end
 
     def fetch_with_headers
       process_http_request
-    rescue StandardError => error
-      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{error.message})")
-       HTTP::Response.new(version: '1.1', status: 500, body: '')
+    rescue StandardError => e
+      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{e.message})")
+      HTTP::Response.new(version: "1.1", status: 500, body: "")
     end
 
     protected
 
     def process_http_request(http_method: method, http_params: params)
-      raise ArgumentError, 'wrong http method name!' unless HTTP::Request::METHODS.include?(http_method)
+      unless HTTP::Request::METHODS.include?(http_method)
+        raise ArgumentError, "'#{http_method}' is a wrong HTTP method name!"
+      end
 
       http.public_send(
         http_method.to_sym, url,
@@ -101,7 +103,7 @@ module ProxyFetcher
     #
     def default_headers
       {
-        'User-Agent' => ProxyFetcher.config.user_agent
+        "User-Agent" => ProxyFetcher.config.user_agent
       }
     end
   end

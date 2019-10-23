@@ -13,7 +13,7 @@ module ProxyFetcher
       # @return [WrongCustomClass]
       #
       def initialize(klass, methods)
-        required_methods = Array(methods).join(', ')
+        required_methods = Array(methods).join(", ")
         super("#{klass} must respond to [#{required_methods}] class methods!")
       end
     end
@@ -53,7 +53,7 @@ module ProxyFetcher
       # @return [MaximumRedirectsReached]
       #
       def initialize(*)
-        super('maximum redirects reached')
+        super("maximum redirects reached")
       end
     end
 
@@ -66,7 +66,7 @@ module ProxyFetcher
       # @return [MaximumRetriesReached]
       #
       def initialize(*)
-        super('reached the maximum number of retries')
+        super("reached the maximum number of retries")
       end
     end
 
@@ -95,7 +95,7 @@ module ProxyFetcher
         super(<<-MSG.strip.squeeze
           you need to specify adapter for HTML parsing: ProxyFetcher.config.adapter = :nokogiri.
           You can use one of the predefined adapters (:nokogiri or :oga) or your own implementation.
-          MSG
+        MSG
         )
       end
     end
@@ -111,7 +111,7 @@ module ProxyFetcher
       # @return [AdapterSetupError]
       #
       def initialize(adapter_name, error)
-        adapter = demodulize(adapter_name.gsub('Adapter', ''))
+        adapter = demodulize(adapter_name.gsub("Adapter", ""))
 
         super("can't setup '#{adapter}' adapter during the following error:\n\t#{error}'")
       end
@@ -127,7 +127,7 @@ module ProxyFetcher
       #
       def demodulize(path)
         path = path.to_s
-        index = path.rindex('::')
+        index = path.rindex("::")
 
         index ? path[(index + 2)..-1] : path
       end

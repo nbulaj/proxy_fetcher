@@ -26,15 +26,6 @@ module ProxyFetcher
         document.xpath(selector)
       end
 
-      # You can override this method in your own adapter class
-      #
-      # @param selector [String]
-      #   CSS selector
-      #
-      def css(selector)
-        document.css(selector)
-      end
-
       # Returns <code>Node</code> class that will handle HTML
       # nodes for particular adapter.
       #
@@ -42,7 +33,7 @@ module ProxyFetcher
       #   node
       #
       def proxy_node
-        self.class.const_get('Node')
+        self.class.const_get("Node")
       end
 
       # Installs adapter requirements.
@@ -53,8 +44,8 @@ module ProxyFetcher
       def self.setup!(*args)
         install_requirements!(*args)
         self
-      rescue LoadError, StandardError => error
-        raise Exceptions::AdapterSetupError.new(name, error.message)
+      rescue LoadError, StandardError => e
+        raise Exceptions::AdapterSetupError.new(name, e.message)
       end
     end
   end
