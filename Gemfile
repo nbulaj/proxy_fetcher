@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "nokogiri", "~> 1.8"
-gem "oga", "~> 2.0"
+gem "oga", "~> 3.0"
 gem "rubocop", "~> 0.74"
 
 group :test do
