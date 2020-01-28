@@ -41,8 +41,12 @@ module ProxyFetcher
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/xroxy"
   end
 
+  @__config_access_lock__ = Mutex.new
+  @__config_definition_lock__ = Mutex.new
+
   # Main ProxyFetcher module.
   class << self
+
     ##
     # Returns ProxyFetcher configuration.
     #
@@ -58,7 +62,9 @@ module ProxyFetcher
     #           @providers=[:free_proxy_list, ...], @adapter=ProxyFetcher::Document::NokogiriAdapter>
     #
     def config
-      @config ||= ProxyFetcher::Configuration.new
+      @__config_definition_lock__.synchronize do
+        @config ||= ProxyFetcher::Configuration.new
+      end
     end
 
     ##
@@ -70,7 +76,7 @@ module ProxyFetcher
     #   Configuration object.
     #
     def configure
-      yield config
+      @__config_access_lock__.synchronize { yield config }
     end
 
     # Returns ProxyFetcher logger instance.

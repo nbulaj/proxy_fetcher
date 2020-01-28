@@ -6,6 +6,15 @@ Reverse Chronological Order:
 
 * Add your description here
 
+## `0.12.0` (2020-01-28)
+
+* Fix XRoxy provider
+* Fix multi-threading issues with config and adapter
+
+## `0.11.0` (2019-10-24)
+
+* Big gem refactoring
+
 ## `0.10.2` (2019-03-15)
 
 * Remove ProxyDocker provider (no longer workable)

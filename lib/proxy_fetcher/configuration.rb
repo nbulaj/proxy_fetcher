@@ -39,7 +39,7 @@ module ProxyFetcher
     attr_accessor :logger
 
     # @!attribute [r] adapter
-    #   @return [Object] HTML parser adapter
+    #   @return [#to_s] HTML parser adapter
     attr_reader :adapter
 
     # @!attribute [r] http_client
@@ -67,6 +67,8 @@ module ProxyFetcher
     # Default is Nokogiri, but can be changed in <code>ProxyFetcher.config</code>.
     #
     DEFAULT_ADAPTER = :nokogiri
+
+    @__adapter_lock__ = Mutex.new
 
     class << self
       # Registry for handling proxy providers.
@@ -131,11 +133,13 @@ module ProxyFetcher
     end
 
     def adapter_class
-      return @adapter_class if defined?(@adapter_class)
+      self.class.instance_variable_get(:@__adapter_lock__).synchronize do
+        return @adapter_class if defined?(@adapter_class)
 
-      @adapter_class = ProxyFetcher::Document::Adapters.lookup(adapter)
-      @adapter_class.setup!
-      @adapter_class
+        @adapter_class = ProxyFetcher::Document::Adapters.lookup(adapter)
+        @adapter_class.setup!
+        @adapter_class
+      end
     end
 
     # Setups collection of providers that will be used to fetch proxies.
