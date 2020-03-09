@@ -51,7 +51,7 @@ module ProxyFetcher
     attr_reader :proxy_validator
 
     # @!attribute [r] providers
-    #   @return [Array<String>, Array<Symbol>] proxy providers list to be used
+    #   @return [Array<String, Symbol>] proxy providers list to be used
     attr_reader :providers
 
     # User-Agent string that will be used by the ProxyFetcher HTTP client (to
@@ -95,7 +95,7 @@ module ProxyFetcher
 
       # Returns registered providers names.
       #
-      # @return [Array<String>, Array<Symbol>]
+      # @return [Array<String, Symbol>]
       #   registered providers names
       #
       def registered_providers
@@ -144,7 +144,7 @@ module ProxyFetcher
 
     # Setups collection of providers that will be used to fetch proxies.
     #
-    # @param value [String, Symbol, Array<String>, Array<Symbol>]
+    # @param value [String, Symbol, Array<String, Symbol>]
     #   provider names
     #
     def providers=(value)
