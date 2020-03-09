@@ -104,5 +104,17 @@ module ProxyFetcher
         URI::Generic.build(host: addr, port: port).to_s
       end
     end
+
+    def ==(other)
+      other.is_a?(Proxy) && addr == other.addr && port == other.port
+    end
+
+    def eql?(other)
+      hash.eql?(other.hash)
+    end
+
+    def hash
+      [addr.hash, port.hash].hash
+    end
   end
 end

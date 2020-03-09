@@ -54,7 +54,7 @@ you can implement your own adapter if it your use-case. Take a look at the [Conf
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.10'
+gem 'proxy_fetcher', '~> 0.13'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -72,7 +72,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.10'
+gem install proxy_fetcher -v '0.13'
 ```
 
 ## Example of usage
@@ -80,11 +80,11 @@ gem install proxy_fetcher -v '0.10'
 ### In Ruby application
 
 By default ProxyFetcher uses all the available proxy providers. To get current proxy list without validation you
-need to initialize an instance of `ProxyFetcher::Manager` class. During this process ProxyFetcher will automatically load
-and parse all the proxies:
+need to initialize an instance of `ProxyFetcher::Manager` class. By default ProxyFetcher will automatically load
+and parse all the proxies from all available sources:
 
 ```ruby
-manager = ProxyFetcher::Manager.new # will immediately load proxy list from the server
+manager = ProxyFetcher::Manager.new # will immediately load proxy list from the servers
 manager.proxies
 
  #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA",
@@ -99,6 +99,27 @@ manager = ProxyFetcher::Manager.new(refresh: false) # just initialize class inst
 manager.proxies
 
  #=> []
+```
+
+Also you could use ProxyFetcher to load proxy lists from local files if you have such:
+
+```ruby
+manager = ProxyFetcher::Manager.new(file: "/home/dev/proxies.txt", refresh: false)
+
+# or
+
+manager = ProxyFetcher::Manager.from_file(file: "/home/dev/proxies.txt", refresh: false)
+
+# or
+
+manager = ProxyFetcher::Manager.new(
+  files: Dir.glob("/home/dev/proxies/**/*.txt"),
+  refresh: false
+)
+manager.proxies
+
+ #=> [#<ProxyFetcher::Proxy:0x00000002879680 @addr="97.77.104.22", @port=3128, @country="USA",
+ #     @response_time=5217, @type="HTTP", @anonymity="High">, ... ]
 ```
 
 `ProxyFetcher::Manager` class is very helpful when you need to manipulate and manager proxies. To get the proxy

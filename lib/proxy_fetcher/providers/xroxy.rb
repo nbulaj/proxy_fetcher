@@ -24,12 +24,12 @@ module ProxyFetcher
       #
       def to_proxy(html_node)
         ProxyFetcher::Proxy.new.tap do |proxy|
-          proxy.addr = html_node.content_at("td[2]")
-          proxy.port = Integer(html_node.content_at("td[3]").gsub(/^0+/, ""))
-          proxy.anonymity = html_node.content_at("td[4]")
-          proxy.country = html_node.content_at("td[6]")
-          proxy.response_time = Integer(html_node.content_at("td[7]"))
-          proxy.type = html_node.content_at("td[4]")
+          proxy.addr = html_node.content_at("td[1]")
+          proxy.port = Integer(html_node.content_at("td[2]").gsub(/^0+/, ""))
+          proxy.anonymity = html_node.content_at("td[3]")
+          proxy.country = html_node.content_at("td[5]")
+          proxy.response_time = Integer(html_node.content_at("td[6]"))
+          proxy.type = html_node.content_at("td[3]")
         end
       end
     end

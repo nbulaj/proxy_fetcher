@@ -3,6 +3,16 @@
 module ProxyFetcher
   # ProxyFetcher Manager class for interacting with proxy lists from various providers.
   class Manager
+    REFRESHER_LOCK = Mutex.new
+
+    class << self
+      def from_files(files, **options)
+        new(**options.merge(files: Array(files)))
+      end
+
+      alias from_file from_files
+    end
+
     # @!attribute [r] proxies
     #   @return [Array<ProxyFetcher::Proxy>] An array of proxies
     attr_reader :proxies
@@ -14,14 +24,17 @@ module ProxyFetcher
     #
     # @return [Manager]
     #
-    def initialize(refresh: true, validate: false, filters: {})
-      if refresh
-        refresh_list!(filters)
+    def initialize(**options)
+      if options.fetch(:refresh, true)
+        refresh_list!(options.fetch(:filters, {}))
       else
         @proxies = []
       end
 
-      cleanup! if validate
+      files = Array(options.fetch(:file, options.fetch(:files, [])))
+      load_proxies_from_files!(files) if files&.any?
+
+      cleanup! if options.fetch(:validate, false)
     end
 
     # Update current proxy list using configured providers.
@@ -30,9 +43,7 @@ module ProxyFetcher
     #
     def refresh_list!(filters = nil)
       @proxies = []
-
       threads = []
-      lock = Mutex.new
 
       ProxyFetcher.config.providers.each do |provider_name|
         threads << Thread.new do
@@ -40,7 +51,7 @@ module ProxyFetcher
           provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
           provider_proxies = provider.fetch_proxies!(provider_filters)
 
-          lock.synchronize do
+          REFRESHER_LOCK.synchronize do
             @proxies.concat(provider_proxies)
           end
         end
@@ -88,6 +99,26 @@ module ProxyFetcher
     end
 
     alias pop! get!
+
+    # Loads proxies from files.
+    #
+    # @param proxy_files [String, Array<String,Pathname>]
+    #   file path of list of files to load
+    #
+    def load_proxies_from_files!(proxy_files)
+      proxy_files = Array(proxy_files)
+      return if proxy_files.empty?
+
+      proxy_files.each do |proxy_file|
+        File.foreach(proxy_file, chomp: true) do |proxy_string|
+          addr, port = proxy_string.split(":", 2)
+          port = Integer(port) if port
+          @proxies << Proxy.new(addr: addr, port: port)
+        end
+      end
+
+      @proxies.uniq!
+    end
 
     # Clean current proxy list from dead proxies (that doesn't respond by timeout)
     #

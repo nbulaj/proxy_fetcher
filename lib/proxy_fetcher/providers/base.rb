@@ -108,7 +108,8 @@ module ProxyFetcher
         to_proxy(*args)
       rescue StandardError => e
         ProxyFetcher.logger.warn(
-          "Failed to build Proxy object for #{self.class.name} due to error: #{e.message}"
+          "Failed to build Proxy for #{self.class.name.split("::").last} " \
+          "due to error: #{e.message}"
         )
 
         nil

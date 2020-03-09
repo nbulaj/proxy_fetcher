@@ -6,6 +6,13 @@ Reverse Chronological Order:
 
 * Add your description here
 
+## `0.13.0` (2020-03-09)
+
+* Fix GatherProxy provider
+* Fix XRoxy provider
+* Allow ability to load proxies from files
+* Fix Proxy object comparators
+
 ## `0.12.0` (2020-01-28)
 
 * Fix XRoxy provider
