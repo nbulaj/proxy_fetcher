@@ -6,7 +6,7 @@ gemspec
 
 gem "nokogiri", "~> 1.8"
 gem "oga", "~> 3.2"
-gem "rubocop", "~> 0.74"
+gem "rubocop", "~> 0.80"
 
 group :test do
   gem "coveralls", require: false

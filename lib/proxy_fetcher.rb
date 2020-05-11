@@ -33,10 +33,12 @@ module ProxyFetcher
   # ProxyFetcher providers namespace
   module Providers
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/base"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxypedia"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list_ssl"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/gather_proxy"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/http_tunnel"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/mtpro"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxy_list"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/xroxy"
   end
