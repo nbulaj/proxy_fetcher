@@ -4,6 +4,10 @@ Reverse Chronological Order:
 
 ## `master`
 
+...
+
+## `0.14.0` (2020-05-11)
+
 * Add MTPro provider
 * Add Proxypedia provider
 

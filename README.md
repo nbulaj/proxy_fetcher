@@ -54,7 +54,7 @@ you can implement your own adapter if it your use-case. Take a look at the [Conf
 If using bundler, first add 'proxy_fetcher' to your Gemfile:
 
 ```ruby
-gem 'proxy_fetcher', '~> 0.13'
+gem 'proxy_fetcher', '~> 0.14'
 ```
 
 or if you want to use the latest version (from `master` branch), then:
@@ -72,7 +72,7 @@ bundle install
 Otherwise simply install the gem:
 
 ```sh
-gem install proxy_fetcher -v '0.13'
+gem install proxy_fetcher -v '0.14'
 ```
 
 ## Example of usage
@@ -429,11 +429,12 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 
 * Free Proxy List
 * Free SSL Proxies
-* Proxy Docker
 * Gather Proxy
 * HTTP Tunnel Genius
 * Proxy List
 * XRoxy
+* Proxypedia
+* MTPro.xyz
 
 If you wanna use one of them just setup it in the config:
 
