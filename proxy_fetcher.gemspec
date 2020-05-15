@@ -8,9 +8,11 @@ Gem::Specification.new do |gem|
   gem.name = "proxy_fetcher"
   gem.version = ProxyFetcher.gem_version
   gem.summary = "Ruby gem for dealing with proxy lists from different providers"
-  gem.description = "This gem can help your Ruby application to make HTTP(S) requests " \
-                    "using proxies by fetching and validating proxy lists from " \
-                    "the different providers."
+  gem.description = <<-TEXT.strip.gsub(/[\s\n]+/, " ")
+    This gem can help your Ruby application to make HTTP(S) requests 
+    using proxies by fetching and validating proxy lists from 
+    the different providers.
+  TEXT
   gem.authors = ["Nikita Bulai"]
   gem.email = "bulajnikita@gmail.com"
   gem.require_paths = ["lib"]
@@ -24,5 +26,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "http", ">= 3", "< 5"
 
   gem.add_development_dependency "rake", ">= 12.0"
-  gem.add_development_dependency "rspec", "~> 3.5"
+  gem.add_development_dependency "rspec", "~> 3.9"
 end

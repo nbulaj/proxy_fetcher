@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe ProxyFetcher::Providers::GatherProxy do
+describe ProxyFetcher::Providers::GatherProxy, :unreliable do
   before :all do
     ProxyFetcher.config.provider = :gather_proxy
   end
