@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
 module ProxyFetcher
   module Providers
@@ -25,9 +25,7 @@ module ProxyFetcher
       def load_document(url, filters = {})
         html = load_html(url, filters)
 
-        CSV.parse(html, col_sep: "\t").map do |row|
-          row.first
-        end
+        CSV.parse(html, col_sep: "\t").map(&:first)
       end
 
       # Fetches HTML content by sending HTTP request to the provider URL and
