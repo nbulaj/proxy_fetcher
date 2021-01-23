@@ -38,7 +38,6 @@ module ProxyFetcher
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list_socks"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list_ssl"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/free_proxy_list_us"
-    require File.dirname(__FILE__) + "/proxy_fetcher/providers/gather_proxy"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/http_tunnel"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/mtpro"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxy_list"

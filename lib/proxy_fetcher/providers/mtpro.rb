@@ -4,7 +4,7 @@ require "json"
 
 module ProxyFetcher
   module Providers
-    # GatherProxy provider class.
+    # MTPro provider class.
     class MTPro < Base
       # Provider URL to fetch proxy list
       def provider_url

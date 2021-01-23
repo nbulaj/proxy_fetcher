@@ -431,7 +431,6 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 * Free SSL Proxies
 * Free Socks Proxies
 * Free US Proxies
-* Gather Proxy
 * HTTP Tunnel Genius
 * Proxy List
 * XRoxy
