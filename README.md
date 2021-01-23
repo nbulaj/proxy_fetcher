@@ -435,6 +435,7 @@ Currently ProxyFetcher can deal with next proxy providers (services):
 * Proxy List
 * XRoxy
 * Proxypedia
+* Proxyscrape
 * MTPro.xyz
 
 If you wanna use one of them just setup it in the config:
