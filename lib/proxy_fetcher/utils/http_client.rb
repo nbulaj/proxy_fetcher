@@ -71,7 +71,7 @@ module ProxyFetcher
       response = process_http_request
       response.body.to_s
     rescue StandardError => e
-      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{e.message})")
+      ProxyFetcher.config.logger.warn("Failed to process request to #{url} (#{e.message})")
       ""
     end
 
