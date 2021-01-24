@@ -129,7 +129,7 @@ move it to the end of the list. They both marked as danger methods because all d
 
 If you need just some random proxy then call `manager.random_proxy` or it's alias `manager.random`.
 
-To clean current proxy list from the dead entries that does not respond to the requests you you need to use `cleanup!`
+To clean current proxy list from the dead entries that does not respond to the requests you need to use `cleanup!`
 or `validate!` method:
 
 ```ruby

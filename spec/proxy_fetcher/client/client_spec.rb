@@ -118,15 +118,15 @@ describe ProxyFetcher::Client do
     end
   end
 
-  xcontext "retries" do
+  context "retries" do
     it "raises an error when reaches max retries limit" do
       allow(ProxyFetcher::Client::Request).to receive(:execute).and_raise(StandardError)
 
-      expect { ProxyFetcher::Client.get("http://httpbin.org") }
+      expect { ProxyFetcher::Client.get("http://httpbin.org", options: { max_retries: 10 }) }
         .to raise_error(ProxyFetcher::Exceptions::MaximumRetriesReached)
     end
 
-    it "raises an error when http request returns an error" do
+    xit "raises an error when http request returns an error" do
       allow_any_instance_of(HTTP::Client).to receive(:get).and_return(StandardError.new)
 
       expect { ProxyFetcher::Client.get("http://httpbin.org") }
@@ -134,14 +134,14 @@ describe ProxyFetcher::Client do
     end
 
     it "refreshes proxy lists if no proxy found" do
-      ProxyFetcher::Client::ProxiesRegistry.manager.instance_variable_set(:"@proxies", [])
+      allow(ProxyFetcher::Manager.new).to receive(:proxies).and_return([])
 
       expect { ProxyFetcher::Client.get("http://httpbin.org") }
         .not_to raise_error
     end
   end
 
-  context "redirects" do
+  xcontext "redirects" do
     it "follows redirect when present" do
       content = ProxyFetcher::Client.get("http://httpbin.org/absolute-redirect/2")
 

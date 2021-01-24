@@ -75,13 +75,6 @@ module ProxyFetcher
       ""
     end
 
-    def fetch_with_headers
-      process_http_request
-    rescue StandardError => e
-      ProxyFetcher.logger.warn("Failed to process request to #{url} (#{e.message})")
-      HTTP::Response.new(version: "1.1", status: 500, body: "")
-    end
-
     protected
 
     def process_http_request(http_method: method, http_params: params)
