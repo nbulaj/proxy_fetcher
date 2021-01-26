@@ -428,15 +428,16 @@ Also you can call next instance methods for every Proxy object:
 Currently ProxyFetcher can deal with next proxy providers (services):
 
 * Free Proxy List
-* Free SSL Proxies
 * Free Socks Proxies
+* Free SSL Proxies
 * Free US Proxies
 * HTTP Tunnel Genius
-* Proxy List
-* XRoxy
+* MTPro.xyz
+* Proxy-List.ORG
+* Proxy-List.Download
 * Proxypedia
 * Proxyscrape
-* MTPro.xyz
+* XRoxy
 
 If you wanna use one of them just setup it in the config:
 
