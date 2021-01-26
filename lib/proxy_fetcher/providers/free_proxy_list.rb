@@ -44,8 +44,8 @@ module ProxyFetcher
       #   Proxy type
       #
       def parse_type(html_node)
-        https = html_node.content_at("td[6]")
-        https&.casecmp("yes")&.zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
+        type = html_node.content_at("td[6]")
+        type&.casecmp("yes")&.zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
       end
     end
 

@@ -44,10 +44,10 @@ module ProxyFetcher
       #   Proxy type
       #
       def parse_type(html_node)
-        https = html_node.content_at("td[5]")
+        type = html_node.content_at("td[5]")
 
-        return ProxyFetcher::Proxy::SOCKS4 if https&.casecmp("socks4")&.zero?
-        return ProxyFetcher::Proxy::SOCKS5 if https&.casecmp("socks5")&.zero?
+        return ProxyFetcher::Proxy::SOCKS4 if type&.casecmp("socks4")&.zero?
+        return ProxyFetcher::Proxy::SOCKS5 if type&.casecmp("socks5")&.zero?
 
         "Unknown"
       end

@@ -4,6 +4,7 @@ require "spec_helper"
 
 describe "Proxy classes" do
   [
+    [:free_proxy_cz,              "FreeProxyCz"],
     [:free_proxy_list,            "FreeProxyList"],
     [:free_proxy_list_socks,      "FreeProxyListSocks"],
     [:free_proxy_list_ssl,        "FreeProxyListSSL"],
