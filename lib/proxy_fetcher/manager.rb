@@ -47,6 +47,8 @@ module ProxyFetcher
 
       ProxyFetcher.config.providers.each do |provider_name|
         threads << Thread.new do
+          Thread.current.report_on_exception = false
+
           provider = ProxyFetcher::Configuration.providers_registry.class_for(provider_name)
           provider_filters = filters && filters.fetch(provider_name.to_sym, filters)
           provider_proxies = provider.fetch_proxies!(provider_filters)

@@ -2,11 +2,11 @@
 
 module ProxyFetcher
   module Providers
-    # FreeProxyListSSL provider class.
-    class FreeProxyListSSL < Base
+    # FreeProxyListUS provider class.
+    class FreeProxyListUS < Base
       # Provider URL to fetch proxy list
       def provider_url
-        "https://www.sslproxies.org/"
+        "https://www.us-proxy.org/"
       end
 
       # [NOTE] Doesn't support filtering
@@ -29,11 +29,26 @@ module ProxyFetcher
           proxy.port = Integer(html_node.content_at("td[2]").gsub(/^0+/, ""))
           proxy.country = html_node.content_at("td[4]")
           proxy.anonymity = html_node.content_at("td[5]")
-          proxy.type = ProxyFetcher::Proxy::HTTPS
+          proxy.type = parse_type(html_node)
         end
+      end
+
+      private
+
+      # Parses HTML node to extract proxy type.
+      #
+      # @param html_node [Object]
+      #   HTML node from the <code>ProxyFetcher::Document</code> DOM model.
+      #
+      # @return [String]
+      #   Proxy type
+      #
+      def parse_type(html_node)
+        https = html_node.content_at("td[7]")
+        https&.casecmp("yes")&.zero? ? ProxyFetcher::Proxy::HTTPS : ProxyFetcher::Proxy::HTTP
       end
     end
 
-    ProxyFetcher::Configuration.register_provider(:free_proxy_list_ssl, FreeProxyListSSL)
+    ProxyFetcher::Configuration.register_provider(:free_proxy_list_us, FreeProxyListUS)
   end
 end

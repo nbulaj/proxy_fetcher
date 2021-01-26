@@ -6,7 +6,7 @@ module ProxyFetcher
     class XRoxy < Base
       # Provider URL to fetch proxy list
       def provider_url
-        "https://madison.xroxy.com/proxylist.html"
+        "https://www.xroxy.com/proxylist.htm"
       end
 
       def xpath
