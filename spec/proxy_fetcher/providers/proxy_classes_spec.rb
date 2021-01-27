@@ -19,6 +19,7 @@ describe "Proxy classes" do
     [:proxyscrape_http,           "ProxyscrapeHTTP"],
     [:proxyscrape_socks4,         "ProxyscrapeSOCKS4"],
     [:proxyscrape_socks5,         "ProxyscrapeSOCKS5"],
+    [:scrapingant,                "Scrapingant"],
     [:xroxy,                      "XRoxy"]
   ].each do |(provider_name, provider_klass)|
     describe Object.const_get("ProxyFetcher::Providers::#{provider_klass}") do

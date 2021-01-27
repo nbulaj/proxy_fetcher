@@ -48,6 +48,7 @@ module ProxyFetcher
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxyscrape_http"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxyscrape_socks4"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/proxyscrape_socks5"
+    require File.dirname(__FILE__) + "/proxy_fetcher/providers/scrapingant"
     require File.dirname(__FILE__) + "/proxy_fetcher/providers/xroxy"
   end
 
