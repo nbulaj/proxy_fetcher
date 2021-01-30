@@ -7,6 +7,19 @@ module ProxyFetcher
       # Loads proxy provider page content, extract proxy list from it
       # and convert every entry to proxy object.
       def fetch_proxies(filters = {})
+        return fetch_raw_proxies(filters) unless pages_count > 1
+
+        proxies = []
+
+        (first_page_number..pages_count).each do |page_number|
+          provider_params = { page_param_name => page_number }
+          proxies += fetch_raw_proxies(filters)
+        end
+
+        proxies
+      end
+
+      def fetch_raw_proxies(filters)
         raw_proxies = load_proxy_list(filters)
         proxies = raw_proxies.map { |html_node| build_proxy(html_node) }.compact
         proxies.reject { |proxy| proxy.addr.nil? }
@@ -32,6 +45,18 @@ module ProxyFetcher
       #
       def provider_headers
         {}
+      end
+
+      def pages_count
+        1
+      end
+
+      def first_page_number
+        1
+      end
+
+      def page_param_name
+        raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end
 
       def xpath

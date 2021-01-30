@@ -11,6 +11,14 @@ module ProxyFetcher
         "https://proxy-list.org/english/index.php"
       end
 
+      def pages_count
+        10
+      end
+
+      def page_param_name
+        'p'
+      end
+
       def xpath
         '//div[@class="table-wrap"]/div[@class="table"]/ul'
       end
