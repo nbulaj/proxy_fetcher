@@ -6,7 +6,19 @@ module ProxyFetcher
     class XRoxy < Base
       # Provider URL to fetch proxy list
       def provider_url
-        "https://www.xroxy.com/proxylist.htm"
+        "https://www.xroxy.com/proxylist.php"
+      end
+
+      def pages_count
+        99
+      end
+
+      def first_page_number
+        0
+      end
+
+      def page_param_name
+        'pnum'
       end
 
       def xpath
