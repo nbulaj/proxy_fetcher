@@ -27,7 +27,7 @@ module ProxyFetcher
       # @return [ProxyFetcher::Proxy]
       #   Proxy object
       #
-      def to_proxy(node)
+      def to_proxy(node, filters)
         ProxyFetcher::Proxy.new.tap do |proxy|
           proxy.addr = node["ip"]
           proxy.port = Integer(node["port"])

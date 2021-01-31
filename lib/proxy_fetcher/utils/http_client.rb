@@ -83,7 +83,8 @@ module ProxyFetcher
       end
 
       http.public_send(
-        http_method.to_sym, url,
+        http_method.to_sym,
+        url,
         form: http_params,
         ssl_context: ssl_ctx
       )

@@ -12,7 +12,7 @@ module ProxyFetcher
         proxies = []
 
         (first_page_number..pages_count).each do |page_number|
-          provider_params = { page_param_name => page_number }
+          filters = { page_param_name => page_param_values[page_number] || page_number }
           proxies += fetch_raw_proxies(filters)
         end
 
@@ -21,7 +21,7 @@ module ProxyFetcher
 
       def fetch_raw_proxies(filters)
         raw_proxies = load_proxy_list(filters)
-        proxies = raw_proxies.map { |html_node| build_proxy(html_node) }.compact
+        proxies = raw_proxies.map { |html_node| build_proxy(html_node, filters) }.compact
         proxies.reject { |proxy| proxy.addr.nil? }
       end
 
@@ -59,6 +59,10 @@ module ProxyFetcher
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end
 
+      def page_param_values
+        []
+      end
+
       def xpath
         raise NotImplementedError, "#{__method__} must be implemented in a descendant class!"
       end
@@ -90,6 +94,7 @@ module ProxyFetcher
           # TODO: query for post request?
           uri = URI.parse(url)
           uri.query = URI.encode_www_form(provider_params.merge(filters.to_h))
+          provider_params = {}
           url = uri.to_s
         end
 

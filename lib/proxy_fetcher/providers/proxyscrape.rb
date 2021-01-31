@@ -5,10 +5,37 @@ require "csv"
 module ProxyFetcher
   module Providers
     # FreeProxyList provider class.
-    class ProxyListDownloadSOCKS4 < Base
+    class Proxyscrape < Base
       # Provider URL to fetch proxy list
       def provider_url
-        "https://www.proxy-list.download/api/v1/get?type=socks4"
+        "https://api.proxyscrape.com/v2/"
+      end
+
+      def provider_params
+        {
+          request: "getproxies",
+          timeout: 1_000,
+        }
+      end
+
+      def pages_count
+        2
+      end
+
+      def first_page_number
+        0
+      end
+
+      def page_param_name
+        'protocol'
+      end
+
+      def page_param_values
+        [
+          'http',
+          'socks4',
+          'socks5',
+        ]
       end
 
       # Loads provider HTML and parses it with internal document object.
@@ -47,7 +74,7 @@ module ProxyFetcher
       # @return [ProxyFetcher::Proxy]
       #   Proxy object
       #
-      def to_proxy(node)
+      def to_proxy(node, filters)
         addr, port = node.split(":")
 
         ProxyFetcher::Proxy.new.tap do |proxy|
@@ -55,11 +82,28 @@ module ProxyFetcher
           proxy.port = Integer(port)
           proxy.country = "Unknown"
           proxy.anonymity = "Unknown"
-          proxy.type = ProxyFetcher::Proxy::SOCKS4
+          proxy.type = parse_type(filters[page_param_name])
         end
+      end
+
+      # Parses String to extract proxy type.
+      #
+      # @param type [String]
+      #   String from filters.
+      #
+      # @return [String]
+      #   Proxy type
+      #
+      def parse_type(type)
+        return ProxyFetcher::Proxy::HTTP   if type&.casecmp("http")&.zero?
+        return ProxyFetcher::Proxy::HTTPS  if type&.casecmp("https")&.zero?
+        return ProxyFetcher::Proxy::SOCKS4 if type&.casecmp("socks4")&.zero?
+        return ProxyFetcher::Proxy::SOCKS5 if type&.casecmp("socks5")&.zero?
+
+        "Unknown"
       end
     end
 
-    ProxyFetcher::Configuration.register_provider(:proxy_list_download_socks4, ProxyListDownloadSOCKS4)
+    ProxyFetcher::Configuration.register_provider(:proxyscrape, Proxyscrape)
   end
 end

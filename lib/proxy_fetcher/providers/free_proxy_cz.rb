@@ -25,7 +25,7 @@ module ProxyFetcher
       # @return [ProxyFetcher::Proxy]
       #   Proxy object
       #
-      def to_proxy(html_node)
+      def to_proxy(html_node, filters)
         ProxyFetcher::Proxy.new.tap do |proxy|
           addr = parse_addr(html_node)
 

@@ -27,7 +27,7 @@ module ProxyFetcher
       # @return [ProxyFetcher::Proxy]
       #   Proxy object
       #
-      def to_proxy(json_node)
+      def to_proxy(json_node, filters)
         addr, port = json_node['addr'].split(":")
 
         ProxyFetcher::Proxy.new.tap do |proxy|

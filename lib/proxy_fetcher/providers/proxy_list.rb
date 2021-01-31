@@ -32,7 +32,7 @@ module ProxyFetcher
       # @return [ProxyFetcher::Proxy]
       #   Proxy object
       #
-      def to_proxy(html_node)
+      def to_proxy(html_node, filters)
         ProxyFetcher::Proxy.new.tap do |proxy|
           uri = parse_proxy_uri(html_node)
           proxy.addr = uri.host

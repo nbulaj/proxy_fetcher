@@ -23,7 +23,7 @@ module ProxyFetcher
       # @return [ProxyFetcher::Proxy]
       #   Proxy object
       #
-      def to_proxy(html_node)
+      def to_proxy(html_node, filters)
         addr, port = html_node.content_at("a").to_s.split(":")
 
         ProxyFetcher::Proxy.new.tap do |proxy|
