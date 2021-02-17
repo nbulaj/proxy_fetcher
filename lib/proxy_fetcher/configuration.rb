@@ -114,7 +114,7 @@ module ProxyFetcher
 
     # Sets default configuration options
     def reset!
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @user_agent = DEFAULT_USER_AGENT
       @pool_size = 10
       @client_timeout = 3

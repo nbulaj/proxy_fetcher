@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.version = ProxyFetcher.gem_version
   gem.summary = "Ruby gem for dealing with proxy lists from different providers"
   gem.description = <<-TEXT.strip.gsub(/[\s\n]+/, " ")
-    This gem can help your Ruby application to make HTTP(S) requests 
-    using proxies by fetching and validating proxy lists from 
+    This gem can help your Ruby application to make HTTP(S) requests
+    using proxies by fetching and validating proxy lists from
     the different providers.
   TEXT
   gem.authors = ["Nikita Bulai"]

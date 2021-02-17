@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
   Exclude:
     - 'bin/*'
   DisplayCopNames: true
@@ -16,10 +16,14 @@ Style/StringLiteralsInInterpolation:
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Enabled: true
 Layout/DotPosition:
   EnforcedStyle: leading
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - spec/**/*
 
 Metrics/LineLength:
   Exclude:

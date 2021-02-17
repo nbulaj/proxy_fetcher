@@ -295,7 +295,7 @@ Default configuration looks as follows:
 
 ```ruby
 ProxyFetcher.configure do |config|
-  config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new($stdout)
   config.user_agent = ProxyFetcher::Configuration::DEFAULT_USER_AGENT
   config.pool_size = 10
   config.client_timeout = 3
