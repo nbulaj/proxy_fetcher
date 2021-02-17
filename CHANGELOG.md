@@ -6,6 +6,16 @@ Reverse Chronological Order:
 
 ...
 
+## `0.15.1` (2021-02-17)
+
+* Support for Ruby 3.0
+
+## `0.15.0` (2021-01-26)
+
+* Removed failing providers
+* Added new
+* Specs refactoring
+
 ## `0.14.0` (2020-05-11)
 
 * Add MTPro provider
