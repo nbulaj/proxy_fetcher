@@ -42,7 +42,8 @@ module ProxyFetcher
     #   resource content
     #
     def self.fetch(*args)
-      new(*args).fetch
+      url = args.shift
+      new(url, **args.first).fetch
     end
 
     # Initialize HTTP client instance
