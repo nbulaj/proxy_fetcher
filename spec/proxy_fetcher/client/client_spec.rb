@@ -3,6 +3,11 @@
 require "spec_helper"
 require "json"
 
+begin
+  require "webrick"
+rescue LoadError
+  # nop
+end
 require "evil-proxy"
 require "evil-proxy/async"
 

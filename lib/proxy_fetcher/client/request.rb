@@ -41,15 +41,15 @@ module ProxyFetcher
       # @return [String]
       #   response body (requested resource content)
       #
-      def self.execute(args)
-        new(args).execute
+      def self.execute(**args)
+        new(**args).execute
       end
 
       # Initialize new HTTP request
       #
       # @return [Request]
       #
-      def initialize(args)
+      def initialize(**args)
         raise ArgumentError, "args must be a Hash!" unless args.is_a?(Hash)
 
         @url = args.fetch(:url)

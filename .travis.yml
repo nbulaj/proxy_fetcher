@@ -4,7 +4,7 @@ cache: bundler
 before_install:
   - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
   - rvm @global do gem uninstall bundler -a -x -I || true
-  - gem install bundler -v '~> 1.10'
+  - gem install bundler
 
 bundler_args: --without yard guard benchmarks
 env: JRUBY_OPTS="$JRUBY_OPTS --debug"
@@ -18,6 +18,7 @@ rvm:
   - 2.5
   - 2.6
   - 2.7
+  - 3.0
   - ruby-head
   - jruby-9.2.8.0
   - truffleruby-head
