@@ -11,6 +11,6 @@ gem "rubocop", "~> 1.0"
 group :test do
   gem "coveralls", require: false
   # Until I find a way to introduce other MITM proxy
-  gem "webrick", "1.4.2"
+  gem "webrick", "1.7.0"
   gem "evil-proxy", "~> 0.2"
 end
