@@ -9,7 +9,7 @@ gem "oga", "~> 3.2"
 gem "rubocop", "~> 1.0"
 
 group :test do
-  gem "coveralls", require: false
+  gem "coveralls_reborn", require: false
   # Until I find a way to introduce other MITM proxy
   gem "webrick", "1.4.2"
   gem "evil-proxy", "~> 0.2"

@@ -11,7 +11,7 @@ module ProxyFetcher
 
       # [NOTE] Doesn't support filtering
       def xpath
-        '//table[@id="proxylisttable"]/tbody/tr'
+        "//table[./thead/tr/th[contains(text(), 'IP')]]/tbody/tr"
       end
 
       # Converts HTML node (entry of N tags) to <code>ProxyFetcher::Proxy</code>
