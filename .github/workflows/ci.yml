@@ -8,24 +8,41 @@ jobs:
       Ruby ${{ matrix.ruby }} (${{ matrix.gemfile }})
     env:
       CI: true
-
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' || matrix.experimental }}
     if: |
       !(   contains(github.event.pull_request.title,  '[ci skip]')
         || contains(github.event.pull_request.title,  '[skip ci]'))
     strategy:
       fail-fast: true
       matrix:
+        experimental: [false]
         os: [ ubuntu-latest ]
         ruby:
           - 2.6
           - 2.7
           - '3.0'
           - '3.1'
-          - head
         gemfile:
           - gemfiles/oga.gemfile
           - gemfiles/nokogiri.gemfile
+        include:
+          - ruby: head
+            os: ubuntu-latest
+            gemfile: gemfiles/nokogiri.gemfile
+            experimental: true
+          - ruby: head
+            os: ubuntu-latest
+            gemfile: gemfiles/oga.gemfile
+            experimental: true
+          - ruby: jruby
+            os: ubuntu-latest
+            gemfile: gemfiles/nokogiri.gemfile
+            experimental: true
+          - ruby: truffleruby
+            os: ubuntu-latest
+            gemfile: gemfiles/nokogiri.gemfile
+            experimental: true
     steps:
       - name: Repo checkout
         uses: actions/checkout@v2
