@@ -1,6 +1,6 @@
 # Ruby / JRuby lib for managing proxies
 [![Gem Version](https://badge.fury.io/rb/proxy_fetcher.svg)](http://badge.fury.io/rb/proxy_fetcher)
-[![Build Status](https://travis-ci.org/nbulaj/proxy_fetcher.svg?branch=master)](https://travis-ci.org/nbulaj/proxy_fetcher)
+[![CI](https://github.com/nbulaj/proxy_fetcher/actions/workflows/ci.yml/badge.svg)](https://github.com/nbulaj/proxy_fetcher/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/nbulaj/proxy_fetcher/badge.svg)](https://coveralls.io/github/nbulaj/proxy_fetcher)
 [![Code Climate](https://codeclimate.com/github/nbulaj/proxy_fetcher/badges/gpa.svg)](https://codeclimate.com/github/nbulaj/proxy_fetcher)
 [![Inline docs](http://inch-ci.org/github/nbulaj/proxy_fetcher.png?branch=master)](http://inch-ci.org/github/nbulaj/proxy_fetcher)
