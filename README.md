@@ -39,7 +39,7 @@ https://github.com/nbulaj/proxy_fetcher/releases
 ## Dependencies
 
 ProxyFetcher gem itself requires Ruby `>= 2.0.0` (or [JRuby](http://jruby.org/) `> 9.0`, but maybe earlier too,
-[see Travis build matrix](.travis.yml)) and great [HTTP.rb gem](https://github.com/httprb/http).
+[see GitHub Actions matrix](.github/workflows/ci.yml)) and great [HTTP.rb gem](https://github.com/httprb/http).
 
 However, it requires an adapter to parse HTML. If you do not specify any specific adapter, then it will use
 default one - [Nokogiri](https://github.com/sparklemotion/nokogiri). It's OK for any Ruby on Rails project
@@ -503,4 +503,4 @@ Thanks.
 
 `proxy_fetcher` gem is released under the [MIT License](http://www.opensource.org/licenses/MIT).
 
-Copyright (c) 2017—2018 Nikita Bulai (bulajnikita@gmail.com).
+Copyright (c) 2017 Nikita Bulai (bulajnikita@gmail.com).
