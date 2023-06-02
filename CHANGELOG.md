@@ -6,6 +6,15 @@ Reverse Chronological Order:
 
 ...
 
+## `0.17.0` (2023-06-02)
+
+* Remove dead providers
+
+## `0.16.0` (2022-02-04)
+
+* Fix providers
+* Improve HTTP.rb dependency
+
 ## `0.15.1` (2021-02-17)
 
 * Support for Ruby 3.0

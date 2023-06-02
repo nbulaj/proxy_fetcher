@@ -13,7 +13,7 @@ module ProxyFetcher
     # Major version number
     MAJOR = 0
     # Minor version number
-    MINOR = 16
+    MINOR = 17
     # Smallest version number
     TINY  = 0
 

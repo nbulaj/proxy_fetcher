@@ -41,9 +41,6 @@ module ProxyFetcher
     require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/mtpro"
     require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/proxy_list"
     require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/proxypedia"
-    require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/proxyscrape_http"
-    require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/proxyscrape_socks4"
-    require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/proxyscrape_socks5"
     require "#{File.dirname(__FILE__)}/proxy_fetcher/providers/xroxy"
   end
 
